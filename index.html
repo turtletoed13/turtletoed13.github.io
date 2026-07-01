@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Redacted-5</title>
-  <meta name="description" content="Redacted-5 — cinematic Roblox game website." />
+  <title>REDACTED-5</title>
+  <meta name="description" content="REDACTED-5 — premium cinematic game website." />
   <meta name="theme-color" content="#050608" />
 
   <style>
@@ -13,34 +12,26 @@
       --bg0:#040507;
       --bg1:#07090d;
       --bg2:#0d1018;
-      --glass: rgba(14, 16, 22, 0.58);
-      --glass-strong: rgba(8, 10, 14, 0.84);
-      --line: rgba(255,255,255,.09);
-      --line-strong: rgba(255,255,255,.14);
       --text:#f4f7fb;
-      --muted: rgba(244,247,251,.68);
-      --muted2: rgba(244,247,251,.50);
+      --muted:rgba(244,247,251,.68);
+      --muted2:rgba(244,247,251,.48);
+      --glass:rgba(14,16,22,.60);
+      --glass2:rgba(10,12,18,.76);
+      --line:rgba(255,255,255,.09);
+      --line2:rgba(255,255,255,.14);
       --accent:#b7c8ff;
       --accent2:#d9b0ff;
       --danger:#ff5b68;
-      --shadow: 0 30px 100px rgba(0,0,0,.50);
-      --shadow-soft: 0 16px 40px rgba(0,0,0,.30);
-      --radius: 28px;
-      --radius-sm: 18px;
-      --max: 1240px;
-      --ease: cubic-bezier(.2,.8,.2,1);
+      --shadow:0 30px 100px rgba(0,0,0,.50);
+      --shadow2:0 16px 40px rgba(0,0,0,.30);
+      --radius:28px;
+      --radius2:18px;
+      --max:1240px;
+      --ease:cubic-bezier(.2,.8,.2,1);
     }
 
-    *{
-      box-sizing:border-box;
-      margin:0;
-      padding:0;
-    }
-
-    html{
-      scroll-behavior:smooth;
-    }
-
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
     body{
       min-height:100vh;
       overflow-x:hidden;
@@ -75,7 +66,7 @@
       background-image:
         linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px);
-      background-size: 42px 42px;
+      background-size:42px 42px;
       mask-image: radial-gradient(circle at center, black 36%, transparent 100%);
     }
 
@@ -102,17 +93,17 @@
       padding:16px 18px;
       border:1px solid rgba(255,255,255,.10);
       border-radius:24px;
-      background: rgba(14, 16, 22, .62);
-      backdrop-filter: blur(26px);
-      -webkit-backdrop-filter: blur(26px);
-      box-shadow: 0 18px 50px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06);
-      transition: transform .35s var(--ease), background .35s var(--ease), border-color .35s var(--ease), padding .35s var(--ease);
+      background:rgba(14,16,22,.62);
+      backdrop-filter:blur(26px);
+      -webkit-backdrop-filter:blur(26px);
+      box-shadow:0 18px 50px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06);
+      transition:transform .35s var(--ease), background .35s var(--ease), border-color .35s var(--ease);
     }
 
     .topbar-inner.shrink{
       transform:translateY(-2px);
-      background: rgba(9, 10, 14, .76);
-      border-color: rgba(255,255,255,.08);
+      background:rgba(9,10,14,.76);
+      border-color:rgba(255,255,255,.08);
     }
 
     .brand{
@@ -126,12 +117,12 @@
       width:42px;
       height:42px;
       border-radius:14px;
+      overflow:hidden;
+      flex:0 0 auto;
       background:
         radial-gradient(circle at 28% 28%, rgba(255,255,255,.92), transparent 18%),
         linear-gradient(135deg, rgba(183,200,255,1), rgba(217,176,255,1));
-      box-shadow: 0 14px 30px rgba(183,200,255,.16);
-      flex:0 0 auto;
-      overflow:hidden;
+      box-shadow:0 14px 30px rgba(183,200,255,.16);
     }
 
     .brand-mark img{
@@ -166,7 +157,7 @@
     .nav{
       display:flex;
       align-items:center;
-      gap:14px;
+      gap:22px;
       flex-wrap:wrap;
       justify-content:flex-end;
     }
@@ -177,49 +168,77 @@
       font-size:.95rem;
       font-weight:600;
       position:relative;
-      transition: color .25s var(--ease), opacity .25s var(--ease), transform .25s var(--ease);
-      padding:10px 12px;
-      border-radius:999px;
+      transition:color .25s var(--ease), transform .25s var(--ease);
     }
 
     .nav a:hover{
       color:#fff;
       transform:translateY(-1px);
-      background: rgba(255,255,255,.04);
     }
 
     .nav a.active{
-      color:#08111f;
-      background: linear-gradient(135deg, #f4f7ff, #cddcff);
+      color:#fff;
     }
 
-    .nav a.active:hover{
-      background: linear-gradient(135deg, #f4f7ff, #cddcff);
+    .nav a::after{
+      content:"";
+      position:absolute;
+      left:0;
+      bottom:-9px;
+      width:100%;
+      height:1px;
+      transform:scaleX(0);
+      transform-origin:center;
+      transition:transform .25s var(--ease);
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.68), transparent);
+    }
+
+    .nav a:hover::after,
+    .nav a.active::after{
+      transform:scaleX(1);
+    }
+
+    .nav .pill{
+      padding:11px 16px;
+      border-radius:999px;
+      background:linear-gradient(135deg, rgba(244,247,251,.96), rgba(208,220,255,.9));
+      color:#08111f;
+      box-shadow:0 14px 30px rgba(255,255,255,.08);
+    }
+
+    .nav .pill:hover{
+      transform:translateY(-1px);
       color:#08111f;
     }
 
     .page{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:34px 16px 112px;
       display:none;
-      animation: pageIn .45s var(--ease);
+      animation: pageIn .35s var(--ease);
     }
 
     .page.active{
       display:block;
     }
 
+    @keyframes pageIn{
+      from{opacity:.02; transform:translateY(10px)}
+      to{opacity:1; transform:translateY(0)}
+    }
+
     .hero{
-      max-width:var(--max);
-      margin:0 auto;
-      padding: 88px 16px 40px;
-      min-height: calc(100vh - 88px);
+      min-height:calc(100vh - 98px);
       display:grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap: 30px;
+      grid-template-columns:1.05fr .95fr;
+      gap:30px;
       align-items:center;
+      padding-top:18px;
     }
 
     .hero-copy{
-      padding: 8px 0 18px;
+      padding:8px 0 18px;
     }
 
     .eyebrow{
@@ -229,9 +248,9 @@
       padding:9px 14px;
       border-radius:999px;
       border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.045);
-      backdrop-filter: blur(16px);
-      color: rgba(244,247,251,.84);
+      background:rgba(255,255,255,.045);
+      backdrop-filter:blur(16px);
+      color:rgba(244,247,251,.84);
       font-size:.92rem;
       margin-bottom:18px;
     }
@@ -240,12 +259,12 @@
       width:8px;
       height:8px;
       border-radius:50%;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
       box-shadow:0 0 18px rgba(183,200,255,.55);
     }
 
     h1{
-      font-size: clamp(3.4rem, 7.4vw, 6.9rem);
+      font-size:clamp(3.4rem, 7.4vw, 6.9rem);
       line-height:.93;
       letter-spacing:-.07em;
       max-width:11ch;
@@ -253,7 +272,7 @@
     }
 
     .grad{
-      background: linear-gradient(135deg, #fff 12%, #b9ceff 42%, #dfb8ff 76%, #fff 100%);
+      background:linear-gradient(135deg, #fff 12%, #b9ceff 42%, #dfb8ff 76%, #fff 100%);
       -webkit-background-clip:text;
       background-clip:text;
       color:transparent;
@@ -285,42 +304,42 @@
       text-decoration:none;
       font-weight:800;
       letter-spacing:.01em;
-      transition: transform .25s var(--ease), box-shadow .25s var(--ease), background .25s var(--ease), border-color .25s var(--ease);
-      will-change: transform;
+      transition:transform .25s var(--ease), box-shadow .25s var(--ease), background .25s var(--ease), border-color .25s var(--ease);
+      will-change:transform;
       border:1px solid transparent;
       cursor:pointer;
     }
 
     .button.primary{
       color:#08111f;
-      background: linear-gradient(135deg, #f4f7ff, #cddcff);
-      box-shadow: 0 18px 48px rgba(165,190,255,.16);
+      background:linear-gradient(135deg, #f4f7ff, #cddcff);
+      box-shadow:0 18px 48px rgba(165,190,255,.16);
     }
 
     .button.secondary{
-      color: var(--text);
-      background: rgba(255,255,255,.045);
-      border-color: rgba(255,255,255,.10);
-      backdrop-filter: blur(18px);
+      color:var(--text);
+      background:rgba(255,255,255,.045);
+      border-color:rgba(255,255,255,.10);
+      backdrop-filter:blur(18px);
     }
 
     .button.danger{
       color:#fff;
-      background: linear-gradient(135deg, rgba(255,91,104,.92), rgba(209,67,77,.88));
-      box-shadow: 0 18px 48px rgba(255,91,104,.16);
+      background:linear-gradient(135deg, rgba(255,91,104,.95), rgba(255,135,145,.88));
+      box-shadow:0 18px 48px rgba(255,91,104,.16);
     }
 
     .button:hover{
-      transform: translateY(-2px);
+      transform:translateY(-2px);
     }
 
     .button.primary:hover{
-      box-shadow: 0 22px 60px rgba(165,190,255,.24);
+      box-shadow:0 22px 60px rgba(165,190,255,.24);
     }
 
     .button.secondary:hover{
-      background: rgba(255,255,255,.065);
-      border-color: rgba(255,255,255,.14);
+      background:rgba(255,255,255,.065);
+      border-color:rgba(255,255,255,.14);
     }
 
     .showcase{
@@ -340,30 +359,30 @@
         radial-gradient(circle at 28% 28%, rgba(255,255,255,.40), transparent 18%),
         radial-gradient(circle at 45% 45%, rgba(183,200,255,.22), transparent 38%),
         radial-gradient(circle at 68% 68%, rgba(217,176,255,.18), transparent 48%);
-      filter: blur(8px);
+      filter:blur(8px);
       opacity:.9;
-      animation: drift 10s var(--ease) infinite alternate;
+      animation:drift 10s var(--ease) infinite alternate;
     }
 
     .card-shell{
       position:relative;
       width:min(100%, 540px);
-      aspect-ratio: 4 / 5;
-      border-radius: 36px;
+      aspect-ratio:4 / 5;
+      border-radius:36px;
       border:1px solid rgba(255,255,255,.10);
       background:
         linear-gradient(180deg, rgba(255,255,255,.09), transparent 16%),
-        rgba(10, 12, 18, .75);
-      backdrop-filter: blur(26px);
-      -webkit-backdrop-filter: blur(26px);
-      box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,.06);
+        rgba(10,12,18,.75);
+      backdrop-filter:blur(26px);
+      -webkit-backdrop-filter:blur(26px);
+      box-shadow:var(--shadow), inset 0 1px 0 rgba(255,255,255,.06);
       overflow:hidden;
-      transform: perspective(1400px) rotateY(-10deg) rotateX(7deg);
-      transition: transform .35s var(--ease);
+      transform:perspective(1400px) rotateY(-10deg) rotateX(7deg);
+      transition:transform .35s var(--ease);
     }
 
     .card-shell:hover{
-      transform: perspective(1400px) rotateY(-7deg) rotateX(4deg) translateY(-2px);
+      transform:perspective(1400px) rotateY(-7deg) rotateX(4deg) translateY(-2px);
     }
 
     .card-shell::before{
@@ -385,17 +404,17 @@
         url("MovementBackround.png") center/cover no-repeat;
       filter:saturate(1.05) contrast(1.02);
       opacity:.35;
-      transform: scale(1.04);
+      transform:scale(1.04);
     }
 
     .shell-top{
       position:relative;
       z-index:2;
-      padding: 22px 22px 0;
+      padding:22px 22px 0;
       display:flex;
       justify-content:space-between;
       align-items:center;
-      color: rgba(244,247,251,.74);
+      color:rgba(244,247,251,.74);
       font-size:.9rem;
       letter-spacing:.01em;
     }
@@ -409,25 +428,23 @@
       width:11px;
       height:11px;
       border-radius:50%;
-      background: rgba(255,255,255,.18);
+      background:rgba(255,255,255,.18);
     }
 
     .panel{
       position:relative;
       z-index:2;
-      margin: 22px;
+      margin:22px;
       padding:24px;
       border-radius:28px;
       border:1px solid rgba(255,255,255,.08);
-      background: rgba(8, 10, 16, .44);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+      background:rgba(8,10,16,.44);
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
     }
 
-    .panel + .panel{
-      margin-top:0;
-    }
+    .panel + .panel{margin-top:0}
 
     .mini-title{
       font-size:.95rem;
@@ -445,7 +462,7 @@
     .stats{
       margin-top:18px;
       display:grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns:repeat(3, 1fr);
       gap:12px;
     }
 
@@ -453,7 +470,7 @@
       padding:16px 14px;
       border-radius:20px;
       border:1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.04);
+      background:rgba(255,255,255,.04);
     }
 
     .stat strong{
@@ -469,12 +486,6 @@
       font-size:.85rem;
     }
 
-    .section{
-      max-width:var(--max);
-      margin: 0 auto;
-      padding: 34px 16px 112px;
-    }
-
     .section-head{
       display:flex;
       align-items:end;
@@ -485,7 +496,7 @@
     }
 
     .section-head h2{
-      font-size: clamp(1.85rem, 3vw, 2.85rem);
+      font-size:clamp(1.85rem, 3vw, 2.85rem);
       letter-spacing:-.05em;
       line-height:1;
     }
@@ -499,7 +510,7 @@
 
     .grid{
       display:grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns:repeat(3, minmax(0, 1fr));
       gap:18px;
     }
 
@@ -510,30 +521,26 @@
       border:1px solid rgba(255,255,255,.09);
       background:
         linear-gradient(180deg, rgba(255,255,255,.07), transparent 22%),
-        rgba(12, 14, 20, .60);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      box-shadow: var(--shadow-soft);
+        rgba(12,14,20,.60);
+      backdrop-filter:blur(20px);
+      -webkit-backdrop-filter:blur(20px);
+      box-shadow:var(--shadow2);
       overflow:hidden;
-      transform: translateY(18px);
+      transform:translateY(18px);
       opacity:0;
-      transition:
-        transform .8s var(--ease),
-        opacity .8s var(--ease),
-        border-color .25s var(--ease),
-        background .25s var(--ease);
+      transition:transform .8s var(--ease), opacity .8s var(--ease), border-color .25s var(--ease), background .25s var(--ease);
     }
 
     .feature.reveal{
-      transform: translateY(0);
+      transform:translateY(0);
       opacity:1;
     }
 
     .feature:hover{
-      border-color: rgba(193, 210, 255, .22);
+      border-color:rgba(193,210,255,.22);
       background:
         linear-gradient(180deg, rgba(255,255,255,.09), transparent 22%),
-        rgba(15, 18, 26, .74);
+        rgba(15,18,26,.74);
     }
 
     .feature .icon{
@@ -543,7 +550,7 @@
       display:grid;
       place-items:center;
       margin-bottom:18px;
-      background: linear-gradient(135deg, rgba(183,200,255,.20), rgba(217,176,255,.16));
+      background:linear-gradient(135deg, rgba(183,200,255,.20), rgba(217,176,255,.16));
       border:1px solid rgba(255,255,255,.08);
       color:#fff;
       font-weight:900;
@@ -567,261 +574,281 @@
       padding:8px 11px;
       border-radius:999px;
       border:1px solid rgba(255,255,255,.08);
-      color: rgba(244,247,251,.74);
-      background: rgba(255,255,255,.04);
+      color:rgba(244,247,251,.74);
+      background:rgba(255,255,255,.04);
       font-size:.84rem;
     }
 
-    .media{
+    .reel{
       margin-top:18px;
-      border-radius:26px;
-      border:1px solid rgba(255,255,255,.08);
+      border-radius:30px;
+      border:1px solid rgba(255,255,255,.09);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.06), transparent 22%),
+        rgba(12,14,20,.60);
+      box-shadow:var(--shadow2);
       overflow:hidden;
-      background: rgba(255,255,255,.03);
-      box-shadow: var(--shadow-soft);
-      aspect-ratio: 16 / 8;
-      position:relative;
+      padding:18px;
     }
 
-    .media img{
+    .reel-layout{
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:18px;
+      align-items:stretch;
+    }
+
+    .reel-stage{
+      position:relative;
+      min-height:420px;
+      border-radius:26px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.03);
+    }
+
+    .reel-stage img{
       width:100%;
       height:100%;
       object-fit:cover;
       display:block;
       opacity:.95;
-      transform: scale(1.01);
+      transform:scale(1.02);
     }
 
-    .media::after{
-      content:"";
+    .reel-overlay{
       position:absolute;
       inset:0;
-      background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.12) 100%);
-      pointer-events:none;
+      background:
+        linear-gradient(180deg, transparent 0%, rgba(0,0,0,.16) 100%),
+        linear-gradient(90deg, rgba(0,0,0,.52) 0%, rgba(0,0,0,.08) 42%, rgba(0,0,0,.28) 100%);
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-end;
+      padding:24px;
+      gap:10px;
     }
 
-    .cards{
+    .reel-overlay h3{
+      font-size:1.8rem;
+      letter-spacing:-.04em;
+      line-height:1;
+    }
+
+    .reel-overlay p{
+      color:rgba(244,247,251,.74);
+      line-height:1.6;
+      max-width:42ch;
+    }
+
+    .reel-rail{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .slide-chip{
+      flex:1;
+      min-height:0;
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,.09);
+      background:rgba(255,255,255,.04);
+      overflow:hidden;
+      padding:14px;
+      cursor:pointer;
+      transition:transform .25s var(--ease), border-color .25s var(--ease), background .25s var(--ease);
+      text-align:left;
+      color:inherit;
+    }
+
+    .slide-chip:hover{
+      transform:translateY(-1px);
+      border-color:rgba(183,200,255,.20);
+      background:rgba(255,255,255,.06);
+    }
+
+    .slide-chip.active{
+      border-color:rgba(183,200,255,.28);
+      background:rgba(183,200,255,.08);
+    }
+
+    .slide-chip img{
+      width:100%;
+      height:122px;
+      object-fit:cover;
+      display:block;
+      border-radius:16px;
+      margin-bottom:12px;
+    }
+
+    .slide-chip strong{
+      display:block;
+      margin-bottom:6px;
+      font-size:1rem;
+    }
+
+    .slide-chip span{
+      display:block;
+      color:var(--muted);
+      font-size:.9rem;
+      line-height:1.55;
+    }
+
+    .page-hero{
+      min-height:calc(100vh - 98px);
       display:grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items:center;
+      padding-top:18px;
+    }
+
+    .updates-grid{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
       gap:18px;
       margin-top:18px;
     }
 
-    .list-card{
+    .update-card{
       border-radius:var(--radius);
       padding:24px;
       border:1px solid rgba(255,255,255,.09);
       background:
-        linear-gradient(180deg, rgba(255,255,255,.06), transparent 20%),
-        rgba(12, 14, 20, .60);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      box-shadow: var(--shadow-soft);
+        linear-gradient(180deg, rgba(255,255,255,.07), transparent 22%),
+        rgba(12,14,20,.60);
+      backdrop-filter:blur(20px);
+      -webkit-backdrop-filter:blur(20px);
+      box-shadow:var(--shadow2);
     }
 
-    .list-card h3{
-      font-size:1.1rem;
+    .update-card .date{
+      display:inline-flex;
+      margin-bottom:12px;
+      padding:8px 11px;
+      border-radius:999px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      color:rgba(244,247,251,.78);
+      font-size:.84rem;
+    }
+
+    .update-card h3{
+      font-size:1.18rem;
       margin-bottom:10px;
-      letter-spacing:-.02em;
     }
 
-    .list-card p{
-      color:var(--muted);
-      line-height:1.72;
-    }
-
-    .timeline{
-      display:grid;
-      gap:14px;
-      margin-top:18px;
-    }
-
-    .update-item{
-      display:flex;
-      gap:14px;
-      padding:18px;
-      border-radius:22px;
-      border:1px solid rgba(255,255,255,.09);
-      background: rgba(255,255,255,.04);
-    }
-
-    .update-badge{
-      width:50px;
-      height:50px;
-      flex:0 0 auto;
-      border-radius:18px;
-      display:grid;
-      place-items:center;
-      font-weight:900;
-      color:#08111f;
-      background: linear-gradient(135deg, #f4f7ff, #cddcff);
-    }
-
-    .update-content h4{
-      margin-bottom:6px;
-      font-size:1rem;
-      letter-spacing:-.02em;
-    }
-
-    .update-content span{
-      display:block;
-      color:var(--muted2);
-      font-size:.86rem;
-      margin-bottom:8px;
-    }
-
-    .update-content p{
+    .update-card p{
       color:var(--muted);
       line-height:1.7;
+      font-size:.98rem;
+      margin-bottom:14px;
     }
 
-    .redirect-box{
-      max-width:780px;
-      margin:0 auto;
-      padding: 20px 16px 0;
+    .update-card .tag{
+      display:inline-flex;
+      padding:8px 11px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.08);
+      color:rgba(244,247,251,.74);
+      background:rgba(255,255,255,.04);
+      font-size:.84rem;
     }
 
-    .redirect-card{
-      border-radius:34px;
-      border:1px solid rgba(255,255,255,.10);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.08), transparent 20%),
-        rgba(10, 12, 18, .74);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-
-    .redirect-hero{
-      position:relative;
-      min-height:420px;
-      padding:34px;
-      display:flex;
-      align-items:flex-end;
-      background:
-        linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.65)),
-        url("MovementBackround.png") center/cover no-repeat;
-    }
-
-    .redirect-copy{
-      width:min(100%, 520px);
-    }
-
-    .redirect-copy h2{
-      font-size: clamp(2.2rem, 5vw, 4rem);
-      line-height:.95;
-      letter-spacing:-.06em;
-      margin-bottom:10px;
-    }
-
-    .redirect-copy p{
-      color: rgba(244,247,251,.72);
-      line-height:1.75;
-      margin-bottom:18px;
-      max-width:50ch;
-    }
-
-    .redirect-actions{
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-
-    .profile-wrap{
+    .playtest-wrap{
       display:grid;
-      grid-template-columns: 1.05fr .95fr;
+      grid-template-columns:1fr .92fr;
       gap:18px;
+      align-items:start;
       margin-top:18px;
     }
 
-    .profile-frame{
-      border-radius:28px;
-      overflow:hidden;
-      border:1px solid rgba(255,255,255,.09);
-      background: rgba(255,255,255,.03);
-      min-height:720px;
-      box-shadow: var(--shadow-soft);
-    }
-
-    .profile-frame iframe{
-      width:100%;
-      height:100%;
-      min-height:720px;
-      border:0;
-      background:#000;
-    }
-
-    .profile-note{
-      border-radius:28px;
-      padding:24px;
-      border:1px solid rgba(255,255,255,.09);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.06), transparent 20%),
-        rgba(12, 14, 20, .60);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      box-shadow: var(--shadow-soft);
-    }
-
-    .profile-note h3{
-      font-size:1.1rem;
-      margin-bottom:10px;
-      letter-spacing:-.02em;
-    }
-
-    .profile-note p{
-      color:var(--muted);
-      line-height:1.72;
-      margin-bottom:12px;
-    }
-
-    .profile-note ul{
-      padding-left:18px;
-      color:var(--muted);
-      line-height:1.8;
-    }
-
-    .toast{
+    .owner-toast{
       position:fixed;
-      top:18px;
       right:18px;
-      z-index:120;
-      width:min(92vw, 380px);
-      padding:16px 16px 16px 18px;
-      border-radius:22px;
+      bottom:18px;
+      width:min(100%, 360px);
+      border-radius:24px;
       border:1px solid rgba(255,255,255,.10);
-      background: rgba(11, 13, 18, .74);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      box-shadow: var(--shadow-soft);
-      transform: translateY(-18px);
+      background:rgba(12,14,20,.82);
+      backdrop-filter:blur(24px);
+      -webkit-backdrop-filter:blur(24px);
+      box-shadow:var(--shadow);
+      padding:16px;
+      z-index:100;
+      transform:translateY(24px);
       opacity:0;
       pointer-events:none;
-      transition: transform .35s var(--ease), opacity .35s var(--ease);
+      transition:opacity .35s var(--ease), transform .35s var(--ease);
     }
 
-    .toast.show{
-      transform: translateY(0);
+    .owner-toast.show{
+      transform:translateY(0);
       opacity:1;
+      pointer-events:auto;
     }
 
-    .toast-title{
-      font-weight:900;
+    .owner-toast .top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:10px;
+    }
+
+    .owner-toast .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 11px;
+      border-radius:999px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      font-size:.84rem;
+      color:rgba(244,247,251,.8);
+    }
+
+    .owner-toast .dot{
+      width:8px;height:8px;border-radius:50%;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow:0 0 16px rgba(183,200,255,.55);
+    }
+
+    .owner-toast h4{
       margin-bottom:6px;
-      letter-spacing:-.02em;
+      font-size:1rem;
     }
 
-    .toast-text{
+    .owner-toast p{
       color:var(--muted);
-      line-height:1.65;
-      font-size:.95rem;
+      line-height:1.55;
+      font-size:.92rem;
     }
 
-    .refresh-overlay{
+    .owner-toast .bar{
+      margin-top:12px;
+      height:6px;
+      border-radius:999px;
+      overflow:hidden;
+      background:rgba(255,255,255,.06);
+    }
+
+    .owner-toast .bar span{
+      display:block;
+      width:100%;
+      height:100%;
+      transform-origin:left;
+      background:linear-gradient(90deg, rgba(183,200,255,.95), rgba(217,176,255,.95));
+      animation:toastbar 4.6s linear forwards;
+    }
+
+    @keyframes toastbar{
+      from{transform:scaleX(1)}
+      to{transform:scaleX(0)}
+    }
+
+    .refresh-screen{
       position:fixed;
       inset:0;
-      z-index:300;
+      z-index:200;
       display:none;
       align-items:center;
       justify-content:center;
@@ -831,7 +858,7 @@
       padding:24px;
     }
 
-    .refresh-overlay.active{
+    .refresh-screen.active{
       display:flex;
     }
 
@@ -839,10 +866,10 @@
       width:min(100%, 520px);
       border-radius:34px;
       border:1px solid rgba(255,255,255,.10);
-      background: rgba(14,16,22,.64);
-      backdrop-filter: blur(26px);
-      -webkit-backdrop-filter: blur(26px);
-      box-shadow: var(--shadow);
+      background:rgba(14,16,22,.64);
+      backdrop-filter:blur(26px);
+      -webkit-backdrop-filter:blur(26px);
+      box-shadow:var(--shadow);
       padding:34px 28px;
       text-align:center;
       position:relative;
@@ -853,8 +880,8 @@
       content:"";
       position:absolute;
       inset:-40%;
-      background: radial-gradient(circle, rgba(255,255,255,.10), transparent 42%);
-      animation: sweep 2.8s linear infinite;
+      background:radial-gradient(circle, rgba(255,255,255,.10), transparent 42%);
+      animation:sweep 2.8s linear infinite;
       pointer-events:none;
     }
 
@@ -871,20 +898,20 @@
       position:absolute;
       inset:0;
       border-radius:50%;
-      border: 1px solid rgba(255,255,255,.12);
-      animation: spin 1.5s linear infinite;
+      border:1px solid rgba(255,255,255,.12);
+      animation:spin 1.5s linear infinite;
     }
 
     .ring.two{
       inset:12px;
-      animation-duration: 2.3s;
-      border-color: rgba(183,200,255,.18);
+      animation-duration:2.3s;
+      border-color:rgba(183,200,255,.18);
     }
 
     .ring.three{
       inset:24px;
-      animation-duration: 3.4s;
-      border-color: rgba(217,176,255,.16);
+      animation-duration:3.4s;
+      border-color:rgba(217,176,255,.16);
     }
 
     .pulse{
@@ -892,13 +919,13 @@
       width:18px;
       height:18px;
       border-radius:50%;
-      background: linear-gradient(135deg, #fff, #cfdcff);
-      box-shadow: 0 0 28px rgba(255,255,255,.22);
-      animation: pulse 1.2s ease-in-out infinite;
+      background:linear-gradient(135deg, #fff, #cfdcff);
+      box-shadow:0 0 28px rgba(255,255,255,.22);
+      animation:pulse 1.2s ease-in-out infinite;
     }
 
     .refresh-title{
-      font-size: clamp(2rem, 4vw, 2.9rem);
+      font-size:clamp(2rem, 4vw, 2.9rem);
       letter-spacing:-.05em;
       line-height:1;
       margin-bottom:10px;
@@ -906,7 +933,7 @@
     }
 
     .refresh-title .grad{
-      background: linear-gradient(135deg, #fff, #cbd9ff 46%, #e1bbff 84%, #fff);
+      background:linear-gradient(135deg, #fff, #cbd9ff 46%, #e1bbff 84%, #fff);
       -webkit-background-clip:text;
       background-clip:text;
       color:transparent;
@@ -924,7 +951,7 @@
       height:10px;
       border-radius:999px;
       margin-top:24px;
-      background: rgba(255,255,255,.06);
+      background:rgba(255,255,255,.06);
       border:1px solid rgba(255,255,255,.08);
       overflow:hidden;
     }
@@ -934,20 +961,76 @@
       height:100%;
       width:38%;
       border-radius:inherit;
-      background: linear-gradient(90deg, rgba(255,255,255,.25), rgba(183,200,255,.92), rgba(217,176,255,.88), rgba(255,255,255,.24));
-      filter: blur(.1px);
-      animation: load 1.05s ease-in-out infinite;
+      background:linear-gradient(90deg, rgba(255,255,255,.25), rgba(183,200,255,.92), rgba(217,176,255,.88), rgba(255,255,255,.24));
+      animation:load 1.05s ease-in-out infinite;
     }
 
-    .hidden{
-      display:none !important;
+    .game-launch{
+      min-height:calc(100vh - 98px);
+      display:grid;
+      place-items:center;
+      text-align:center;
+    }
+
+    .launch-card{
+      width:min(100%, 640px);
+      border-radius:34px;
+      padding:34px 28px;
+      border:1px solid rgba(255,255,255,.10);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.08), transparent 22%),
+        rgba(12,14,20,.62);
+      backdrop-filter:blur(26px);
+      -webkit-backdrop-filter:blur(26px);
+      box-shadow:var(--shadow);
+    }
+
+    .launch-card h2{
+      font-size:clamp(2rem, 4.4vw, 3rem);
+      letter-spacing:-.05em;
+      margin-bottom:10px;
+    }
+
+    .launch-card p{
+      color:var(--muted);
+      line-height:1.75;
+      max-width:42ch;
+      margin:0 auto 20px;
+    }
+
+    .iframe-shell{
+      margin-top:18px;
+      border-radius:28px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.09);
+      background:rgba(255,255,255,.03);
+      box-shadow:var(--shadow2);
+    }
+
+    .iframe-shell iframe{
+      width:100%;
+      height:720px;
+      border:0;
+      display:block;
+      background:#0b0d12;
+    }
+
+    .fallback-link{
+      margin-top:12px;
+      color:var(--muted);
+      font-size:.92rem;
+    }
+
+    .fallback-link a{
+      color:#dbe5ff;
+      text-decoration:none;
     }
 
     .footer{
       max-width:var(--max);
       margin:0 auto;
-      padding: 0 16px 36px;
-      color: rgba(244,247,251,.54);
+      padding:0 16px 36px;
+      color:rgba(244,247,251,.54);
       font-size:.92rem;
     }
 
@@ -961,40 +1044,20 @@
       flex-wrap:wrap;
     }
 
-    @keyframes spin{
-      from{ transform:rotate(0deg); }
-      to{ transform:rotate(360deg); }
-    }
+    @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+    @keyframes pulse{0%,100%{transform:scale(.92);opacity:.68}50%{transform:scale(1.2);opacity:1}}
+    @keyframes sweep{from{transform:translateX(-8%) rotate(0deg)}to{transform:translateX(8%) rotate(360deg)}}
+    @keyframes load{0%{transform:translateX(-90%)}50%{transform:translateX(120%)}100%{transform:translateX(-90%)}}
+    @keyframes drift{from{transform:translateY(-6px) translateX(-3px) scale(1)}to{transform:translateY(10px) translateX(8px) scale(1.03)}}
 
-    @keyframes pulse{
-      0%,100%{ transform:scale(.92); opacity:.68; }
-      50%{ transform:scale(1.2); opacity:1; }
-    }
-
-    @keyframes sweep{
-      from{ transform:translateX(-8%) rotate(0deg); }
-      to{ transform:translateX(8%) rotate(360deg); }
-    }
-
-    @keyframes load{
-      0%{ transform:translateX(-90%); }
-      50%{ transform:translateX(120%); }
-      100%{ transform:translateX(-90%); }
-    }
-
-    @keyframes drift{
-      from{ transform:translateY(-6px) translateX(-3px) scale(1); }
-      to{ transform:translateY(10px) translateX(8px) scale(1.03); }
-    }
-
-    @keyframes pageIn{
-      from{ opacity:.35; transform: translateY(8px); }
-      to{ opacity:1; transform: translateY(0); }
-    }
-
-    @media (max-width: 1040px){
-      .hero{
+    @media (max-width:1040px){
+      .hero,
+      .playtest-wrap,
+      .reel-layout{
         grid-template-columns:1fr;
+      }
+
+      .hero{
         min-height:auto;
         padding-top:66px;
       }
@@ -1004,17 +1067,14 @@
       }
 
       .grid,
-      .cards,
-      .profile-wrap{
+      .updates-grid{
         grid-template-columns:1fr;
       }
 
-      h1{
-        max-width:none;
-      }
+      h1{max-width:none}
     }
 
-    @media (max-width: 720px){
+    @media (max-width:720px){
       .topbar{
         padding-left:10px;
         padding-right:10px;
@@ -1025,51 +1085,22 @@
         border-radius:20px;
       }
 
-      .nav{
-        gap:8px;
-      }
-
-      .brand-text span{
-        display:none;
-      }
-
-      .hero{
-        padding-top:52px;
-      }
-
-      .lead{
-        font-size:1rem;
-      }
-
-      .stats{
-        grid-template-columns:1fr;
-      }
-
-      .card-shell{
-        transform:none;
-      }
-
-      .card-shell:hover{
-        transform:translateY(-2px);
-      }
-
-      .redirect-hero{
-        min-height:340px;
-        padding:24px;
-      }
+      .nav{gap:14px}
+      .brand-text span{display:none}
+      .hero{padding-top:52px}
+      .lead{font-size:1rem}
+      .stats{grid-template-columns:1fr}
+      .card-shell{transform:none}
+      .card-shell:hover{transform:translateY(-2px)}
+      .reel-stage{min-height:320px}
+      .iframe-shell iframe{height:520px}
     }
   </style>
-
 </head>
 <body>
   <div class="noise"></div>
 
-  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true">
-    <div class="toast-title" id="toastTitle">Redacted-5</div>
-    <div class="toast-text" id="toastText">Website loaded.</div>
-  </div>
-
-  <div class="refresh-overlay" id="refreshOverlay" aria-hidden="true">
+  <div class="refresh-screen" id="refreshScreen" aria-hidden="true">
     <div class="refresh-shell">
       <div class="refresh-icon" aria-hidden="true">
         <div class="ring"></div>
@@ -1078,410 +1109,500 @@
         <div class="pulse"></div>
       </div>
       <div class="refresh-title"><span class="grad">Refreshing</span></div>
-      <p class="refresh-text">Please wait while Redacted-5 reloads the interface.</p>
+      <p class="refresh-text" id="refreshMessage">Please wait while REDACTED-5 reloads the interface.</p>
       <div class="refresh-bar" aria-hidden="true"><span></span></div>
     </div>
   </div>
 
-  <div class="app" id="app">
+  <div class="owner-toast" id="ownerToast">
+    <div class="top">
+      <div class="badge"><span class="dot"></span><span id="toastBadge">Playtest Notice</span></div>
+      <button class="button secondary" id="toastClose" style="padding:8px 12px;border-radius:14px;">Close</button>
+    </div>
+    <h4 id="toastTitle">Playtest access online.</h4>
+    <p id="toastBody">Open the Playtest page to check the latest testing notes.</p>
+    <div class="bar"><span></span></div>
+  </div>
+
+  <div class="app">
     <header class="topbar">
       <div class="topbar-inner" id="topbar">
         <div class="brand">
           <div class="brand-mark">
-            <img id="brandIcon" src="RedactedP.png" alt="Redacted-5 icon" />
+            <img src="RedactedP.png" alt="Redacted-5 icon" />
           </div>
           <div class="brand-text">
-            <strong id="siteName">Redacted-5</strong>
-            <span id="siteTagline">Premium classified game interface</span>
+            <strong id="brandName">REDACTED-5</strong>
+            <span id="brandSub">Premium classified game interface</span>
           </div>
         </div>
 
-```
-    <nav class="nav" aria-label="Primary">
-      <a href="#home" data-route="home">Home</a>
-      <a href="#updates" data-route="updates">Updates</a>
-      <a href="#game" data-route="game">Game</a>
-      <a href="#playtest" data-route="playtest">Playtest</a>
-      <a href="#creator" data-route="creator">Creator</a>
-    </nav>
-  </div>
-</header>
-
-<main>
-  <section class="page active" id="page-home">
-    <section class="hero" id="home">
-      <div class="hero-copy">
-        <div class="eyebrow">
-          <span class="eyebrow-dot"></span>
-          <span id="eyebrowText">Classified tactical experience</span>
-        </div>
-
-        <h1>
-          <span class="grad" id="heroTitle">Redacted-5</span>
-          <span id="heroSubtitle">Is Live.</span>
-        </h1>
-
-        <p class="lead" id="heroLead">
-          A cinematic, premium site built around your game identity: blurred chrome, stronger hierarchy, soft motion, and a cleaner classified tone.
-        </p>
-
-        <div class="actions">
-          <a class="button primary" href="#game">Play Game</a>
-          <a class="button secondary" href="#updates">See Updates</a>
-          <a class="button secondary" href="#creator">Creator</a>
-        </div>
+        <nav class="nav" aria-label="Primary">
+          <a href="#home" data-nav="home">Home</a>
+          <a href="#updates" data-nav="updates">Updates</a>
+          <a href="#playtest" data-nav="playtest">Playtest</a>
+          <a href="#creator" data-nav="creator">Creator</a>
+          <a href="#game" data-nav="game" class="pill">Game</a>
+        </nav>
       </div>
+    </header>
 
-      <div class="showcase">
-        <div class="orb"></div>
-
-        <div class="card-shell" id="shell">
-          <div class="hero-bg"></div>
-
-          <div class="shell-top">
-            <div class="traffic" aria-hidden="true">
-              <span></span><span></span><span></span>
-            </div>
-            <div id="previewLabel">Secure Preview</div>
-          </div>
-
-          <div class="panel" style="margin-top:22px;">
-            <div class="mini-title" id="previewTitle">Mission Brief</div>
-            <div class="mini-text" id="previewText">
-              Built to feel more like a studio launch page than a generic game site.
+    <main>
+      <section class="page" data-page="home">
+        <div class="hero">
+          <div class="hero-copy">
+            <div class="eyebrow">
+              <span class="eyebrow-dot"></span>
+              <span id="heroEyebrow">Classified tactical experience</span>
             </div>
 
-            <div class="stats">
-              <div class="stat">
-                <strong>01</strong>
-                <span>Glass UI</span>
-              </div>
-              <div class="stat">
-                <strong>02</strong>
-                <span>Page routing</span>
-              </div>
-              <div class="stat">
-                <strong>03</strong>
-                <span>Open toast</span>
-              </div>
+            <h1><span class="grad" id="heroTitle">REDACTED-5</span> Is Live.</h1>
+
+            <p class="lead" id="heroLead">
+              A cinematic, high-end site built around your game identity: sharp glass panels, soft blur, premium contrast, and a serious classified tone.
+            </p>
+
+            <div class="actions">
+              <button class="button primary" id="goGameBtn">Open Game</button>
+              <a class="button secondary" href="#updates">View Updates</a>
+              <a class="button secondary" href="#creator">Creator</a>
             </div>
           </div>
 
-          <div class="panel" style="margin-top:0;">
-            <div class="mini-title">Interface Quality</div>
-            <div class="mini-text">
-              Strong contrast, cleaner spacing, and a more cinematic card system make the page feel much more complete.
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </section>
+          <div class="showcase">
+            <div class="orb"></div>
 
-  <section class="page" id="page-updates">
-    <section class="section">
-      <div class="section-head">
-        <div>
-          <h2 id="updatesTitle">Update Log</h2>
-          <p id="updatesDesc">A structured update page for patch notes, feature drops, and future devlogs.</p>
-        </div>
-        <a class="button secondary" href="#home">Back Home</a>
-      </div>
+            <div class="card-shell" id="shell">
+              <div class="hero-bg"></div>
+              <div class="shell-top">
+                <div class="traffic" aria-hidden="true">
+                  <span></span><span></span><span></span>
+                </div>
+                <div id="showcaseCaption">Secure Preview</div>
+              </div>
 
-      <div class="timeline" id="updateTimeline"></div>
-    </section>
-  </section>
+              <div class="panel" style="margin-top:22px;">
+                <div class="mini-title">Mission Brief</div>
+                <div class="mini-text">
+                  Built for a darker, more premium look with a blurred top banner, polished depth, and a cinematic background pulled from your image file.
+                </div>
 
-  <section class="page" id="page-game">
-    <section class="section">
-      <div class="redirect-box">
-        <div class="redirect-card">
-          <div class="redirect-hero">
-            <div class="redirect-copy">
-              <h2>Launching the game.</h2>
-              <p>
-                You are being redirected to the Roblox experience. If it does not open automatically, press the button below.
-              </p>
-              <div class="redirect-actions">
-                <a class="button primary" id="openGameBtn" href="https://www.roblox.com/games/131283297263046/REDACTED-5" target="_blank" rel="noopener noreferrer">Open Redacted-5</a>
-                <a class="button secondary" href="#home">Cancel</a>
+                <div class="stats">
+                  <div class="stat"><strong>01</strong><span>Glass UI</span></div>
+                  <div class="stat"><strong>02</strong><span>Scroll motion</span></div>
+                  <div class="stat"><strong>03</strong><span>Custom pages</span></div>
+                </div>
+              </div>
+
+              <div class="panel" style="margin-top:0;">
+                <div class="mini-title">Interface Quality</div>
+                <div class="mini-text">
+                  The layout uses restrained motion, layered lighting, and a cleaner composition so it feels much more expensive than a basic fan page.
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-  </section>
 
-  <section class="page" id="page-playtest">
-    <section class="section">
-      <div class="section-head">
-        <div>
-          <h2>Playtest</h2>
-          <p>Give testers a clean place to check the build, read rules, and contact you without clutter.</p>
-        </div>
-        <a class="button secondary" href="#home">Back Home</a>
-      </div>
-
-      <div class="cards">
-        <article class="list-card">
-          <h3>Open Request</h3>
-          <p>
-            This page can act like a playtest hub. Add your Discord tag, a form link, or a simple request message here.
-          </p>
-        </article>
-
-        <article class="list-card">
-          <h3>What testers should know</h3>
-          <p>
-            Keep feedback focused on bugs, performance, balance, and map flow. Use this space to post the current testing goal.
-          </p>
-        </article>
-      </div>
-
-      <div class="media" style="margin-top:18px;">
-        <img src="MovementBackround.png" alt="Redacted-5 playtest background" />
-      </div>
-
-      <div class="cards">
-        <article class="list-card">
-          <h3>Playtest Notice</h3>
-          <p>
-            Every time the website opens, a sleek notification appears at the top. You can edit that message in the config block.
-          </p>
-        </article>
-
-        <article class="list-card">
-          <h3>Quick Actions</h3>
-          <p>
-            Add a “Join Test” button, a whitelist notice, or a changelog snippet here when you are ready.
-          </p>
-        </article>
-      </div>
-    </section>
-  </section>
-
-  <section class="page" id="page-creator">
-    <section class="section">
-      <div class="section-head">
-        <div>
-          <h2>Creator</h2>
-          <p>About the developer, with a profile embed attempt and a fallback link in case Roblox blocks the iframe.</p>
-        </div>
-        <a class="button secondary" href="#home">Back Home</a>
-      </div>
-
-      <div class="profile-wrap">
-        <div class="profile-frame">
-          <iframe
-            src="https://www.roblox.com/users/3028124482/profile"
-            title="Roblox profile for the creator"
-            loading="lazy"
-            referrerpolicy="no-referrer"
-            allow="fullscreen"
-          ></iframe>
-        </div>
-
-        <aside class="profile-note">
-          <h3>About Redacted-5</h3>
-          <p>
-            This is the creator page. Use it for your bio, socials, development notes, or contact links.
-          </p>
-          <p>
-            Roblox may block the embedded profile in some browsers or may refuse iframe display. If that happens, the fallback still gives users a direct path.
-          </p>
-          <ul>
-            <li>Game: Redacted-5</li>
-            <li>Creator profile: linked above</li>
-            <li>Style: premium, cinematic, minimal</li>
-          </ul>
-
-          <div class="actions" style="margin-top:18px;">
-            <a class="button primary" href="https://www.roblox.com/users/3028124482/profile" target="_blank" rel="noopener noreferrer">Open Profile</a>
-            <a class="button secondary" href="#updates">View Updates</a>
+        <section style="margin-top:24px;">
+          <div class="section-head">
+            <div>
+              <h2>Media reel</h2>
+              <p>Scroll down and the showcase changes feel like a cinematic slideshow instead of a plain image dump.</p>
+            </div>
           </div>
-        </aside>
+
+          <div class="reel">
+            <div class="reel-layout">
+              <div class="reel-stage">
+                <img id="slidePreview" src="MovementBackround.png" alt="Redacted-5 media slide" />
+                <div class="reel-overlay">
+                  <div class="eyebrow" style="margin-bottom:0;width:fit-content;">
+                    <span class="eyebrow-dot"></span>
+                    Media
+                  </div>
+                  <h3 id="slideTitle">Atmosphere</h3>
+                  <p id="slideText">A dark, premium visual foundation built for Redacted-5.</p>
+                </div>
+              </div>
+
+              <div class="reel-rail" id="reelRail"></div>
+            </div>
+          </div>
+        </section>
+
+        <section style="margin-top:28px;">
+          <div class="section-head">
+            <div>
+              <h2>Built to feel like a real game brand.</h2>
+              <p>Less clutter, more presence. The page uses large typography, soft glass, and a stronger visual hierarchy so Redacted-5 looks polished immediately.</p>
+            </div>
+          </div>
+
+          <div class="grid">
+            <article class="feature reveal-on-scroll">
+              <div class="icon">✦</div>
+              <h3>Premium Blur</h3>
+              <p>The top banner stays glassy and crisp, like a modern product site instead of a generic game page.</p>
+              <span class="tag">Frozen glass</span>
+            </article>
+
+            <article class="feature reveal-on-scroll">
+              <div class="icon">◌</div>
+              <h3>Cinematic Depth</h3>
+              <p>Layered lights, gradients, and your background image create a stronger sense of atmosphere.</p>
+              <span class="tag">Dark prestige</span>
+            </article>
+
+            <article class="feature reveal-on-scroll">
+              <div class="icon">↻</div>
+              <h3>Custom Refresh</h3>
+              <p>When the page reloads, users briefly see a custom waiting screen with animation instead of a plain white flash.</p>
+              <span class="tag">Custom loader</span>
+            </article>
+          </div>
+        </section>
+
+        <section style="margin-top:28px;">
+          <div class="section-head">
+            <div>
+              <h2>Latest update preview</h2>
+              <p>There is a full updates page too, but this keeps the home page feeling alive.</p>
+            </div>
+            <a class="button secondary" href="#updates">Open Updates Page</a>
+          </div>
+          <div class="update-card" id="homeUpdatePreview"></div>
+        </section>
+      </section>
+
+      <section class="page" data-page="updates">
+        <div class="page-hero">
+          <div>
+            <div class="section-head">
+              <div>
+                <h2>Updates</h2>
+                <p>Live changelog, patch notes, and whatever you want to place here next. Edit the CONFIG block at the top and this page updates automatically.</p>
+              </div>
+            </div>
+
+            <div class="updates-grid" id="updatesGrid"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" data-page="playtest">
+        <div class="page-hero">
+          <div>
+            <div class="section-head">
+              <div>
+                <h2>Playtest</h2>
+                <p>A clean section for testers. This page also triggers the sleek notification when the site opens.</p>
+              </div>
+            </div>
+
+            <div class="playtest-wrap">
+              <div class="feature reveal-on-scroll" style="opacity:1;transform:none;">
+                <div class="icon">◉</div>
+                <h3>Test Access</h3>
+                <p id="playtestText">Playtest access is open. Check the latest build, watch for bugs, and send notes back to the owner.</p>
+                <div class="actions" style="margin-top:18px;">
+                  <a class="button primary" href="#game">Launch Game</a>
+                  <a class="button secondary" href="#updates">Check Updates</a>
+                </div>
+              </div>
+
+              <div class="feature reveal-on-scroll" style="opacity:1;transform:none;">
+                <div class="icon">⟲</div>
+                <h3>Owner Notification</h3>
+                <p>
+                  Every time the website opens, a polished alert appears. That gives you a sleek reminder that the playtest page is ready.
+                </p>
+                <span class="tag">Auto notice on load</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" data-page="creator">
+        <div class="page-hero">
+          <div>
+            <div class="section-head">
+              <div>
+                <h2>Creator</h2>
+                <p>About the developer, the profile embed, and a clean place for basic info.</p>
+              </div>
+            </div>
+
+            <div class="grid" style="grid-template-columns:1fr .95fr;">
+              <article class="feature reveal-on-scroll" style="opacity:1;transform:none;">
+                <div class="icon">⌁</div>
+                <h3 id="creatorName">About the Creator</h3>
+                <p id="creatorBio">
+                  Put your short bio here. This section is built to look like a premium profile panel instead of a boring text block.
+                </p>
+                <div class="actions" style="margin-top:18px;">
+                  <a class="button primary" href="https://www.roblox.com/users/3028124482/profile" target="_blank" rel="noreferrer">Open Roblox Profile</a>
+                </div>
+              </article>
+
+              <article class="feature reveal-on-scroll" style="opacity:1;transform:none;">
+                <div class="icon">▣</div>
+                <h3>Embedded Profile</h3>
+                <p>Roblox may block iframe embedding on some pages, but the frame is included as requested and a fallback link is shown below it.</p>
+                <span class="tag">Iframe + fallback</span>
+              </article>
+            </div>
+
+            <div class="iframe-shell" style="margin-top:18px;">
+              <iframe
+                src="https://www.roblox.com/users/3028124482/profile"
+                title="Roblox Creator Profile"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+              </iframe>
+            </div>
+
+            <div class="fallback-link">
+              If the profile does not load inside the frame, open it here:
+              <a href="https://www.roblox.com/users/3028124482/profile" target="_blank" rel="noreferrer">Roblox Creator Profile</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" data-page="game">
+        <div class="game-launch">
+          <div class="launch-card">
+            <div class="eyebrow" style="margin-bottom:14px;">
+              <span class="eyebrow-dot"></span>
+              Launching
+            </div>
+            <h2>Opening REDACTED-5</h2>
+            <p>Redirecting to the game now. If it does not open automatically, use the button below.</p>
+            <div class="actions" style="justify-content:center;">
+              <a class="button danger" id="manualGameLink" href="https://www.roblox.com/games/131283297263046/REDACTED-5" target="_blank" rel="noreferrer">Open Game</a>
+              <a class="button secondary" href="#home">Back Home</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <div id="footerLeft">REDACTED-5</div>
+        <div id="footerRight">Classified. Cinematic. Clean.</div>
       </div>
-    </section>
-  </section>
-</main>
-
-<footer class="footer">
-  <div class="footer-inner">
-    <div id="footerLeft">Redacted-5</div>
-    <div id="footerRight">Classified. Cinematic. Clean.</div>
-  </div>
-</footer>
-```
-
+    </footer>
   </div>
 
   <script>
+    /*
+      EDIT THIS BLOCK ONLY FOR MOST CHANGES:
+      - Replace image names if needed.
+      - Change URLs.
+      - Update update cards and slideshow text.
+      - Adjust the toast message.
+    */
     const CONFIG = {
-      siteName: "Redacted-5",
-      siteTagline: "Premium classified game interface",
-      eyebrowText: "Classified tactical experience",
-      heroTitle: "Redacted-5",
-      heroSubtitle: "Is Live.",
-      heroLead: "A cinematic, premium site built around your game identity: blurred chrome, stronger hierarchy, soft motion, and a cleaner classified tone.",
-      previewLabel: "Secure Preview",
-      previewTitle: "Mission Brief",
-      previewText: "Built to feel more like a studio launch page than a generic game site.",
-      welcomeTitle: "Redacted-5 Loaded",
-      welcomeText: "Welcome back. The site is ready.",
-      updateTitle: "Update Log",
-      updateDesc: "A structured update page for patch notes, feature drops, and future devlogs.",
+      siteName: "REDACTED-5",
+      brandSubtitle: "Premium classified game interface",
+      heroEyebrow: "Classified tactical experience",
+      heroTitle: "REDACTED-5",
+      heroLead: "A cinematic, high-end site built around your game identity: sharp glass panels, soft blur, premium contrast, and a serious classified tone.",
       gameUrl: "https://www.roblox.com/games/131283297263046/REDACTED-5",
-      profileUrl: "https://www.roblox.com/users/3028124482/profile",
-      openGameDelayMs: 1200,
-      refreshOverlayMs: 1400,
+      creatorProfileUrl: "https://www.roblox.com/users/3028124482/profile",
+      toast: {
+        badge: "Playtest Notice",
+        title: "Playtest access online.",
+        body: "Open the Playtest page to check the latest testing notes."
+      },
+      creatorBio: "Put your short bio here. This section is built to look like a premium profile panel instead of a boring text block.",
       updates: [
         {
-          badge: "01",
-          title: "Premium UI pass",
-          date: "Latest",
-          text: "The interface now uses a blurred top banner, stronger page structure, and a more cinematic home layout."
+          date: "Build 01",
+          title: "Premium site overhaul",
+          body: "The interface was rebuilt with a darker cinematic theme, better spacing, glass panels, and stronger motion.",
+          tag: "UI / visual pass"
         },
         {
-          badge: "02",
-          title: "Page routing",
-          date: "Navigation",
-          text: "The site now behaves like a multi-page experience with Home, Updates, Game, Playtest, and Creator pages."
+          date: "Build 02",
+          title: "Pages added",
+          body: "Home, Updates, Playtest, Creator, and Game pages now live in one file and switch cleanly by hash.",
+          tag: "Pages / routing"
         },
         {
-          badge: "03",
-          title: "Playtest hub",
-          date: "Feature",
-          text: "A dedicated playtest page gives you room for tester instructions, request messaging, and future forms."
+          date: "Build 03",
+          title: "Launch flow",
+          body: "The Game page now acts like a dedicated launch screen and redirects to the Roblox game link.",
+          tag: "Redirect / launch"
+        }
+      ],
+      slides: [
+        {
+          image: "MovementBackround.png",
+          title: "Atmosphere",
+          text: "A dark, premium visual foundation for REDACTED-5."
+        },
+        {
+          image: "MovementBackround.png",
+          title: "Cinematic Motion",
+          text: "Scroll-friendly presentation with a smoother, studio-style feel."
+        },
+        {
+          image: "RedactedP.png",
+          title: "Brand Mark",
+          text: "Your icon sits cleanly in the UI and works as the site identity."
         }
       ]
     };
 
-    const pages = {
-      home: document.getElementById("page-home"),
-      updates: document.getElementById("page-updates"),
-      game: document.getElementById("page-game"),
-      playtest: document.getElementById("page-playtest"),
-      creator: document.getElementById("page-creator")
-    };
-
-    const navLinks = Array.from(document.querySelectorAll(".nav a"));
     const topbar = document.getElementById("topbar");
     const shell = document.getElementById("shell");
-    const refreshOverlay = document.getElementById("refreshOverlay");
-    const toast = document.getElementById("toast");
-    const toastTitle = document.getElementById("toastTitle");
-    const toastText = document.getElementById("toastText");
-    const updateTimeline = document.getElementById("updateTimeline");
-    const openGameBtn = document.getElementById("openGameBtn");
-
-    const siteName = document.getElementById("siteName");
-    const siteTagline = document.getElementById("siteTagline");
-    const eyebrowText = document.getElementById("eyebrowText");
+    const refreshScreen = document.getElementById("refreshScreen");
+    const refreshMessage = document.getElementById("refreshMessage");
+    const brandName = document.getElementById("brandName");
+    const brandSub = document.getElementById("brandSub");
+    const heroEyebrow = document.getElementById("heroEyebrow");
     const heroTitle = document.getElementById("heroTitle");
-    const heroSubtitle = document.getElementById("heroSubtitle");
     const heroLead = document.getElementById("heroLead");
-    const previewLabel = document.getElementById("previewLabel");
-    const previewTitle = document.getElementById("previewTitle");
-    const previewText = document.getElementById("previewText");
-    const updatesTitle = document.getElementById("updatesTitle");
-    const updatesDesc = document.getElementById("updatesDesc");
+    const showcaseCaption = document.getElementById("showcaseCaption");
+    const updatesGrid = document.getElementById("updatesGrid");
+    const homeUpdatePreview = document.getElementById("homeUpdatePreview");
+    const slidePreview = document.getElementById("slidePreview");
+    const slideTitle = document.getElementById("slideTitle");
+    const slideText = document.getElementById("slideText");
+    const reelRail = document.getElementById("reelRail");
+    const playtestText = document.getElementById("playtestText");
+    const creatorName = document.getElementById("creatorName");
+    const creatorBio = document.getElementById("creatorBio");
+    const manualGameLink = document.getElementById("manualGameLink");
+    const toast = document.getElementById("ownerToast");
+    const toastBadge = document.getElementById("toastBadge");
+    const toastTitle = document.getElementById("toastTitle");
+    const toastBody = document.getElementById("toastBody");
+    const toastClose = document.getElementById("toastClose");
     const footerLeft = document.getElementById("footerLeft");
     const footerRight = document.getElementById("footerRight");
-    const brandIcon = document.getElementById("brandIcon");
+    const navLinks = [...document.querySelectorAll("[data-nav]")];
+    const pages = [...document.querySelectorAll("[data-page]")];
 
-    siteName.textContent = CONFIG.siteName;
-    siteTagline.textContent = CONFIG.siteTagline;
-    eyebrowText.textContent = CONFIG.eyebrowText;
-    heroTitle.textContent = CONFIG.heroTitle;
-    heroSubtitle.textContent = CONFIG.heroSubtitle;
-    heroLead.textContent = CONFIG.heroLead;
-    previewLabel.textContent = CONFIG.previewLabel;
-    previewTitle.textContent = CONFIG.previewTitle;
-    previewText.textContent = CONFIG.previewText;
-    updatesTitle.textContent = CONFIG.updateTitle;
-    updatesDesc.textContent = CONFIG.updateDesc;
-    footerLeft.textContent = CONFIG.siteName;
-    footerRight.textContent = "Classified. Cinematic. Clean.";
-    openGameBtn.href = CONFIG.gameUrl;
-    brandIcon.src = "RedactedP.png";
+    function renderConfig() {
+      document.title = CONFIG.siteName;
+      brandName.textContent = CONFIG.siteName;
+      brandSub.textContent = CONFIG.brandSubtitle;
+      heroEyebrow.textContent = CONFIG.heroEyebrow;
+      heroTitle.textContent = CONFIG.heroTitle;
+      heroLead.textContent = CONFIG.heroLead;
+      showcaseCaption.textContent = "Secure Preview";
+      playtestText.textContent = "Playtest access is open. Check the latest build, watch for bugs, and send notes back to the owner.";
+      creatorBio.textContent = CONFIG.creatorBio;
+      refreshMessage.textContent = `Please wait while ${CONFIG.siteName} reloads the interface.`;
+      toastBadge.textContent = CONFIG.toast.badge;
+      toastTitle.textContent = CONFIG.toast.title;
+      toastBody.textContent = CONFIG.toast.body;
+      footerLeft.textContent = CONFIG.siteName;
+      footerRight.textContent = "Classified. Cinematic. Clean.";
+      manualGameLink.href = CONFIG.gameUrl;
+    }
 
     function renderUpdates() {
-      updateTimeline.innerHTML = CONFIG.updates.map(item => `
-        <article class="update-item">
-          <div class="update-badge">${item.badge}</div>
-          <div class="update-content">
-            <h4>${item.title}</h4>
-            <span>${item.date}</span>
-            <p>${item.text}</p>
-          </div>
-        </article>
-      `).join("");
-    }
+      updatesGrid.innerHTML = "";
+      CONFIG.updates.forEach((item, index) => {
+        const card = document.createElement("article");
+        card.className = "update-card reveal-on-scroll";
+        card.innerHTML = `
+          <div class="date">${item.date}</div>
+          <h3>${item.title}</h3>
+          <p>${item.body}</p>
+          <span class="tag">${item.tag}</span>
+        `;
+        updatesGrid.appendChild(card);
 
-    renderUpdates();
-
-    function showToast(title, text, duration = 3300) {
-      toastTitle.textContent = title;
-      toastText.textContent = text;
-      toast.classList.add("show");
-      clearTimeout(showToast._timer);
-      showToast._timer = setTimeout(() => toast.classList.remove("show"), duration);
-    }
-
-    function showRefreshOverlay(duration = CONFIG.refreshOverlayMs) {
-      refreshOverlay.classList.add("active");
-      refreshOverlay.setAttribute("aria-hidden", "false");
-      window.setTimeout(() => {
-        refreshOverlay.classList.remove("active");
-        refreshOverlay.setAttribute("aria-hidden", "true");
-      }, duration);
-    }
-
-    function setActivePage(pageName) {
-      Object.entries(pages).forEach(([key, el]) => {
-        el.classList.toggle("active", key === pageName);
+        if (index === 0) {
+          homeUpdatePreview.innerHTML = `
+            <div class="date">${item.date}</div>
+            <h3>${item.title}</h3>
+            <p>${item.body}</p>
+            <span class="tag">${item.tag}</span>
+          `;
+        }
       });
+    }
 
-      navLinks.forEach(link => {
-        const route = link.getAttribute("data-route");
-        link.classList.toggle("active", route === pageName);
+    function renderSlides() {
+      reelRail.innerHTML = "";
+      CONFIG.slides.forEach((slide, index) => {
+        const btn = document.createElement("button");
+        btn.className = "slide-chip";
+        btn.type = "button";
+        btn.innerHTML = `
+          <img src="${slide.image}" alt="${slide.title}">
+          <strong>${slide.title}</strong>
+          <span>${slide.text}</span>
+        `;
+        btn.addEventListener("click", () => setSlide(index));
+        reelRail.appendChild(btn);
       });
+    }
 
-      if (pageName === "updates") {
-        renderUpdates();
-      }
+    let activeSlide = 0;
+    function setSlide(index) {
+      activeSlide = index;
+      const slide = CONFIG.slides[index];
+      slidePreview.src = slide.image;
+      slidePreview.alt = slide.title;
+      slideTitle.textContent = slide.title;
+      slideText.textContent = slide.text;
 
-      if (pageName === "game") {
-        window.setTimeout(() => {
+      [...document.querySelectorAll(".slide-chip")].forEach((el, i) => {
+        el.classList.toggle("active", i === index);
+      });
+    }
+
+    function pageNameFromHash() {
+      const hash = location.hash.replace("#", "").trim();
+      return hash || "home";
+    }
+
+    let redirectTimer = null;
+    function showPage(name) {
+      pages.forEach(page => page.classList.toggle("active", page.dataset.page === name));
+      navLinks.forEach(link => link.classList.toggle("active", link.dataset.nav === name));
+      document.title = `${CONFIG.siteName} | ${name.charAt(0).toUpperCase() + name.slice(1)}`;
+
+      if (name === "game") {
+        clearTimeout(redirectTimer);
+        redirectTimer = setTimeout(() => {
           window.location.href = CONFIG.gameUrl;
-        }, CONFIG.openGameDelayMs);
+        }, 1300);
       }
-
-      window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    function routeFromHash() {
-      const hash = (window.location.hash || "#home").replace("#", "");
-      if (pages[hash]) return hash;
-      return "home";
+    function route() {
+      const page = pageNameFromHash();
+      showPage(page);
     }
 
-    window.addEventListener("hashchange", () => {
-      setActivePage(routeFromHash());
-    });
+    function isReloadNavigation() {
+      try {
+        const nav = performance.getEntriesByType?.("navigation")?.[0];
+        if (nav && nav.type === "reload") return true;
+      } catch (_) {}
+      try {
+        return performance.navigation && performance.navigation.type === 1;
+      } catch (_) {
+        return false;
+      }
+    }
 
-    window.addEventListener("load", () => {
-      setActivePage(routeFromHash());
-      showToast(CONFIG.welcomeTitle, CONFIG.welcomeText);
-      showRefreshOverlay();
+    function showOwnerToast() {
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 4600);
+    }
 
-      setTimeout(() => {
-        document.querySelectorAll(".feature").forEach((el, index) => {
-          setTimeout(() => el.classList.add("reveal"), index * 120);
-        });
-      }, 150);
-    });
+    toastClose.addEventListener("click", () => toast.classList.remove("show"));
 
     window.addEventListener("scroll", () => {
       if (window.scrollY > 8) topbar.classList.add("shrink");
@@ -1506,18 +1627,50 @@
     });
 
     const revealObserver = new IntersectionObserver((entries) => {
-      for (const entry of entries) {
+      entries.forEach((entry) => {
         if (entry.isIntersecting) entry.target.classList.add("reveal");
-      }
+      });
     }, { threshold: 0.18 });
 
-    document.querySelectorAll(".feature").forEach((el) => revealObserver.observe(el));
+    function observeRevealElements() {
+      document.querySelectorAll(".reveal-on-scroll").forEach((el) => revealObserver.observe(el));
+    }
 
-    // Keep playtest page and creator page feeling alive by revealing cards.
-    document.querySelectorAll(".list-card, .update-item").forEach((el) => {
-      el.style.opacity = "1";
+    document.getElementById("goGameBtn").addEventListener("click", () => {
+      location.hash = "#game";
     });
-  </script>
 
+    window.addEventListener("hashchange", route);
+
+    if (isReloadNavigation()) {
+      refreshScreen.classList.add("active");
+      refreshScreen.setAttribute("aria-hidden", "false");
+      window.addEventListener("load", () => {
+        setTimeout(() => {
+          refreshScreen.classList.remove("active");
+          refreshScreen.setAttribute("aria-hidden", "true");
+        }, 1450);
+      });
+    }
+
+    renderConfig();
+    renderUpdates();
+    renderSlides();
+    setSlide(0);
+    observeRevealElements();
+    route();
+    showOwnerToast();
+
+    setInterval(() => {
+      const next = (activeSlide + 1) % CONFIG.slides.length;
+      setSlide(next);
+    }, 4200);
+
+    setTimeout(() => {
+      document.querySelectorAll(".reveal-on-scroll").forEach((el) => {
+        if (el.getBoundingClientRect().top < window.innerHeight * 0.88) el.classList.add("reveal");
+      });
+    }, 150);
+  </script>
 </body>
 </html>
