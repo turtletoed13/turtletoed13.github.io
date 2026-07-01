@@ -3,23 +3,385 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SYSTEMATICS REIMAGINED / [REDACTED]</title>
+
+<title>Your Project</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
-body{margin:0;font-family:Arial,sans-serif;background:#0d1117;color:#e6edf3}
-header{padding:20px 40px;background:#161b22;border-bottom:1px solid #30363d;font-size:28px;font-weight:bold}
-main{padding:60px}
-.card{background:#161b22;border:1px solid #30363d;border-radius:14px;padding:24px;max-width:700px}
-a.button{display:inline-block;margin-top:20px;padding:12px 20px;background:#238636;color:#fff;text-decoration:none;border-radius:8px}
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Inter",sans-serif;
+}
+
+body{
+    background:#07090f;
+    color:white;
+    overflow-x:hidden;
+}
+
+/* Background */
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+
+    background:
+        radial-gradient(circle at top left,#2458ff55,transparent 40%),
+        radial-gradient(circle at bottom right,#6d28d955,transparent 40%),
+        radial-gradient(circle at center,#0b0f1d,transparent 70%);
+
+    z-index:-2;
+}
+
+body::after{
+    content:"";
+    position:fixed;
+    inset:0;
+    backdrop-filter:blur(120px);
+    z-index:-1;
+}
+
+/* NAVBAR */
+
+nav{
+    position:fixed;
+    top:20px;
+    left:50%;
+    transform:translateX(-50%);
+
+    width:min(1200px,92%);
+    height:72px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 32px;
+
+    border-radius:22px;
+
+    background:rgba(20,20,28,.55);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    backdrop-filter:blur(28px);
+    -webkit-backdrop-filter:blur(28px);
+
+    box-shadow:
+    0 20px 60px rgba(0,0,0,.4),
+    inset 0 1px rgba(255,255,255,.08);
+
+    z-index:999;
+}
+
+.logo{
+    font-size:24px;
+    font-weight:700;
+    letter-spacing:.5px;
+}
+
+.logo span{
+    color:#4b8dff;
+}
+
+.links{
+    display:flex;
+    gap:32px;
+}
+
+.links a{
+    color:#cfd8ff;
+    text-decoration:none;
+    transition:.25s;
+    font-weight:500;
+}
+
+.links a:hover{
+    color:white;
+}
+
+.github{
+    padding:12px 24px;
+
+    border-radius:14px;
+
+    background:linear-gradient(135deg,#4b8dff,#6d4cff);
+
+    color:white;
+    text-decoration:none;
+    font-weight:600;
+
+    transition:.3s;
+}
+
+.github:hover{
+    transform:translateY(-3px);
+    box-shadow:0 15px 35px rgba(75,141,255,.45);
+}
+
+/* HERO */
+
+.hero{
+    min-height:100vh;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+
+    padding:120px 30px;
+}
+
+.hero-content{
+    max-width:900px;
+}
+
+.badge{
+
+    display:inline-flex;
+    gap:10px;
+    align-items:center;
+
+    padding:10px 18px;
+
+    border-radius:999px;
+
+    background:rgba(255,255,255,.05);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    backdrop-filter:blur(18px);
+
+    margin-bottom:28px;
+}
+
+.hero h1{
+
+    font-size:clamp(48px,7vw,82px);
+
+    line-height:1.05;
+
+    margin-bottom:25px;
+
+    font-weight:700;
+}
+
+.hero h1 span{
+
+    background:linear-gradient(90deg,#66a8ff,#c27bff);
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.hero p{
+
+    font-size:20px;
+
+    color:#aab5d6;
+
+    line-height:1.7;
+
+    max-width:720px;
+
+    margin:auto;
+}
+
+.buttons{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:18px;
+
+    margin-top:45px;
+
+    flex-wrap:wrap;
+}
+
+.btn{
+
+    padding:16px 34px;
+
+    border-radius:18px;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+    transition:.3s;
+}
+
+.primary{
+
+    background:linear-gradient(135deg,#4b8dff,#6d4cff);
+
+    color:white;
+}
+
+.primary:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:0 20px 45px rgba(77,122,255,.4);
+}
+
+.secondary{
+
+    background:rgba(255,255,255,.05);
+
+    color:white;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    backdrop-filter:blur(18px);
+}
+
+.secondary:hover{
+
+    background:rgba(255,255,255,.08);
+}
+
+/* Cards */
+
+.cards{
+
+    width:min(1200px,92%);
+
+    margin:auto;
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+
+    gap:24px;
+
+    padding-bottom:120px;
+}
+
+.card{
+
+    padding:32px;
+
+    border-radius:24px;
+
+    background:rgba(255,255,255,.04);
+
+    border:1px solid rgba(255,255,255,.06);
+
+    backdrop-filter:blur(25px);
+
+    transition:.35s;
+}
+
+.card:hover{
+
+    transform:translateY(-10px);
+
+    border-color:#4b8dff;
+
+    box-shadow:0 20px 45px rgba(0,0,0,.45);
+}
+
+.card h2{
+
+    margin-bottom:12px;
+}
+
+.card p{
+
+    color:#9da8c9;
+
+    line-height:1.7;
+}
 </style>
+
 </head>
 <body>
-<header>REDACTED</header>
-<main>
-<div class="card">
-<h1>Confidential Project</h1>
-<p>REDACTED.</p>
-<a class="button" href="#">REDACTED</a>
+
+<nav>
+
+<div class="logo">
+Your<span>Project</span>
 </div>
-</main>
+
+<div class="links">
+<a href="#">Home</a>
+<a href="#">Features</a>
+<a href="#">Downloads</a>
+<a href="#">Documentation</a>
+</div>
+
+<a class="github" href="#">
+GitHub
+</a>
+
+</nav>
+
+<section class="hero">
+
+<div class="hero-content">
+
+<div class="badge">
+🚀 Premium Interface
+</div>
+
+<h1>
+Build Something
+<span>Beautiful.</span>
+</h1>
+
+<p>
+A modern glassmorphism interface designed for GitHub Pages. Smooth animations,
+frosted glass effects, premium gradients, and responsive layout without any
+frameworks.
+</p>
+
+<div class="buttons">
+
+<a class="btn primary" href="#">
+Get Started
+</a>
+
+<a class="btn secondary" href="#">
+Learn More
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="cards">
+
+<div class="card">
+<h2>⚡ Fast</h2>
+<p>
+Pure HTML and CSS with zero dependencies. Loads instantly on GitHub Pages.
+</p>
+</div>
+
+<div class="card">
+<h2>💎 Premium</h2>
+<p>
+Modern glassmorphism, soft shadows, blur effects, and elegant spacing.
+</p>
+</div>
+
+<div class="card">
+<h2>📱 Responsive</h2>
+<p>
+Looks great on desktop, tablet, and mobile with adaptive layouts.
+</p>
+</div>
+
+</section>
+
 </body>
 </html>
