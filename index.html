@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Redacted-5</title>
-  <meta name="description" content="Redacted-5 — a premium cinematic game website." />
+  <title>REDACTED-5</title>
+  <meta name="description" content="REDACTED-5 — premium cinematic game website." />
   <meta name="theme-color" content="#050608" />
 
   <style>
@@ -13,34 +13,26 @@
       --bg0:#040507;
       --bg1:#07090d;
       --bg2:#0d1018;
-      --glass: rgba(14, 16, 22, 0.56);
-      --glass-strong: rgba(10, 12, 18, 0.78);
-      --line: rgba(255,255,255,.09);
-      --line-strong: rgba(255,255,255,.14);
       --text:#f4f7fb;
-      --muted: rgba(244,247,251,.68);
-      --muted2: rgba(244,247,251,.48);
+      --muted:rgba(244,247,251,.68);
+      --muted2:rgba(244,247,251,.48);
+      --glass:rgba(14,16,22,.60);
+      --glass2:rgba(10,12,18,.76);
+      --line:rgba(255,255,255,.09);
+      --line2:rgba(255,255,255,.14);
       --accent:#b7c8ff;
       --accent2:#d9b0ff;
       --danger:#ff5b68;
-      --shadow: 0 30px 100px rgba(0,0,0,.50);
-      --shadow-soft: 0 16px 40px rgba(0,0,0,.30);
-      --radius: 28px;
-      --radius-sm: 18px;
-      --max: 1240px;
-      --ease: cubic-bezier(.2,.8,.2,1);
+      --shadow:0 30px 100px rgba(0,0,0,.50);
+      --shadow2:0 16px 40px rgba(0,0,0,.30);
+      --radius:28px;
+      --radius2:18px;
+      --max:1240px;
+      --ease:cubic-bezier(.2,.8,.2,1);
     }
 
-    *{
-      box-sizing:border-box;
-      margin:0;
-      padding:0;
-    }
-
-    html{
-      scroll-behavior:smooth;
-    }
-
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
     body{
       min-height:100vh;
       overflow-x:hidden;
@@ -75,7 +67,7 @@
       background-image:
         linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px);
-      background-size: 42px 42px;
+      background-size:42px 42px;
       mask-image: radial-gradient(circle at center, black 36%, transparent 100%);
     }
 
@@ -102,17 +94,17 @@
       padding:16px 18px;
       border:1px solid rgba(255,255,255,.10);
       border-radius:24px;
-      background: rgba(14, 16, 22, .62);
-      backdrop-filter: blur(26px);
-      -webkit-backdrop-filter: blur(26px);
-      box-shadow: 0 18px 50px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06);
-      transition: transform .35s var(--ease), background .35s var(--ease), border-color .35s var(--ease), padding .35s var(--ease);
+      background:rgba(14,16,22,.62);
+      backdrop-filter:blur(26px);
+      -webkit-backdrop-filter:blur(26px);
+      box-shadow:0 18px 50px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06);
+      transition:transform .35s var(--ease), background .35s var(--ease), border-color .35s var(--ease);
     }
 
     .topbar-inner.shrink{
       transform:translateY(-2px);
-      background: rgba(9, 10, 14, .76);
-      border-color: rgba(255,255,255,.08);
+      background:rgba(9,10,14,.76);
+      border-color:rgba(255,255,255,.08);
     }
 
     .brand{
@@ -126,12 +118,12 @@
       width:42px;
       height:42px;
       border-radius:14px;
+      overflow:hidden;
+      flex:0 0 auto;
       background:
         radial-gradient(circle at 28% 28%, rgba(255,255,255,.92), transparent 18%),
         linear-gradient(135deg, rgba(183,200,255,1), rgba(217,176,255,1));
-      box-shadow: 0 14px 30px rgba(183,200,255,.16);
-      flex:0 0 auto;
-      overflow:hidden;
+      box-shadow:0 14px 30px rgba(183,200,255,.16);
     }
 
     .brand-mark img{
@@ -166,7 +158,7 @@
     .nav{
       display:flex;
       align-items:center;
-      gap:24px;
+      gap:22px;
       flex-wrap:wrap;
       justify-content:flex-end;
     }
@@ -177,12 +169,16 @@
       font-size:.95rem;
       font-weight:600;
       position:relative;
-      transition: color .25s var(--ease), opacity .25s var(--ease), transform .25s var(--ease);
+      transition:color .25s var(--ease), transform .25s var(--ease);
     }
 
     .nav a:hover{
       color:#fff;
       transform:translateY(-1px);
+    }
+
+    .nav a.active{
+      color:#fff;
     }
 
     .nav a::after{
@@ -195,38 +191,55 @@
       transform:scaleX(0);
       transform-origin:center;
       transition:transform .25s var(--ease);
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,.68), transparent);
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.68), transparent);
     }
 
-    .nav a:hover::after{
+    .nav a:hover::after,
+    .nav a.active::after{
       transform:scaleX(1);
     }
 
     .nav .pill{
       padding:11px 16px;
       border-radius:999px;
-      background: linear-gradient(135deg, rgba(244,247,251,.96), rgba(208,220,255,.9));
+      background:linear-gradient(135deg, rgba(244,247,251,.96), rgba(208,220,255,.9));
       color:#08111f;
-      box-shadow: 0 14px 30px rgba(255,255,255,.08);
+      box-shadow:0 14px 30px rgba(255,255,255,.08);
     }
 
     .nav .pill:hover{
       transform:translateY(-1px);
+      color:#08111f;
+    }
+
+    .page{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:34px 16px 112px;
+      display:none;
+      animation: pageIn .35s var(--ease);
+    }
+
+    .page.active{
+      display:block;
+    }
+
+    @keyframes pageIn{
+      from{opacity:.02; transform:translateY(10px)}
+      to{opacity:1; transform:translateY(0)}
     }
 
     .hero{
-      max-width:var(--max);
-      margin:0 auto;
-      padding: 88px 16px 40px;
-      min-height: calc(100vh - 88px);
+      min-height:calc(100vh - 98px);
       display:grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap: 30px;
+      grid-template-columns:1.05fr .95fr;
+      gap:30px;
       align-items:center;
+      padding-top:18px;
     }
 
     .hero-copy{
-      padding: 8px 0 18px;
+      padding:8px 0 18px;
     }
 
     .eyebrow{
@@ -236,9 +249,9 @@
       padding:9px 14px;
       border-radius:999px;
       border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.045);
-      backdrop-filter: blur(16px);
-      color: rgba(244,247,251,.84);
+      background:rgba(255,255,255,.045);
+      backdrop-filter:blur(16px);
+      color:rgba(244,247,251,.84);
       font-size:.92rem;
       margin-bottom:18px;
     }
@@ -247,12 +260,12 @@
       width:8px;
       height:8px;
       border-radius:50%;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
       box-shadow:0 0 18px rgba(183,200,255,.55);
     }
 
     h1{
-      font-size: clamp(3.4rem, 7.4vw, 6.9rem);
+      font-size:clamp(3.4rem, 7.4vw, 6.9rem);
       line-height:.93;
       letter-spacing:-.07em;
       max-width:11ch;
@@ -260,7 +273,7 @@
     }
 
     .grad{
-      background: linear-gradient(135deg, #fff 12%, #b9ceff 42%, #dfb8ff 76%, #fff 100%);
+      background:linear-gradient(135deg, #fff 12%, #b9ceff 42%, #dfb8ff 76%, #fff 100%);
       -webkit-background-clip:text;
       background-clip:text;
       color:transparent;
@@ -292,35 +305,43 @@
       text-decoration:none;
       font-weight:800;
       letter-spacing:.01em;
-      transition: transform .25s var(--ease), box-shadow .25s var(--ease), background .25s var(--ease), border-color .25s var(--ease);
-      will-change: transform;
+      transition:transform .25s var(--ease), box-shadow .25s var(--ease), background .25s var(--ease), border-color .25s var(--ease);
+      will-change:transform;
       border:1px solid transparent;
+      cursor:pointer;
+      background:none;
     }
 
     .button.primary{
       color:#08111f;
-      background: linear-gradient(135deg, #f4f7ff, #cddcff);
-      box-shadow: 0 18px 48px rgba(165,190,255,.16);
+      background:linear-gradient(135deg, #f4f7ff, #cddcff);
+      box-shadow:0 18px 48px rgba(165,190,255,.16);
     }
 
     .button.secondary{
-      color: var(--text);
-      background: rgba(255,255,255,.045);
-      border-color: rgba(255,255,255,.10);
-      backdrop-filter: blur(18px);
+      color:var(--text);
+      background:rgba(255,255,255,.045);
+      border-color:rgba(255,255,255,.10);
+      backdrop-filter:blur(18px);
+    }
+
+    .button.danger{
+      color:#fff;
+      background:linear-gradient(135deg, rgba(255,91,104,.95), rgba(255,135,145,.88));
+      box-shadow:0 18px 48px rgba(255,91,104,.16);
     }
 
     .button:hover{
-      transform: translateY(-2px);
+      transform:translateY(-2px);
     }
 
     .button.primary:hover{
-      box-shadow: 0 22px 60px rgba(165,190,255,.24);
+      box-shadow:0 22px 60px rgba(165,190,255,.24);
     }
 
     .button.secondary:hover{
-      background: rgba(255,255,255,.065);
-      border-color: rgba(255,255,255,.14);
+      background:rgba(255,255,255,.065);
+      border-color:rgba(255,255,255,.14);
     }
 
     .showcase{
@@ -340,30 +361,30 @@
         radial-gradient(circle at 28% 28%, rgba(255,255,255,.40), transparent 18%),
         radial-gradient(circle at 45% 45%, rgba(183,200,255,.22), transparent 38%),
         radial-gradient(circle at 68% 68%, rgba(217,176,255,.18), transparent 48%);
-      filter: blur(8px);
+      filter:blur(8px);
       opacity:.9;
-      animation: drift 10s var(--ease) infinite alternate;
+      animation:drift 10s var(--ease) infinite alternate;
     }
 
     .card-shell{
       position:relative;
       width:min(100%, 540px);
-      aspect-ratio: 4 / 5;
-      border-radius: 36px;
+      aspect-ratio:4 / 5;
+      border-radius:36px;
       border:1px solid rgba(255,255,255,.10);
       background:
         linear-gradient(180deg, rgba(255,255,255,.09), transparent 16%),
-        rgba(10, 12, 18, .75);
-      backdrop-filter: blur(26px);
-      -webkit-backdrop-filter: blur(26px);
-      box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,.06);
+        rgba(10,12,18,.75);
+      backdrop-filter:blur(26px);
+      -webkit-backdrop-filter:blur(26px);
+      box-shadow:var(--shadow), inset 0 1px 0 rgba(255,255,255,.06);
       overflow:hidden;
-      transform: perspective(1400px) rotateY(-10deg) rotateX(7deg);
-      transition: transform .35s var(--ease);
+      transform:perspective(1400px) rotateY(-10deg) rotateX(7deg);
+      transition:transform .35s var(--ease);
     }
 
     .card-shell:hover{
-      transform: perspective(1400px) rotateY(-7deg) rotateX(4deg) translateY(-2px);
+      transform:perspective(1400px) rotateY(-7deg) rotateX(4deg) translateY(-2px);
     }
 
     .card-shell::before{
@@ -385,17 +406,17 @@
         url("MovementBackround.png") center/cover no-repeat;
       filter:saturate(1.05) contrast(1.02);
       opacity:.35;
-      transform: scale(1.04);
+      transform:scale(1.04);
     }
 
     .shell-top{
       position:relative;
       z-index:2;
-      padding: 22px 22px 0;
+      padding:22px 22px 0;
       display:flex;
       justify-content:space-between;
       align-items:center;
-      color: rgba(244,247,251,.74);
+      color:rgba(244,247,251,.74);
       font-size:.9rem;
       letter-spacing:.01em;
     }
@@ -409,25 +430,23 @@
       width:11px;
       height:11px;
       border-radius:50%;
-      background: rgba(255,255,255,.18);
+      background:rgba(255,255,255,.18);
     }
 
     .panel{
       position:relative;
       z-index:2;
-      margin: 22px;
+      margin:22px;
       padding:24px;
       border-radius:28px;
       border:1px solid rgba(255,255,255,.08);
-      background: rgba(8, 10, 16, .44);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+      background:rgba(8,10,16,.44);
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
     }
 
-    .panel + .panel{
-      margin-top:0;
-    }
+    .panel + .panel{margin-top:0}
 
     .mini-title{
       font-size:.95rem;
@@ -445,7 +464,7 @@
     .stats{
       margin-top:18px;
       display:grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns:repeat(3, 1fr);
       gap:12px;
     }
 
@@ -453,7 +472,7 @@
       padding:16px 14px;
       border-radius:20px;
       border:1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.04);
+      background:rgba(255,255,255,.04);
     }
 
     .stat strong{
@@ -469,12 +488,6 @@
       font-size:.85rem;
     }
 
-    .section{
-      max-width:var(--max);
-      margin: 0 auto;
-      padding: 34px 16px 112px;
-    }
-
     .section-head{
       display:flex;
       align-items:end;
@@ -485,7 +498,7 @@
     }
 
     .section-head h2{
-      font-size: clamp(1.85rem, 3vw, 2.85rem);
+      font-size:clamp(1.85rem, 3vw, 2.85rem);
       letter-spacing:-.05em;
       line-height:1;
     }
@@ -499,7 +512,7 @@
 
     .grid{
       display:grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns:repeat(3, minmax(0, 1fr));
       gap:18px;
     }
 
@@ -510,30 +523,26 @@
       border:1px solid rgba(255,255,255,.09);
       background:
         linear-gradient(180deg, rgba(255,255,255,.07), transparent 22%),
-        rgba(12, 14, 20, .60);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      box-shadow: var(--shadow-soft);
+        rgba(12,14,20,.60);
+      backdrop-filter:blur(20px);
+      -webkit-backdrop-filter:blur(20px);
+      box-shadow:var(--shadow2);
       overflow:hidden;
-      transform: translateY(18px);
+      transform:translateY(18px);
       opacity:0;
-      transition:
-        transform .8s var(--ease),
-        opacity .8s var(--ease),
-        border-color .25s var(--ease),
-        background .25s var(--ease);
+      transition:transform .8s var(--ease), opacity .8s var(--ease), border-color .25s var(--ease), background .25s var(--ease);
     }
 
     .feature.reveal{
-      transform: translateY(0);
+      transform:translateY(0);
       opacity:1;
     }
 
     .feature:hover{
-      border-color: rgba(193, 210, 255, .22);
+      border-color:rgba(193,210,255,.22);
       background:
         linear-gradient(180deg, rgba(255,255,255,.09), transparent 22%),
-        rgba(15, 18, 26, .74);
+        rgba(15,18,26,.74);
     }
 
     .feature .icon{
@@ -543,7 +552,7 @@
       display:grid;
       place-items:center;
       margin-bottom:18px;
-      background: linear-gradient(135deg, rgba(183,200,255,.20), rgba(217,176,255,.16));
+      background:linear-gradient(135deg, rgba(183,200,255,.20), rgba(217,176,255,.16));
       border:1px solid rgba(255,255,255,.08);
       color:#fff;
       font-weight:900;
@@ -567,58 +576,506 @@
       padding:8px 11px;
       border-radius:999px;
       border:1px solid rgba(255,255,255,.08);
-      color: rgba(244,247,251,.74);
-      background: rgba(255,255,255,.04);
+      color:rgba(244,247,251,.74);
+      background:rgba(255,255,255,.04);
       font-size:.84rem;
     }
 
-    .media{
+    .reel{
       margin-top:18px;
-      border-radius:26px;
-      border:1px solid rgba(255,255,255,.08);
+      border-radius:30px;
+      border:1px solid rgba(255,255,255,.09);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.06), transparent 22%),
+        rgba(12,14,20,.60);
+      box-shadow:var(--shadow2);
       overflow:hidden;
-      background: rgba(255,255,255,.03);
-      box-shadow: var(--shadow-soft);
-      aspect-ratio: 16 / 8;
-      position:relative;
+      padding:18px;
     }
 
-    .media img{
+    .reel-layout{
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:18px;
+      align-items:stretch;
+    }
+
+    .reel-stage{
+      position:relative;
+      min-height:420px;
+      border-radius:26px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.03);
+    }
+
+    .reel-stage img{
       width:100%;
       height:100%;
       object-fit:cover;
       display:block;
       opacity:.95;
-      transform: scale(1.01);
+      transform:scale(1.02);
     }
 
-    .media::after{
-      content:"";
+    .reel-overlay{
       position:absolute;
       inset:0;
-      background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.12) 100%);
-      pointer-events:none;
-    }
-
-    .footer{
-      max-width:var(--max);
-      margin:0 auto;
-      padding: 0 16px 36px;
-      color: rgba(244,247,251,.54);
-      font-size:.92rem;
-    }
-
-    .footer-inner{
-      border-top:1px solid rgba(255,255,255,.08);
-      padding-top:18px;
+      background:
+        linear-gradient(180deg, transparent 0%, rgba(0,0,0,.16) 100%),
+        linear-gradient(90deg, rgba(0,0,0,.52) 0%, rgba(0,0,0,.08) 42%, rgba(0,0,0,.28) 100%);
       display:flex;
+      flex-direction:column;
+      justify-content:flex-end;
+      padding:24px;
+      gap:10px;
+    }
+
+    .reel-overlay h3{
+      font-size:1.8rem;
+      letter-spacing:-.04em;
+      line-height:1;
+    }
+
+    .reel-overlay p{
+      color:rgba(244,247,251,.74);
+      line-height:1.6;
+      max-width:42ch;
+    }
+
+    .reel-rail{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .slide-chip{
+      flex:1;
+      min-height:0;
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,.09);
+      background:rgba(255,255,255,.04);
+      overflow:hidden;
+      padding:14px;
+      cursor:pointer;
+      transition:transform .25s var(--ease), border-color .25s var(--ease), background .25s var(--ease);
+      text-align:left;
+      color:inherit;
+    }
+
+    .slide-chip:hover{
+      transform:translateY(-1px);
+      border-color:rgba(183,200,255,.20);
+      background:rgba(255,255,255,.06);
+    }
+
+    .slide-chip.active{
+      border-color:rgba(183,200,255,.28);
+      background:rgba(183,200,255,.08);
+    }
+
+    .slide-chip img{
+      width:100%;
+      height:122px;
+      object-fit:cover;
+      display:block;
+      border-radius:16px;
+      margin-bottom:12px;
+    }
+
+    .slide-chip strong{
+      display:block;
+      margin-bottom:6px;
+      font-size:1rem;
+    }
+
+    .slide-chip span{
+      display:block;
+      color:var(--muted);
+      font-size:.9rem;
+      line-height:1.55;
+    }
+
+    .page-hero{
+      min-height:calc(100vh - 98px);
+      display:grid;
       align-items:center;
+      padding-top:18px;
+    }
+
+    .updates-grid{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      gap:18px;
+      margin-top:18px;
+    }
+
+    .update-card{
+      border-radius:var(--radius);
+      padding:24px;
+      border:1px solid rgba(255,255,255,.09);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.07), transparent 22%),
+        rgba(12,14,20,.60);
+      backdrop-filter:blur(20px);
+      -webkit-backdrop-filter:blur(20px);
+      box-shadow:var(--shadow2);
+    }
+
+    .update-card .date{
+      display:inline-flex;
+      margin-bottom:12px;
+      padding:8px 11px;
+      border-radius:999px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      color:rgba(244,247,251,.78);
+      font-size:.84rem;
+    }
+
+    .update-card h3{
+      font-size:1.18rem;
+      margin-bottom:10px;
+    }
+
+    .update-card p{
+      color:var(--muted);
+      line-height:1.7;
+      font-size:.98rem;
+      margin-bottom:14px;
+    }
+
+    .update-card .tag{
+      display:inline-flex;
+      padding:8px 11px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.08);
+      color:rgba(244,247,251,.74);
+      background:rgba(255,255,255,.04);
+      font-size:.84rem;
+    }
+
+    .playtest-wrap{
+      display:grid;
+      grid-template-columns:1fr .92fr;
+      gap:18px;
+      align-items:start;
+      margin-top:18px;
+    }
+
+    .form-card{
+      border-radius:var(--radius);
+      padding:24px;
+      border:1px solid rgba(255,255,255,.09);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.07), transparent 22%),
+        rgba(12,14,20,.60);
+      backdrop-filter:blur(20px);
+      -webkit-backdrop-filter:blur(20px);
+      box-shadow:var(--shadow2);
+    }
+
+    .form-card h3{
+      font-size:1.18rem;
+      margin-bottom:10px;
+      letter-spacing:-.02em;
+    }
+
+    .form-card p{
+      color:var(--muted);
+      line-height:1.7;
+      font-size:.98rem;
+      margin-bottom:16px;
+    }
+
+    .field-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      margin-bottom:12px;
+    }
+
+    .field.full{
+      grid-column:1 / -1;
+    }
+
+    .field label{
+      font-size:.88rem;
+      color:rgba(244,247,251,.78);
+      font-weight:700;
+    }
+
+    .field input,
+    .field textarea,
+    .field select{
+      width:100%;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.09);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      padding:13px 14px;
+      outline:none;
+      font:inherit;
+      transition:border-color .2s var(--ease), background .2s var(--ease), transform .2s var(--ease);
+    }
+
+    .field textarea{
+      min-height:120px;
+      resize:vertical;
+    }
+
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus{
+      border-color:rgba(183,200,255,.28);
+      background:rgba(255,255,255,.06);
+    }
+
+    .helper{
+      color:var(--muted2);
+      font-size:.84rem;
+      line-height:1.55;
+    }
+
+    .split{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:18px;
+    }
+
+    .gate{
+      border-radius:var(--radius);
+      padding:24px;
+      border:1px solid rgba(255,255,255,.09);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.07), transparent 22%),
+        rgba(12,14,20,.60);
+      backdrop-filter:blur(20px);
+      -webkit-backdrop-filter:blur(20px);
+      box-shadow:var(--shadow2);
+    }
+
+    .gate h3{
+      font-size:1.18rem;
+      margin-bottom:10px;
+    }
+
+    .gate p{
+      color:var(--muted);
+      line-height:1.7;
+      font-size:.98rem;
+      margin-bottom:16px;
+    }
+
+    .login-row{
+      display:grid;
+      grid-template-columns:1fr 1fr auto;
+      gap:12px;
+    }
+
+    .dashboard{
+      display:none;
+      margin-top:18px;
+      grid-template-columns:1fr;
+      gap:18px;
+    }
+
+    .dashboard.active{
+      display:grid;
+    }
+
+    .dashboard-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+    }
+
+    .list{
+      display:grid;
+      gap:12px;
+      margin-top:12px;
+    }
+
+    .item{
+      border-radius:20px;
+      padding:16px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.04);
+    }
+
+    .item-top{
+      display:flex;
       justify-content:space-between;
-      gap:16px;
+      gap:10px;
+      align-items:center;
+      margin-bottom:8px;
       flex-wrap:wrap;
     }
 
-    /* Refresh screen */
+    .item strong{
+      font-size:.98rem;
+    }
+
+    .item .meta{
+      color:var(--muted2);
+      font-size:.84rem;
+    }
+
+    .item p{
+      color:var(--muted);
+      line-height:1.62;
+      font-size:.94rem;
+      margin:0;
+    }
+
+    .iframe-shell{
+      margin-top:18px;
+      border-radius:28px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.09);
+      background:rgba(255,255,255,.03);
+      box-shadow:var(--shadow2);
+    }
+
+    .iframe-shell iframe{
+      width:100%;
+      height:720px;
+      border:0;
+      display:block;
+      background:#0b0d12;
+    }
+
+    .fallback-link{
+      margin-top:12px;
+      color:var(--muted);
+      font-size:.92rem;
+    }
+
+    .fallback-link a{
+      color:#dbe5ff;
+      text-decoration:none;
+    }
+
+    .game-launch{
+      min-height:calc(100vh - 98px);
+      display:grid;
+      place-items:center;
+      text-align:center;
+    }
+
+    .launch-card{
+      width:min(100%, 640px);
+      border-radius:34px;
+      padding:34px 28px;
+      border:1px solid rgba(255,255,255,.10);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.08), transparent 22%),
+        rgba(12,14,20,.62);
+      backdrop-filter:blur(26px);
+      -webkit-backdrop-filter:blur(26px);
+      box-shadow:var(--shadow);
+    }
+
+    .launch-card h2{
+      font-size:clamp(2rem, 4.4vw, 3rem);
+      letter-spacing:-.05em;
+      margin-bottom:10px;
+    }
+
+    .launch-card p{
+      color:var(--muted);
+      line-height:1.75;
+      max-width:42ch;
+      margin:0 auto 20px;
+    }
+
+    .owner-toast{
+      position:fixed;
+      right:18px;
+      bottom:18px;
+      width:min(100%, 360px);
+      border-radius:24px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(12,14,20,.82);
+      backdrop-filter:blur(24px);
+      -webkit-backdrop-filter:blur(24px);
+      box-shadow:var(--shadow);
+      padding:16px;
+      z-index:100;
+      transform:translateY(24px);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .35s var(--ease), transform .35s var(--ease);
+    }
+
+    .owner-toast.show{
+      transform:translateY(0);
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    .owner-toast .top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:10px;
+    }
+
+    .owner-toast .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 11px;
+      border-radius:999px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      font-size:.84rem;
+      color:rgba(244,247,251,.8);
+    }
+
+    .owner-toast .dot{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow:0 0 16px rgba(183,200,255,.55);
+    }
+
+    .owner-toast h4{
+      margin-bottom:6px;
+      font-size:1rem;
+    }
+
+    .owner-toast p{
+      color:var(--muted);
+      line-height:1.55;
+      font-size:.92rem;
+    }
+
+    .owner-toast .bar{
+      margin-top:12px;
+      height:6px;
+      border-radius:999px;
+      overflow:hidden;
+      background:rgba(255,255,255,.06);
+    }
+
+    .owner-toast .bar span{
+      display:block;
+      width:100%;
+      height:100%;
+      transform-origin:left;
+      background:linear-gradient(90deg, rgba(183,200,255,.95), rgba(217,176,255,.95));
+      animation:toastbar 4.6s linear forwards;
+    }
+
     .refresh-screen{
       position:fixed;
       inset:0;
@@ -640,10 +1097,10 @@
       width:min(100%, 520px);
       border-radius:34px;
       border:1px solid rgba(255,255,255,.10);
-      background: rgba(14,16,22,.64);
-      backdrop-filter: blur(26px);
-      -webkit-backdrop-filter: blur(26px);
-      box-shadow: var(--shadow);
+      background:rgba(14,16,22,.64);
+      backdrop-filter:blur(26px);
+      -webkit-backdrop-filter:blur(26px);
+      box-shadow:var(--shadow);
       padding:34px 28px;
       text-align:center;
       position:relative;
@@ -654,8 +1111,8 @@
       content:"";
       position:absolute;
       inset:-40%;
-      background: radial-gradient(circle, rgba(255,255,255,.10), transparent 42%);
-      animation: sweep 2.8s linear infinite;
+      background:radial-gradient(circle, rgba(255,255,255,.10), transparent 42%);
+      animation:sweep 2.8s linear infinite;
       pointer-events:none;
     }
 
@@ -672,20 +1129,20 @@
       position:absolute;
       inset:0;
       border-radius:50%;
-      border: 1px solid rgba(255,255,255,.12);
-      animation: spin 1.5s linear infinite;
+      border:1px solid rgba(255,255,255,.12);
+      animation:spin 1.5s linear infinite;
     }
 
     .ring.two{
       inset:12px;
-      animation-duration: 2.3s;
-      border-color: rgba(183,200,255,.18);
+      animation-duration:2.3s;
+      border-color:rgba(183,200,255,.18);
     }
 
     .ring.three{
       inset:24px;
-      animation-duration: 3.4s;
-      border-color: rgba(217,176,255,.16);
+      animation-duration:3.4s;
+      border-color:rgba(217,176,255,.16);
     }
 
     .pulse{
@@ -693,13 +1150,13 @@
       width:18px;
       height:18px;
       border-radius:50%;
-      background: linear-gradient(135deg, #fff, #cfdcff);
-      box-shadow: 0 0 28px rgba(255,255,255,.22);
-      animation: pulse 1.2s ease-in-out infinite;
+      background:linear-gradient(135deg, #fff, #cfdcff);
+      box-shadow:0 0 28px rgba(255,255,255,.22);
+      animation:pulse 1.2s ease-in-out infinite;
     }
 
     .refresh-title{
-      font-size: clamp(2rem, 4vw, 2.9rem);
+      font-size:clamp(2rem, 4vw, 2.9rem);
       letter-spacing:-.05em;
       line-height:1;
       margin-bottom:10px;
@@ -707,7 +1164,7 @@
     }
 
     .refresh-title .grad{
-      background: linear-gradient(135deg, #fff, #cbd9ff 46%, #e1bbff 84%, #fff);
+      background:linear-gradient(135deg, #fff, #cbd9ff 46%, #e1bbff 84%, #fff);
       -webkit-background-clip:text;
       background-clip:text;
       color:transparent;
@@ -725,7 +1182,7 @@
       height:10px;
       border-radius:999px;
       margin-top:24px;
-      background: rgba(255,255,255,.06);
+      background:rgba(255,255,255,.06);
       border:1px solid rgba(255,255,255,.08);
       overflow:hidden;
     }
@@ -735,40 +1192,44 @@
       height:100%;
       width:38%;
       border-radius:inherit;
-      background: linear-gradient(90deg, rgba(255,255,255,.25), rgba(183,200,255,.92), rgba(217,176,255,.88), rgba(255,255,255,.24));
-      filter: blur(.1px);
-      animation: load 1.05s ease-in-out infinite;
+      background:linear-gradient(90deg, rgba(255,255,255,.25), rgba(183,200,255,.92), rgba(217,176,255,.88), rgba(255,255,255,.24));
+      animation:load 1.05s ease-in-out infinite;
     }
 
-    @keyframes spin{
-      from{ transform:rotate(0deg); }
-      to{ transform:rotate(360deg); }
+    .footer{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:0 16px 36px;
+      color:rgba(244,247,251,.54);
+      font-size:.92rem;
     }
 
-    @keyframes pulse{
-      0%,100%{ transform:scale(.92); opacity:.68; }
-      50%{ transform:scale(1.2); opacity:1; }
+    .footer-inner{
+      border-top:1px solid rgba(255,255,255,.08);
+      padding-top:18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
     }
 
-    @keyframes sweep{
-      from{ transform:translateX(-8%) rotate(0deg); }
-      to{ transform:translateX(8%) rotate(360deg); }
-    }
+    @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+    @keyframes pulse{0%,100%{transform:scale(.92);opacity:.68}50%{transform:scale(1.2);opacity:1}}
+    @keyframes sweep{from{transform:translateX(-8%) rotate(0deg)}to{transform:translateX(8%) rotate(360deg)}}
+    @keyframes load{0%{transform:translateX(-90%)}50%{transform:translateX(120%)}100%{transform:translateX(-90%)}}
+    @keyframes drift{from{transform:translateY(-6px) translateX(-3px) scale(1)}to{transform:translateY(10px) translateX(8px) scale(1.03)}}
+    @keyframes toastbar{from{transform:scaleX(1)}to{transform:scaleX(0)}}
 
-    @keyframes load{
-      0%{ transform:translateX(-90%); }
-      50%{ transform:translateX(120%); }
-      100%{ transform:translateX(-90%); }
-    }
-
-    @keyframes drift{
-      from{ transform:translateY(-6px) translateX(-3px) scale(1); }
-      to{ transform:translateY(10px) translateX(8px) scale(1.03); }
-    }
-
-    @media (max-width: 1040px){
-      .hero{
+    @media (max-width:1040px){
+      .hero,
+      .playtest-wrap,
+      .reel-layout,
+      .dashboard-grid{
         grid-template-columns:1fr;
+      }
+
+      .hero{
         min-height:auto;
         padding-top:66px;
       }
@@ -777,16 +1238,17 @@
         min-height:460px;
       }
 
-      .grid{
+      .grid,
+      .updates-grid,
+      .field-grid,
+      .login-row{
         grid-template-columns:1fr;
       }
 
-      h1{
-        max-width:none;
-      }
+      h1{max-width:none}
     }
 
-    @media (max-width: 720px){
+    @media (max-width:720px){
       .topbar{
         padding-left:10px;
         padding-right:10px;
@@ -797,33 +1259,15 @@
         border-radius:20px;
       }
 
-      .nav{
-        gap:14px;
-      }
-
-      .brand-text span{
-        display:none;
-      }
-
-      .hero{
-        padding-top:52px;
-      }
-
-      .lead{
-        font-size:1rem;
-      }
-
-      .stats{
-        grid-template-columns:1fr;
-      }
-
-      .card-shell{
-        transform:none;
-      }
-
-      .card-shell:hover{
-        transform:translateY(-2px);
-      }
+      .nav{gap:14px}
+      .brand-text span{display:none}
+      .hero{padding-top:52px}
+      .lead{font-size:1rem}
+      .stats{grid-template-columns:1fr}
+      .card-shell{transform:none}
+      .card-shell:hover{transform:translateY(-2px)}
+      .reel-stage{min-height:320px}
+      .iframe-shell iframe{height:520px}
     }
   </style>
 
@@ -840,12 +1284,22 @@
         <div class="pulse"></div>
       </div>
       <div class="refresh-title"><span class="grad">Refreshing</span></div>
-      <p class="refresh-text">Please wait while Redacted-5 reloads the interface.</p>
+      <p class="refresh-text" id="refreshMessage">Please wait while REDACTED-5 reloads the interface.</p>
       <div class="refresh-bar" aria-hidden="true"><span></span></div>
     </div>
   </div>
 
-  <div class="app" id="app">
+  <div class="owner-toast" id="ownerToast">
+    <div class="top">
+      <div class="badge"><span class="dot"></span><span id="toastBadge">Playtest Notice</span></div>
+      <button class="button secondary" id="toastClose" style="padding:8px 12px;border-radius:14px;">Close</button>
+    </div>
+    <h4 id="toastTitle">Playtest access online.</h4>
+    <p id="toastBody">Open the Testing page to check the latest testing notes.</p>
+    <div class="bar"><span></span></div>
+  </div>
+
+  <div class="app">
     <header class="topbar">
       <div class="topbar-inner" id="topbar">
         <div class="brand">
@@ -853,139 +1307,373 @@
             <img src="RedactedP.png" alt="Redacted-5 icon" />
           </div>
           <div class="brand-text">
-            <strong>Redacted-5</strong>
-            <span>Premium classified game interface</span>
+            <strong id="brandName">REDACTED-5</strong>
+            <span id="brandSub">Premium classified game interface</span>
           </div>
         </div>
 
 ```
     <nav class="nav" aria-label="Primary">
-      <a href="#home">Home</a>
-      <a href="#about">About</a>
-      <a href="#media">Media</a>
-      <a href="#contact" class="pill">Contact</a>
+      <a href="#home" data-nav="home">Home</a>
+      <a href="#updates" data-nav="updates">Updates</a>
+      <a href="#testing" data-nav="testing">Testing</a>
+      <a href="#creator" data-nav="creator">Creator</a>
+      <a href="#game" data-nav="game" class="pill">Game</a>
     </nav>
   </div>
 </header>
 
 <main>
-  <section class="hero" id="home">
-    <div class="hero-copy">
-      <div class="eyebrow">
-        <span class="eyebrow-dot"></span>
-        Classified tactical experience
+  <section class="page" data-page="home">
+    <div class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow">
+          <span class="eyebrow-dot"></span>
+          <span id="heroEyebrow">Classified tactical experience</span>
+        </div>
+
+        <h1><span class="grad" id="heroTitle">REDACTED-5</span> Is Live.</h1>
+
+        <p class="lead" id="heroLead">
+          A cinematic, high-end site built around your game identity: sharp glass panels, soft blur, premium contrast, and a serious classified tone.
+        </p>
+
+        <div class="actions">
+          <button class="button primary" id="goGameBtn">Open Game</button>
+          <a class="button secondary" href="#updates">View Updates</a>
+          <a class="button secondary" href="#testing">Testing Site</a>
+        </div>
       </div>
 
-      <h1>
-        <span class="grad">Redacted-5</span>
-        Is Live.
-      </h1>
+      <div class="showcase">
+        <div class="orb"></div>
 
-      <p class="lead">
-        A cinematic, high-end site built around your game identity: sharp glass panels, soft blur, premium contrast, and a serious classified tone.
-      </p>
+        <div class="card-shell" id="shell">
+          <div class="hero-bg"></div>
+          <div class="shell-top">
+            <div class="traffic" aria-hidden="true">
+              <span></span><span></span><span></span>
+            </div>
+            <div id="showcaseCaption">Secure Preview</div>
+          </div>
 
-      <div class="actions">
-        <a class="button primary" href="#media">Open Media</a>
-        <a class="button secondary" href="#about">Read More</a>
+          <div class="panel" style="margin-top:22px;">
+            <div class="mini-title">Mission Brief</div>
+            <div class="mini-text">
+              Built for a darker, more premium look with a blurred top banner, polished depth, and a cinematic background pulled from your image file.
+            </div>
+
+            <div class="stats">
+              <div class="stat"><strong>01</strong><span>Glass UI</span></div>
+              <div class="stat"><strong>02</strong><span>Scroll motion</span></div>
+              <div class="stat"><strong>03</strong><span>Custom pages</span></div>
+            </div>
+          </div>
+
+          <div class="panel" style="margin-top:0;">
+            <div class="mini-title">Interface Quality</div>
+            <div class="mini-text">
+              The layout uses restrained motion, layered lighting, and a cleaner composition so it feels much more expensive than a basic fan page.
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="showcase">
-      <div class="orb"></div>
+    <section style="margin-top:24px;">
+      <div class="section-head">
+        <div>
+          <h2>Media reel</h2>
+          <p>Scroll down and the showcase changes feel like a cinematic slideshow instead of a plain image dump.</p>
+        </div>
+      </div>
 
-      <div class="card-shell" id="shell">
-        <div class="hero-bg"></div>
-
-        <div class="shell-top">
-          <div class="traffic" aria-hidden="true">
-            <span></span><span></span><span></span>
+      <div class="reel">
+        <div class="reel-layout">
+          <div class="reel-stage">
+            <img id="slidePreview" src="MovementBackround.png" alt="Redacted-5 media slide" />
+            <div class="reel-overlay">
+              <div class="eyebrow" style="margin-bottom:0;width:fit-content;">
+                <span class="eyebrow-dot"></span>
+                Media
+              </div>
+              <h3 id="slideTitle">Atmosphere</h3>
+              <p id="slideText">A dark, premium visual foundation for REDACTED-5.</p>
+            </div>
           </div>
-          <div>Secure Preview</div>
+
+          <div class="reel-rail" id="reelRail"></div>
+        </div>
+      </div>
+    </section>
+
+    <section style="margin-top:28px;">
+      <div class="section-head">
+        <div>
+          <h2>Built to feel like a real game brand.</h2>
+          <p>Less clutter, more presence. The page uses large typography, soft glass, and a stronger visual hierarchy so REDACTED-5 looks polished immediately.</p>
+        </div>
+      </div>
+
+      <div class="grid">
+        <article class="feature reveal-on-scroll">
+          <div class="icon">✦</div>
+          <h3>Premium Blur</h3>
+          <p>The top banner stays glassy and crisp, like a modern product site instead of a generic game page.</p>
+          <span class="tag">Frozen glass</span>
+        </article>
+
+        <article class="feature reveal-on-scroll">
+          <div class="icon">◌</div>
+          <h3>Cinematic Depth</h3>
+          <p>Layered lights, gradients, and your background image create a stronger sense of atmosphere.</p>
+          <span class="tag">Dark prestige</span>
+        </article>
+
+        <article class="feature reveal-on-scroll">
+          <div class="icon">↻</div>
+          <h3>Custom Refresh</h3>
+          <p>When the page reloads, users briefly see a custom waiting screen with animation instead of a plain white flash.</p>
+          <span class="tag">Custom loader</span>
+        </article>
+      </div>
+    </section>
+
+    <section style="margin-top:28px;">
+      <div class="section-head">
+        <div>
+          <h2>Latest update preview</h2>
+          <p>There is a full updates page too, but this keeps the home page feeling alive.</p>
+        </div>
+        <a class="button secondary" href="#updates">Open Updates Page</a>
+      </div>
+      <div class="update-card" id="homeUpdatePreview"></div>
+    </section>
+  </section>
+
+  <section class="page" data-page="updates">
+    <div class="page-hero">
+      <div>
+        <div class="section-head">
+          <div>
+            <h2>Updates</h2>
+            <p>Live changelog, patch notes, and whatever you want to place here next. Edit the CONFIG block at the top and this page updates automatically.</p>
+          </div>
         </div>
 
-        <div class="panel" style="margin-top:22px;">
-          <div class="mini-title">Mission Brief</div>
-          <div class="mini-text">
-            Built for a darker, more premium look with a blurred top banner, polished depth, and a cinematic background pulled from your image file.
-          </div>
+        <div class="updates-grid" id="updatesGrid"></div>
+      </div>
+    </div>
+  </section>
 
-          <div class="stats">
-            <div class="stat">
-              <strong>01</strong>
-              <span>Glass UI</span>
-            </div>
-            <div class="stat">
-              <strong>02</strong>
-              <span>Scroll motion</span>
-            </div>
-            <div class="stat">
-              <strong>03</strong>
-              <span>Refresh screen</span>
-            </div>
+  <section class="page" data-page="testing">
+    <div class="page-hero">
+      <div>
+        <div class="section-head">
+          <div>
+            <h2>Testing Site</h2>
+            <p>Generic users can browse, request playtest access, and send feedback. Admins can log in and manage requests. This is a front-end gate, so real security still needs a backend if you want it truly locked down.</p>
           </div>
         </div>
 
-        <div class="panel" style="margin-top:0;">
-          <div class="mini-title">Interface Quality</div>
-          <div class="mini-text">
-            The layout uses restrained motion, layered lighting, and a cleaner composition so it feels much more expensive than a basic fan page.
+        <div class="playtest-wrap">
+          <div class="split">
+            <div class="form-card">
+              <h3>Request a playtest</h3>
+              <p>Tell me who you are, what you want to test, and how to contact you.</p>
+
+              <form id="requestForm">
+                <div class="field-grid">
+                  <div class="field">
+                    <label for="requestUsername">Roblox username</label>
+                    <input id="requestUsername" name="requestUsername" placeholder="Your Roblox username" required />
+                  </div>
+
+                  <div class="field">
+                    <label for="requestDiscord">Discord username</label>
+                    <input id="requestDiscord" name="requestDiscord" placeholder="Optional" />
+                  </div>
+
+                  <div class="field">
+                    <label for="requestDevice">Device</label>
+                    <input id="requestDevice" name="requestDevice" placeholder="PC, mobile, console..." />
+                  </div>
+
+                  <div class="field">
+                    <label for="requestStyle">Test type</label>
+                    <select id="requestStyle" name="requestStyle">
+                      <option>General playtest</option>
+                      <option>Bug testing</option>
+                      <option>Balance testing</option>
+                      <option>UI / menu testing</option>
+                    </select>
+                  </div>
+
+                  <div class="field full">
+                    <label for="requestNotes">What should we know?</label>
+                    <textarea id="requestNotes" name="requestNotes" placeholder="Tell us why you want to test the game."></textarea>
+                  </div>
+                </div>
+
+                <div class="actions">
+                  <button type="submit" class="button primary">Send Playtest Request</button>
+                </div>
+                <p class="helper">This request is saved locally and sent to the webhook. If browser security blocks the webhook, the request still stays stored in the page data.</p>
+              </form>
+            </div>
+
+            <div class="form-card">
+              <h3>Send feedback</h3>
+              <p>Bug reports, ideas, polish notes, or anything that should make REDACTED-5 better.</p>
+
+              <form id="feedbackForm">
+                <div class="field-grid">
+                  <div class="field">
+                    <label for="feedbackUsername">Roblox username</label>
+                    <input id="feedbackUsername" name="feedbackUsername" placeholder="Your Roblox username" required />
+                  </div>
+
+                  <div class="field">
+                    <label for="feedbackCategory">Category</label>
+                    <select id="feedbackCategory" name="feedbackCategory">
+                      <option>Bug</option>
+                      <option>Suggestion</option>
+                      <option>Balance</option>
+                      <option>UI / Visual</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+
+                  <div class="field full">
+                    <label for="feedbackText">Feedback</label>
+                    <textarea id="feedbackText" name="feedbackText" placeholder="Write your feedback here..." required></textarea>
+                  </div>
+
+                  <div class="field full">
+                    <label for="feedbackLink">Screenshot / clip link</label>
+                    <input id="feedbackLink" name="feedbackLink" placeholder="Optional link" />
+                  </div>
+                </div>
+
+                <div class="actions">
+                  <button type="submit" class="button primary">Send Feedback</button>
+                </div>
+                <p class="helper">This goes to the same webhook and into the local admin dashboard.</p>
+              </form>
+            </div>
+          </div>
+
+          <div class="split">
+            <div class="gate">
+              <h3>Admin login</h3>
+              <p>Admins: <strong>MTF_OPERATOR</strong> and <strong>TurtleToed13</strong>. The key below is a UI gate, not real security. For real security, move login to a server.</p>
+
+              <div class="login-row">
+                <div class="field">
+                  <label for="loginUser">Username</label>
+                  <input id="loginUser" placeholder="MTF_OPERATOR / TurtleToed13" />
+                </div>
+                <div class="field">
+                  <label for="loginKey">Access key</label>
+                  <input id="loginKey" type="password" placeholder="Admin key" />
+                </div>
+                <div class="field" style="justify-content:end;">
+                  <label>&nbsp;</label>
+                  <button class="button primary" id="loginBtn" type="button">Log In</button>
+                </div>
+              </div>
+
+              <div class="actions" style="margin-top:10px;">
+                <button class="button secondary" id="logoutBtn" type="button">Log Out</button>
+                <button class="button secondary" id="clearDataBtn" type="button">Clear Stored Queue</button>
+              </div>
+
+              <div class="helper" id="loginState" style="margin-top:12px;">
+                Not signed in.
+              </div>
+            </div>
+
+            <div class="dashboard" id="dashboard">
+              <div class="dashboard-grid">
+                <div class="form-card">
+                  <h3>Playtest requests</h3>
+                  <p>Incoming requests from visitors.</p>
+                  <div class="list" id="requestsList"></div>
+                </div>
+
+                <div class="form-card">
+                  <h3>Feedback queue</h3>
+                  <p>Everything sent through the feedback form.</p>
+                  <div class="list" id="feedbackList"></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section" id="about">
-    <div class="section-head">
+  <section class="page" data-page="creator">
+    <div class="page-hero">
       <div>
-        <h2>Designed to feel like a real game brand.</h2>
-        <p>Less clutter, more presence. The page uses large typography, soft glass, and a stronger visual hierarchy so Redacted-5 looks polished immediately.</p>
+        <div class="section-head">
+          <div>
+            <h2>Creator</h2>
+            <p>About the developer, the profile embed, and a clean place for basic info.</p>
+          </div>
+        </div>
+
+        <div class="grid" style="grid-template-columns:1fr .95fr;">
+          <article class="feature reveal-on-scroll" style="opacity:1;transform:none;">
+            <div class="icon">⌁</div>
+            <h3 id="creatorName">About the Creator</h3>
+            <p id="creatorBio">
+              Put your short bio here. This section is built to look like a premium profile panel instead of a boring text block.
+            </p>
+            <div class="actions" style="margin-top:18px;">
+              <a class="button primary" href="https://www.roblox.com/users/3028124482/profile" target="_blank" rel="noreferrer">Open Roblox Profile</a>
+            </div>
+          </article>
+
+          <article class="feature reveal-on-scroll" style="opacity:1;transform:none;">
+            <div class="icon">▣</div>
+            <h3>Embedded Profile</h3>
+            <p>Roblox may block iframe embedding on some pages, but the frame is included as requested and a fallback link is shown below it.</p>
+            <span class="tag">Iframe + fallback</span>
+          </article>
+        </div>
+
+        <div class="iframe-shell" style="margin-top:18px;">
+          <iframe
+            src="https://www.roblox.com/users/3028124482/profile"
+            title="Roblox Creator Profile"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+
+        <div class="fallback-link">
+          If the profile does not load inside the frame, open it here:
+          <a href="https://www.roblox.com/users/3028124482/profile" target="_blank" rel="noreferrer">Roblox Creator Profile</a>
+        </div>
       </div>
-    </div>
-
-    <div class="grid">
-      <article class="feature reveal-on-scroll">
-        <div class="icon">✦</div>
-        <h3>Premium Blur</h3>
-        <p>The top banner stays glassy and crisp, like a modern product site instead of a generic game page.</p>
-        <span class="tag">Frozen glass</span>
-      </article>
-
-      <article class="feature reveal-on-scroll">
-        <div class="icon">◌</div>
-        <h3>Cinematic Depth</h3>
-        <p>Layered lights, gradients, and your background image create a stronger sense of atmosphere.</p>
-        <span class="tag">Dark prestige</span>
-      </article>
-
-      <article class="feature reveal-on-scroll">
-        <div class="icon">↻</div>
-        <h3>Refresh Experience</h3>
-        <p>When the page reloads, users briefly see a custom waiting screen with animation instead of a plain white flash.</p>
-        <span class="tag">Custom loader</span>
-      </article>
     </div>
   </section>
 
-  <section class="section" id="media">
-    <div class="section-head">
-      <div>
-        <h2>Media spotlight</h2>
-        <p>Your screenshot can sit here as a big featured panel if you want the page to feel more like a studio launch site.</p>
-      </div>
-    </div>
-
-    <div class="media">
-      <img src="MovementBackround.png" alt="Redacted-5 background screenshot" />
-    </div>
-  </section>
-
-  <section class="section" id="contact">
-    <div class="section-head">
-      <div>
-        <h2>Keep expanding it.</h2>
-        <p>This single file already supports your icon, your background image, a custom refresh state, and a much more premium layout.</p>
+  <section class="page" data-page="game">
+    <div class="game-launch">
+      <div class="launch-card">
+        <div class="eyebrow" style="margin-bottom:14px;">
+          <span class="eyebrow-dot"></span>
+          Launching
+        </div>
+        <h2>Opening REDACTED-5</h2>
+        <p>Click the button to open the game in a new tab.</p>
+        <div class="actions" style="justify-content:center;">
+          <a class="button danger" id="manualGameLink" href="https://www.roblox.com/games/131283297263046/REDACTED-5" target="_blank" rel="noreferrer">Open Game in New Tab</a>
+          <a class="button secondary" href="#home">Back Home</a>
+        </div>
       </div>
     </div>
   </section>
@@ -993,8 +1681,8 @@
 
 <footer class="footer">
   <div class="footer-inner">
-    <div>Redacted-5</div>
-    <div>Classified. Cinematic. Clean.</div>
+    <div id="footerLeft">REDACTED-5</div>
+    <div id="footerRight">Classified. Cinematic. Clean.</div>
   </div>
 </footer>
 ```
@@ -1002,9 +1690,463 @@
   </div>
 
   <script>
+    /*
+      CONFIG BLOCK — edit this first.
+      UI gate only: real security requires a backend, because pure HTML/JS cannot securely protect login data.
+    */
+    const CONFIG = {
+      siteName: "REDACTED-5",
+      brandSubtitle: "Premium classified game interface",
+      heroEyebrow: "Classified tactical experience",
+      heroTitle: "REDACTED-5",
+      heroLead: "A cinematic, high-end site built around your game identity: sharp glass panels, soft blur, premium contrast, and a serious classified tone.",
+      gameUrl: "https://www.roblox.com/games/131283297263046/REDACTED-5",
+      creatorProfileUrl: "https://www.roblox.com/users/3028124482/profile",
+      adminUsers: ["MTF_OPERATOR", "TurtleToed13"],
+      adminKey: "REDACTED5-ADMIN",
+      discordWebhook: "https://discord.com/api/webhooks/1522007954835116193/ucvoDdbwSkBru-IuM00TOMClkFL8kjWAmAMrngSjYF5SLbWFQ9E7UboFfA-sU5vTCEJF",
+      toast: {
+        badge: "Playtest Notice",
+        title: "Playtest access online.",
+        body: "Open the Testing page to check the latest testing notes."
+      },
+      creatorBio: "Put your short bio here. This section is built to look like a premium profile panel instead of a boring text block.",
+      updates: [
+        {
+          date: "Build 01",
+          title: "Premium site overhaul",
+          body: "The interface was rebuilt with a darker cinematic theme, better spacing, glass panels, and stronger motion.",
+          tag: "UI / visual pass"
+        },
+        {
+          date: "Build 02",
+          title: "Pages added",
+          body: "Home, Updates, Testing, Creator, and Game pages now live in one file and switch cleanly by hash.",
+          tag: "Pages / routing"
+        },
+        {
+          date: "Build 03",
+          title: "Launch flow",
+          body: "The Game page now acts like a dedicated launch screen and opens the Roblox game in a new tab.",
+          tag: "Redirect / launch"
+        }
+      ],
+      slides: [
+        {
+          image: "MovementBackround.png",
+          title: "Atmosphere",
+          text: "A dark, premium visual foundation for REDACTED-5."
+        },
+        {
+          image: "MovementBackround.png",
+          title: "Cinematic Motion",
+          text: "Scroll-friendly presentation with a smoother, studio-style feel."
+        },
+        {
+          image: "RedactedP.png",
+          title: "Brand Mark",
+          text: "Your icon sits cleanly in the UI and works as the site identity."
+        }
+      ]
+    };
+
+    const STORAGE_KEYS = {
+      requests: "redacted5_requests",
+      feedback: "redacted5_feedback",
+      auth: "redacted5_auth"
+    };
+
     const topbar = document.getElementById("topbar");
     const shell = document.getElementById("shell");
     const refreshScreen = document.getElementById("refreshScreen");
+    const refreshMessage = document.getElementById("refreshMessage");
+    const brandName = document.getElementById("brandName");
+    const brandSub = document.getElementById("brandSub");
+    const heroEyebrow = document.getElementById("heroEyebrow");
+    const heroTitle = document.getElementById("heroTitle");
+    const heroLead = document.getElementById("heroLead");
+    const showcaseCaption = document.getElementById("showcaseCaption");
+    const updatesGrid = document.getElementById("updatesGrid");
+    const homeUpdatePreview = document.getElementById("homeUpdatePreview");
+    const slidePreview = document.getElementById("slidePreview");
+    const slideTitle = document.getElementById("slideTitle");
+    const slideText = document.getElementById("slideText");
+    const reelRail = document.getElementById("reelRail");
+    const creatorName = document.getElementById("creatorName");
+    const creatorBio = document.getElementById("creatorBio");
+    const manualGameLink = document.getElementById("manualGameLink");
+    const toast = document.getElementById("ownerToast");
+    const toastBadge = document.getElementById("toastBadge");
+    const toastTitle = document.getElementById("toastTitle");
+    const toastBody = document.getElementById("toastBody");
+    const toastClose = document.getElementById("toastClose");
+    const footerLeft = document.getElementById("footerLeft");
+    const footerRight = document.getElementById("footerRight");
+    const navLinks = [...document.querySelectorAll("[data-nav]")];
+    const pages = [...document.querySelectorAll("[data-page]")];
+
+    const requestForm = document.getElementById("requestForm");
+    const feedbackForm = document.getElementById("feedbackForm");
+    const loginUser = document.getElementById("loginUser");
+    const loginKey = document.getElementById("loginKey");
+    const loginBtn = document.getElementById("loginBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const clearDataBtn = document.getElementById("clearDataBtn");
+    const loginState = document.getElementById("loginState");
+    const dashboard = document.getElementById("dashboard");
+    const requestsList = document.getElementById("requestsList");
+    const feedbackList = document.getElementById("feedbackList");
+    const goGameBtn = document.getElementById("goGameBtn");
+    const manualGameUrl = CONFIG.gameUrl;
+
+    let activeSlide = 0;
+    let currentRole = "visitor";
+    let currentUser = "";
+
+    function loadJSON(key, fallback) {
+      try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : fallback;
+      } catch {
+        return fallback;
+      }
+    }
+
+    function saveJSON(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    function getAuth() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEYS.auth) || "null");
+      } catch {
+        return null;
+      }
+    }
+
+    function setAuth(auth) {
+      localStorage.setItem(STORAGE_KEYS.auth, JSON.stringify(auth));
+    }
+
+    function clearAuth() {
+      localStorage.removeItem(STORAGE_KEYS.auth);
+    }
+
+    function renderConfig() {
+      document.title = CONFIG.siteName;
+      brandName.textContent = CONFIG.siteName;
+      brandSub.textContent = CONFIG.brandSubtitle;
+      heroEyebrow.textContent = CONFIG.heroEyebrow;
+      heroTitle.textContent = CONFIG.heroTitle;
+      heroLead.textContent = CONFIG.heroLead;
+      showcaseCaption.textContent = "Secure Preview";
+      refreshMessage.textContent = `Please wait while ${CONFIG.siteName} reloads the interface.`;
+      toastBadge.textContent = CONFIG.toast.badge;
+      toastTitle.textContent = CONFIG.toast.title;
+      toastBody.textContent = CONFIG.toast.body;
+      footerLeft.textContent = CONFIG.siteName;
+      footerRight.textContent = "Classified. Cinematic. Clean.";
+      manualGameLink.href = CONFIG.gameUrl;
+      creatorName.textContent = "About the Creator";
+      creatorBio.textContent = CONFIG.creatorBio;
+    }
+
+    function renderUpdates() {
+      updatesGrid.innerHTML = "";
+      CONFIG.updates.forEach((item, index) => {
+        const card = document.createElement("article");
+        card.className = "update-card reveal-on-scroll";
+        card.innerHTML = `
+          <div class="date">${item.date}</div>
+          <h3>${item.title}</h3>
+          <p>${item.body}</p>
+          <span class="tag">${item.tag}</span>
+        `;
+        updatesGrid.appendChild(card);
+
+        if (index === 0) {
+          homeUpdatePreview.innerHTML = `
+            <div class="date">${item.date}</div>
+            <h3>${item.title}</h3>
+            <p>${item.body}</p>
+            <span class="tag">${item.tag}</span>
+          `;
+        }
+      });
+    }
+
+    function renderSlides() {
+      reelRail.innerHTML = "";
+      CONFIG.slides.forEach((slide, index) => {
+        const btn = document.createElement("button");
+        btn.className = "slide-chip";
+        btn.type = "button";
+        btn.innerHTML = `
+          <img src="${slide.image}" alt="${slide.title}">
+          <strong>${slide.title}</strong>
+          <span>${slide.text}</span>
+        `;
+        btn.addEventListener("click", () => setSlide(index));
+        reelRail.appendChild(btn);
+      });
+    }
+
+    function setSlide(index) {
+      activeSlide = index;
+      const slide = CONFIG.slides[index];
+      slidePreview.src = slide.image;
+      slidePreview.alt = slide.title;
+      slideTitle.textContent = slide.title;
+      slideText.textContent = slide.text;
+
+      [...document.querySelectorAll(".slide-chip")].forEach((el, i) => {
+        el.classList.toggle("active", i === index);
+      });
+    }
+
+    function setRole(role, user) {
+      currentRole = role;
+      currentUser = user || "";
+
+      if (role === "admin") {
+        loginState.innerHTML = `<strong>Signed in:</strong> ${currentUser} <br>Admin access granted.`;
+        dashboard.classList.add("active");
+      } else {
+        loginState.innerHTML = `Not signed in.`;
+        dashboard.classList.remove("active");
+      }
+
+      saveJSON(STORAGE_KEYS.auth, { role, user: currentUser });
+      renderQueues();
+    }
+
+    function renderQueues() {
+      const requests = loadJSON(STORAGE_KEYS.requests, []);
+      const feedback = loadJSON(STORAGE_KEYS.feedback, []);
+
+      requestsList.innerHTML = requests.length ? "" : `<div class="item"><strong>No requests yet.</strong><p>New playtest requests will appear here.</p></div>`;
+      feedbackList.innerHTML = feedback.length ? "" : `<div class="item"><strong>No feedback yet.</strong><p>New feedback will appear here.</p></div>`;
+
+      requests.slice().reverse().forEach((entry) => {
+        const item = document.createElement("div");
+        item.className = "item";
+        item.innerHTML = `
+          <div class="item-top">
+            <strong>${entry.username}</strong>
+            <span class="meta">${entry.time}</span>
+          </div>
+          <p><strong>Discord:</strong> ${entry.discord || "N/A"}<br><strong>Device:</strong> ${entry.device || "N/A"}<br><strong>Type:</strong> ${entry.type}<br><strong>Notes:</strong> ${entry.notes || "—"}</p>
+        `;
+        requestsList.appendChild(item);
+      });
+
+      feedback.slice().reverse().forEach((entry) => {
+        const item = document.createElement("div");
+        item.className = "item";
+        item.innerHTML = `
+          <div class="item-top">
+            <strong>${entry.username} — ${entry.category}</strong>
+            <span class="meta">${entry.time}</span>
+          </div>
+          <p>${entry.text}<br><strong>Link:</strong> ${entry.link || "N/A"}</p>
+        `;
+        feedbackList.appendChild(item);
+      });
+    }
+
+    async function sendWebhook(payload) {
+      try {
+        await fetch(CONFIG.discordWebhook, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+      } catch (err) {
+        console.warn("Webhook send failed:", err);
+      }
+    }
+
+    function nowStamp() {
+      return new Date().toLocaleString();
+    }
+
+    function addRequest(entry) {
+      const arr = loadJSON(STORAGE_KEYS.requests, []);
+      arr.push(entry);
+      saveJSON(STORAGE_KEYS.requests, arr);
+      renderQueues();
+    }
+
+    function addFeedback(entry) {
+      const arr = loadJSON(STORAGE_KEYS.feedback, []);
+      arr.push(entry);
+      saveJSON(STORAGE_KEYS.feedback, arr);
+      renderQueues();
+    }
+
+    function toastShow(title, body) {
+      toastTitle.textContent = title;
+      toastBody.textContent = body;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 4600);
+    }
+
+    function isReloadNavigation() {
+      try {
+        const nav = performance.getEntriesByType?.("navigation")?.[0];
+        if (nav && nav.type === "reload") return true;
+      } catch (_) {}
+      try {
+        return performance.navigation && performance.navigation.type === 1;
+      } catch (_) {
+        return false;
+      }
+    }
+
+    function pageNameFromHash() {
+      const hash = location.hash.replace("#", "").trim();
+      return hash || "home";
+    }
+
+    let redirectTimer = null;
+    function showPage(name) {
+      pages.forEach(page => page.classList.toggle("active", page.dataset.page === name));
+      navLinks.forEach(link => link.classList.toggle("active", link.dataset.nav === name));
+      window.scrollTo({ top: 0, behavior: "auto" });
+      document.title = `${CONFIG.siteName} | ${name.charAt(0).toUpperCase() + name.slice(1)}`;
+
+      if (name === "game") {
+        clearTimeout(redirectTimer);
+      }
+    }
+
+    function route() {
+      const page = pageNameFromHash();
+      showPage(page);
+    }
+
+    function updateDashboardAccess() {
+      const auth = getAuth();
+      if (auth && auth.role === "admin") {
+        setRole("admin", auth.user);
+      } else {
+        setRole("visitor", "");
+      }
+    }
+
+    document.getElementById("goGameBtn").addEventListener("click", () => {
+      window.open(CONFIG.gameUrl, "_blank", "noopener,noreferrer");
+      location.hash = "#game";
+    });
+
+    loginBtn.addEventListener("click", () => {
+      const user = loginUser.value.trim();
+      const key = loginKey.value.trim();
+
+      if (!user) {
+        toastShow("Login required", "Enter a username first.");
+        return;
+      }
+
+      if (CONFIG.adminUsers.includes(user) && key === CONFIG.adminKey) {
+        setRole("admin", user);
+        toastShow("Admin access granted", `${user} is now signed in.`);
+      } else {
+        toastShow("Access denied", "That username or key is not valid for admin mode.");
+      }
+    });
+
+    logoutBtn.addEventListener("click", () => {
+      clearAuth();
+      setRole("visitor", "");
+      toastShow("Signed out", "Admin access was removed.");
+    });
+
+    clearDataBtn.addEventListener("click", () => {
+      localStorage.removeItem(STORAGE_KEYS.requests);
+      localStorage.removeItem(STORAGE_KEYS.feedback);
+      renderQueues();
+      toastShow("Queue cleared", "Stored requests and feedback were removed.");
+    });
+
+    requestForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const username = document.getElementById("requestUsername").value.trim();
+      const discord = document.getElementById("requestDiscord").value.trim();
+      const device = document.getElementById("requestDevice").value.trim();
+      const type = document.getElementById("requestStyle").value.trim();
+      const notes = document.getElementById("requestNotes").value.trim();
+
+      const entry = {
+        username,
+        discord,
+        device,
+        type,
+        notes,
+        time: nowStamp()
+      };
+
+      addRequest(entry);
+
+      await sendWebhook({
+        username: "REDACTED-5 Requests",
+        avatar_url: "https://www.roblox.com/headshot-thumbnail/image?userId=1&width=420&height=420&format=png",
+        embeds: [{
+          title: "New Playtest Request",
+          color: 0xB7C8FF,
+          fields: [
+            { name: "Roblox Username", value: username || "N/A", inline: true },
+            { name: "Discord", value: discord || "N/A", inline: true },
+            { name: "Device", value: device || "N/A", inline: true },
+            { name: "Type", value: type || "N/A", inline: false },
+            { name: "Notes", value: notes || "N/A", inline: false }
+          ],
+          footer: { text: entry.time }
+        }]
+      });
+
+      requestForm.reset();
+      toastShow("Request sent", "Playtest request submitted.");
+    });
+
+    feedbackForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const username = document.getElementById("feedbackUsername").value.trim();
+      const category = document.getElementById("feedbackCategory").value.trim();
+      const text = document.getElementById("feedbackText").value.trim();
+      const link = document.getElementById("feedbackLink").value.trim();
+
+      const entry = {
+        username,
+        category,
+        text,
+        link,
+        time: nowStamp()
+      };
+
+      addFeedback(entry);
+
+      await sendWebhook({
+        username: "REDACTED-5 Feedback",
+        avatar_url: "https://www.roblox.com/headshot-thumbnail/image?userId=1&width=420&height=420&format=png",
+        embeds: [{
+          title: "New Feedback",
+          color: 0xD9B0FF,
+          fields: [
+            { name: "Roblox Username", value: username || "N/A", inline: true },
+            { name: "Category", value: category || "N/A", inline: true },
+            { name: "Screenshot / Clip", value: link || "N/A", inline: false },
+            { name: "Feedback", value: text || "N/A", inline: false }
+          ],
+          footer: { text: entry.time }
+        }]
+      });
+
+      feedbackForm.reset();
+      toastShow("Feedback sent", "Feedback submitted.");
+    });
+
+    toastClose.addEventListener("click", () => toast.classList.remove("show"));
 
     window.addEventListener("scroll", () => {
       if (window.scrollY > 8) topbar.classList.add("shrink");
@@ -1029,30 +2171,20 @@
     });
 
     const revealObserver = new IntersectionObserver((entries) => {
-      for (const entry of entries) {
+      entries.forEach((entry) => {
         if (entry.isIntersecting) entry.target.classList.add("reveal");
-      }
+      });
     }, { threshold: 0.18 });
 
-    document.querySelectorAll(".reveal-on-scroll").forEach((el) => revealObserver.observe(el));
-
-    function isReloadNavigation() {
-      try {
-        const nav = performance.getEntriesByType?.("navigation")?.[0];
-        if (nav && nav.type === "reload") return true;
-      } catch (_) {}
-
-      try {
-        return performance.navigation && performance.navigation.type === 1;
-      } catch (_) {
-        return false;
-      }
+    function observeRevealElements() {
+      document.querySelectorAll(".reveal-on-scroll").forEach((el) => revealObserver.observe(el));
     }
+
+    window.addEventListener("hashchange", route);
 
     if (isReloadNavigation()) {
       refreshScreen.classList.add("active");
       refreshScreen.setAttribute("aria-hidden", "false");
-
       window.addEventListener("load", () => {
         setTimeout(() => {
           refreshScreen.classList.remove("active");
@@ -1061,17 +2193,27 @@
       });
     }
 
-    // Add a tiny delay so above-the-fold cards animate in if already visible.
+    renderConfig();
+    renderUpdates();
+    renderSlides();
+    setSlide(0);
+    observeRevealElements();
+    updateDashboardAccess();
+    route();
+    renderQueues();
+    toastShow(CONFIG.toast.title, CONFIG.toast.body);
+
+    setInterval(() => {
+      const next = (activeSlide + 1) % CONFIG.slides.length;
+      setSlide(next);
+    }, 4200);
+
     setTimeout(() => {
       document.querySelectorAll(".reveal-on-scroll").forEach((el) => {
-        if (el.getBoundingClientRect().top < window.innerHeight * 0.88) {
-          el.classList.add("reveal");
-        }
+        if (el.getBoundingClientRect().top < window.innerHeight * 0.88) el.classList.add("reveal");
       });
     }, 150);
   </script>
 
 </body>
 </html>
-
-
