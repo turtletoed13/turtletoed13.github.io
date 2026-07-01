@@ -1,386 +1,210 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Your Project</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Redacted-5</title>
 
 <style>
+:root{
+  --glass: rgba(15,18,28,0.65);
+  --text: rgba(255,255,255,0.92);
+  --muted: rgba(255,255,255,0.65);
+  --accent: #8ab4ff;
+  --ease: cubic-bezier(.2,.8,.2,1);
+}
+
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:"Inter",sans-serif;
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: system-ui, -apple-system, sans-serif;
 }
 
 body{
-    background:#07090f;
-    color:white;
-    overflow-x:hidden;
+  color:var(--text);
+  overflow-x:hidden;
 }
 
-/* Background */
-
+/* YOUR BACKGROUND FILE */
 body::before{
-    content:"";
-    position:fixed;
-    inset:0;
-
-    background:
-        radial-gradient(circle at top left,#2458ff55,transparent 40%),
-        radial-gradient(circle at bottom right,#6d28d955,transparent 40%),
-        radial-gradient(circle at center,#0b0f1d,transparent 70%);
-
-    z-index:-2;
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.85)),
+    url("MovementBackroung.png");
+  background-size:cover;
+  background-position:center;
+  filter: saturate(1.1) contrast(1.1);
+  z-index:-2;
 }
 
+/* soft blur overlay */
 body::after{
-    content:"";
-    position:fixed;
-    inset:0;
-    backdrop-filter:blur(120px);
-    z-index:-1;
+  content:"";
+  position:fixed;
+  inset:0;
+  backdrop-filter: blur(10px);
+  z-index:-1;
 }
 
-/* NAVBAR */
-
+/* TOP BAR */
 nav{
-    position:fixed;
-    top:20px;
-    left:50%;
-    transform:translateX(-50%);
+  position:fixed;
+  top:18px;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(1100px,92%);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
 
-    width:min(1200px,92%);
-    height:72px;
+  padding:14px 20px;
+  border-radius:18px;
 
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
+  background:var(--glass);
+  border:1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(22px);
 
-    padding:0 32px;
-
-    border-radius:22px;
-
-    background:rgba(20,20,28,.55);
-
-    border:1px solid rgba(255,255,255,.08);
-
-    backdrop-filter:blur(28px);
-    -webkit-backdrop-filter:blur(28px);
-
-    box-shadow:
-    0 20px 60px rgba(0,0,0,.4),
-    inset 0 1px rgba(255,255,255,.08);
-
-    z-index:999;
+  box-shadow:0 25px 60px rgba(0,0,0,0.45);
+  z-index:100;
 }
 
 .logo{
-    font-size:24px;
-    font-weight:700;
-    letter-spacing:.5px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:700;
+  letter-spacing:0.4px;
 }
 
-.logo span{
-    color:#4b8dff;
+.logo img{
+  width:34px;
+  height:34px;
+  border-radius:10px;
 }
 
-.links{
-    display:flex;
-    gap:32px;
+/* LINKS */
+nav a{
+  color:var(--muted);
+  text-decoration:none;
+  margin:0 12px;
+  transition:.25s;
+  font-weight:500;
 }
 
-.links a{
-    color:#cfd8ff;
-    text-decoration:none;
-    transition:.25s;
-    font-weight:500;
+nav a:hover{
+  color:white;
 }
 
-.links a:hover{
-    color:white;
-}
-
-.github{
-    padding:12px 24px;
-
-    border-radius:14px;
-
-    background:linear-gradient(135deg,#4b8dff,#6d4cff);
-
-    color:white;
-    text-decoration:none;
-    font-weight:600;
-
-    transition:.3s;
-}
-
-.github:hover{
-    transform:translateY(-3px);
-    box-shadow:0 15px 35px rgba(75,141,255,.45);
+/* BUTTON */
+.play{
+  padding:10px 16px;
+  border-radius:999px;
+  background:linear-gradient(135deg,#ffffff,#cbd7ff);
+  color:#0b1020;
+  font-weight:700;
+  text-decoration:none;
 }
 
 /* HERO */
-
 .hero{
-    min-height:100vh;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-
-    padding:120px 30px;
-}
-
-.hero-content{
-    max-width:900px;
-}
-
-.badge{
-
-    display:inline-flex;
-    gap:10px;
-    align-items:center;
-
-    padding:10px 18px;
-
-    border-radius:999px;
-
-    background:rgba(255,255,255,.05);
-
-    border:1px solid rgba(255,255,255,.08);
-
-    backdrop-filter:blur(18px);
-
-    margin-bottom:28px;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:0 20px;
 }
 
 .hero h1{
-
-    font-size:clamp(48px,7vw,82px);
-
-    line-height:1.05;
-
-    margin-bottom:25px;
-
-    font-weight:700;
-}
-
-.hero h1 span{
-
-    background:linear-gradient(90deg,#66a8ff,#c27bff);
-
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
+  font-size:clamp(42px,7vw,84px);
+  letter-spacing:-0.04em;
 }
 
 .hero p{
-
-    font-size:20px;
-
-    color:#aab5d6;
-
-    line-height:1.7;
-
-    max-width:720px;
-
-    margin:auto;
+  margin-top:14px;
+  color:var(--muted);
+  max-width:600px;
 }
 
-.buttons{
-
-    display:flex;
-
-    justify-content:center;
-
-    gap:18px;
-
-    margin-top:45px;
-
-    flex-wrap:wrap;
+/* CARDS */
+.section{
+  max-width:1100px;
+  margin:0 auto;
+  padding:60px 20px;
 }
 
-.btn{
-
-    padding:16px 34px;
-
-    border-radius:18px;
-
-    text-decoration:none;
-
-    font-weight:600;
-
-    transition:.3s;
-}
-
-.primary{
-
-    background:linear-gradient(135deg,#4b8dff,#6d4cff);
-
-    color:white;
-}
-
-.primary:hover{
-
-    transform:translateY(-4px);
-
-    box-shadow:0 20px 45px rgba(77,122,255,.4);
-}
-
-.secondary{
-
-    background:rgba(255,255,255,.05);
-
-    color:white;
-
-    border:1px solid rgba(255,255,255,.08);
-
-    backdrop-filter:blur(18px);
-}
-
-.secondary:hover{
-
-    background:rgba(255,255,255,.08);
-}
-
-/* Cards */
-
-.cards{
-
-    width:min(1200px,92%);
-
-    margin:auto;
-
-    display:grid;
-
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-
-    gap:24px;
-
-    padding-bottom:120px;
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:18px;
 }
 
 .card{
-
-    padding:32px;
-
-    border-radius:24px;
-
-    background:rgba(255,255,255,.04);
-
-    border:1px solid rgba(255,255,255,.06);
-
-    backdrop-filter:blur(25px);
-
-    transition:.35s;
+  padding:22px;
+  border-radius:18px;
+  background:rgba(10,12,18,0.55);
+  border:1px solid rgba(255,255,255,0.08);
+  backdrop-filter:blur(20px);
+  transition:.3s;
 }
 
 .card:hover{
-
-    transform:translateY(-10px);
-
-    border-color:#4b8dff;
-
-    box-shadow:0 20px 45px rgba(0,0,0,.45);
-}
-
-.card h2{
-
-    margin-bottom:12px;
-}
-
-.card p{
-
-    color:#9da8c9;
-
-    line-height:1.7;
+  transform:translateY(-6px);
+  border-color:rgba(138,180,255,0.4);
 }
 </style>
-
 </head>
+
 <body>
 
+<!-- NAV -->
 <nav>
+  <div class="logo">
+    <img src="RedactedP.png" alt="icon">
+    <span>Redacted-5</span>
+  </div>
 
-<div class="logo">
-Your<span>Project</span>
-</div>
+  <div>
+    <a href="index.html">Home</a>
+    <a href="lore.html">Lore</a>
+    <a href="media.html">Media</a>
+    <a href="updates.html">Updates</a>
+  </div>
 
-<div class="links">
-<a href="#">Home</a>
-<a href="#">Features</a>
-<a href="#">Downloads</a>
-<a href="#">Documentation</a>
-</div>
-
-<a class="github" href="#">
-GitHub
-</a>
-
+  <a class="play" href="#">Play</a>
 </nav>
 
+<!-- HERO -->
 <section class="hero">
-
-<div class="hero-content">
-
-<div class="badge">
-🚀 Premium Interface
-</div>
-
-<h1>
-Build Something
-<span>Beautiful.</span>
-</h1>
-
-<p>
-A modern glassmorphism interface designed for GitHub Pages. Smooth animations,
-frosted glass effects, premium gradients, and responsive layout without any
-frameworks.
-</p>
-
-<div class="buttons">
-
-<a class="btn primary" href="#">
-Get Started
-</a>
-
-<a class="btn secondary" href="#">
-Learn More
-</a>
-
-</div>
-
-</div>
-
+  <div>
+    <h1>REDACTED-5</h1>
+    <p>A classified tactical experience. Unknown origin. High-risk environment. Minimal disclosure.</p>
+  </div>
 </section>
 
-<section class="cards">
+<!-- FEATURES -->
+<section class="section">
+  <div class="grid">
 
-<div class="card">
-<h2>⚡ Fast</h2>
-<p>
-Pure HTML and CSS with zero dependencies. Loads instantly on GitHub Pages.
-</p>
-</div>
+    <div class="card">
+      <h3>CLASSIFIED ENVIRONMENT</h3>
+      <p>Dynamic map systems with restricted zones and unknown anomalies.</p>
+    </div>
 
-<div class="card">
-<h2>💎 Premium</h2>
-<p>
-Modern glassmorphism, soft shadows, blur effects, and elegant spacing.
-</p>
-</div>
+    <div class="card">
+      <h3>TACTICAL GAMEPLAY</h3>
+      <p>Fast-paced engagement systems designed for coordination and survival.</p>
+    </div>
 
-<div class="card">
-<h2>📱 Responsive</h2>
-<p>
-Looks great on desktop, tablet, and mobile with adaptive layouts.
-</p>
-</div>
+    <div class="card">
+      <h3>LORE SYSTEM</h3>
+      <p>Hidden documents, logs, and encrypted world-building elements.</p>
+    </div>
 
+  </div>
 </section>
 
 </body>
