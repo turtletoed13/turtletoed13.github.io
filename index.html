@@ -309,7 +309,7 @@
       will-change:transform;
       border:1px solid transparent;
       cursor:pointer;
-      font:inherit;
+      background:none;
     }
 
     .button.primary{
@@ -763,20 +763,51 @@
       margin-top:18px;
     }
 
-    .form{
+    .form-card{
+      border-radius:var(--radius);
+      padding:24px;
+      border:1px solid rgba(255,255,255,.09);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.07), transparent 22%),
+        rgba(12,14,20,.60);
+      backdrop-filter:blur(20px);
+      -webkit-backdrop-filter:blur(20px);
+      box-shadow:var(--shadow2);
+    }
+
+    .form-card h3{
+      font-size:1.18rem;
+      margin-bottom:10px;
+      letter-spacing:-.02em;
+    }
+
+    .form-card p{
+      color:var(--muted);
+      line-height:1.7;
+      font-size:.98rem;
+      margin-bottom:16px;
+    }
+
+    .field-grid{
       display:grid;
+      grid-template-columns:1fr 1fr;
       gap:12px;
-      margin-top:14px;
     }
 
     .field{
-      display:grid;
+      display:flex;
+      flex-direction:column;
       gap:8px;
+      margin-bottom:12px;
+    }
+
+    .field.full{
+      grid-column:1 / -1;
     }
 
     .field label{
-      color:rgba(244,247,251,.82);
-      font-size:.9rem;
+      font-size:.88rem;
+      color:rgba(244,247,251,.78);
       font-weight:700;
     }
 
@@ -788,15 +819,15 @@
       border:1px solid rgba(255,255,255,.09);
       background:rgba(255,255,255,.04);
       color:var(--text);
-      padding:14px 15px;
+      padding:13px 14px;
       outline:none;
       font:inherit;
-      transition:border-color .25s var(--ease), background .25s var(--ease), transform .25s var(--ease);
+      transition:border-color .2s var(--ease), background .2s var(--ease), transform .2s var(--ease);
     }
 
     .field textarea{
+      min-height:120px;
       resize:vertical;
-      min-height:118px;
     }
 
     .field input:focus,
@@ -806,9 +837,162 @@
       background:rgba(255,255,255,.06);
     }
 
-    .field input::placeholder,
-    .field textarea::placeholder{
-      color:rgba(244,247,251,.34);
+    .helper{
+      color:var(--muted2);
+      font-size:.84rem;
+      line-height:1.55;
+    }
+
+    .split{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:18px;
+    }
+
+    .gate{
+      border-radius:var(--radius);
+      padding:24px;
+      border:1px solid rgba(255,255,255,.09);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.07), transparent 22%),
+        rgba(12,14,20,.60);
+      backdrop-filter:blur(20px);
+      -webkit-backdrop-filter:blur(20px);
+      box-shadow:var(--shadow2);
+    }
+
+    .gate h3{
+      font-size:1.18rem;
+      margin-bottom:10px;
+    }
+
+    .gate p{
+      color:var(--muted);
+      line-height:1.7;
+      font-size:.98rem;
+      margin-bottom:16px;
+    }
+
+    .login-row{
+      display:grid;
+      grid-template-columns:1fr 1fr auto;
+      gap:12px;
+    }
+
+    .dashboard{
+      display:none;
+      margin-top:18px;
+      grid-template-columns:1fr;
+      gap:18px;
+    }
+
+    .dashboard.active{
+      display:grid;
+    }
+
+    .dashboard-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+    }
+
+    .list{
+      display:grid;
+      gap:12px;
+      margin-top:12px;
+    }
+
+    .item{
+      border-radius:20px;
+      padding:16px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.04);
+    }
+
+    .item-top{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+      margin-bottom:8px;
+      flex-wrap:wrap;
+    }
+
+    .item strong{
+      font-size:.98rem;
+    }
+
+    .item .meta{
+      color:var(--muted2);
+      font-size:.84rem;
+    }
+
+    .item p{
+      color:var(--muted);
+      line-height:1.62;
+      font-size:.94rem;
+      margin:0;
+    }
+
+    .iframe-shell{
+      margin-top:18px;
+      border-radius:28px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.09);
+      background:rgba(255,255,255,.03);
+      box-shadow:var(--shadow2);
+    }
+
+    .iframe-shell iframe{
+      width:100%;
+      height:720px;
+      border:0;
+      display:block;
+      background:#0b0d12;
+    }
+
+    .fallback-link{
+      margin-top:12px;
+      color:var(--muted);
+      font-size:.92rem;
+    }
+
+    .fallback-link a{
+      color:#dbe5ff;
+      text-decoration:none;
+    }
+
+    .game-launch{
+      min-height:calc(100vh - 98px);
+      display:grid;
+      place-items:center;
+      text-align:center;
+    }
+
+    .launch-card{
+      width:min(100%, 640px);
+      border-radius:34px;
+      padding:34px 28px;
+      border:1px solid rgba(255,255,255,.10);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.08), transparent 22%),
+        rgba(12,14,20,.62);
+      backdrop-filter:blur(26px);
+      -webkit-backdrop-filter:blur(26px);
+      box-shadow:var(--shadow);
+    }
+
+    .launch-card h2{
+      font-size:clamp(2rem, 4.4vw, 3rem);
+      letter-spacing:-.05em;
+      margin-bottom:10px;
+    }
+
+    .launch-card p{
+      color:var(--muted);
+      line-height:1.75;
+      max-width:42ch;
+      margin:0 auto 20px;
     }
 
     .owner-toast{
@@ -857,7 +1041,9 @@
     }
 
     .owner-toast .dot{
-      width:8px;height:8px;border-radius:50%;
+      width:8px;
+      height:8px;
+      border-radius:50%;
       background:linear-gradient(135deg, var(--accent), var(--accent2));
       box-shadow:0 0 16px rgba(183,200,255,.55);
     }
@@ -888,59 +1074,6 @@
       transform-origin:left;
       background:linear-gradient(90deg, rgba(183,200,255,.95), rgba(217,176,255,.95));
       animation:toastbar 4.6s linear forwards;
-    }
-
-    .admin-panel{
-      margin-top:18px;
-      border-radius:30px;
-      border:1px solid rgba(255,255,255,.09);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.06), transparent 22%),
-        rgba(12,14,20,.60);
-      box-shadow:var(--shadow2);
-      padding:18px;
-    }
-
-    .admin-list{
-      display:grid;
-      gap:12px;
-      margin-top:14px;
-    }
-
-    .admin-item{
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,.08);
-      background:rgba(255,255,255,.04);
-      padding:14px;
-    }
-
-    .admin-item h4{
-      font-size:.98rem;
-      margin-bottom:8px;
-    }
-
-    .admin-item p{
-      color:var(--muted);
-      line-height:1.6;
-      font-size:.92rem;
-      white-space:pre-wrap;
-    }
-
-    .admin-item .meta{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin-top:10px;
-    }
-
-    .chip{
-      display:inline-flex;
-      padding:7px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.08);
-      background:rgba(255,255,255,.04);
-      color:rgba(244,247,251,.74);
-      font-size:.82rem;
     }
 
     .refresh-screen{
@@ -1063,67 +1196,6 @@
       animation:load 1.05s ease-in-out infinite;
     }
 
-    .game-launch{
-      min-height:calc(100vh - 98px);
-      display:grid;
-      place-items:center;
-      text-align:center;
-    }
-
-    .launch-card{
-      width:min(100%, 640px);
-      border-radius:34px;
-      padding:34px 28px;
-      border:1px solid rgba(255,255,255,.10);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.08), transparent 22%),
-        rgba(12,14,20,.62);
-      backdrop-filter:blur(26px);
-      -webkit-backdrop-filter:blur(26px);
-      box-shadow:var(--shadow);
-    }
-
-    .launch-card h2{
-      font-size:clamp(2rem, 4.4vw, 3rem);
-      letter-spacing:-.05em;
-      margin-bottom:10px;
-    }
-
-    .launch-card p{
-      color:var(--muted);
-      line-height:1.75;
-      max-width:42ch;
-      margin:0 auto 20px;
-    }
-
-    .iframe-shell{
-      margin-top:18px;
-      border-radius:28px;
-      overflow:hidden;
-      border:1px solid rgba(255,255,255,.09);
-      background:rgba(255,255,255,.03);
-      box-shadow:var(--shadow2);
-    }
-
-    .iframe-shell iframe{
-      width:100%;
-      height:720px;
-      border:0;
-      display:block;
-      background:#0b0d12;
-    }
-
-    .fallback-link{
-      margin-top:12px;
-      color:var(--muted);
-      font-size:.92rem;
-    }
-
-    .fallback-link a{
-      color:#dbe5ff;
-      text-decoration:none;
-    }
-
     .footer{
       max-width:var(--max);
       margin:0 auto;
@@ -1153,7 +1225,7 @@
       .hero,
       .playtest-wrap,
       .reel-layout,
-      .updates-grid{
+      .dashboard-grid{
         grid-template-columns:1fr;
       }
 
@@ -1166,7 +1238,10 @@
         min-height:460px;
       }
 
-      .grid{
+      .grid,
+      .updates-grid,
+      .field-grid,
+      .login-row{
         grid-template-columns:1fr;
       }
 
@@ -1220,7 +1295,7 @@
       <button class="button secondary" id="toastClose" style="padding:8px 12px;border-radius:14px;">Close</button>
     </div>
     <h4 id="toastTitle">Playtest access online.</h4>
-    <p id="toastBody">Open the Playtest page to check the latest testing notes.</p>
+    <p id="toastBody">Open the Testing page to check the latest testing notes.</p>
     <div class="bar"><span></span></div>
   </div>
 
@@ -1237,11 +1312,11 @@
           </div>
         </div>
 
-```
+ 
     <nav class="nav" aria-label="Primary">
       <a href="#home" data-nav="home">Home</a>
       <a href="#updates" data-nav="updates">Updates</a>
-      <a href="#playtest" data-nav="playtest">Testing Site</a>
+      <a href="#testing" data-nav="testing">Testing</a>
       <a href="#creator" data-nav="creator">Creator</a>
       <a href="#game" data-nav="game" class="pill">Game</a>
     </nav>
@@ -1264,9 +1339,9 @@
         </p>
 
         <div class="actions">
-          <button class="button primary" id="openGameBtn">Open Game</button>
+          <button class="button primary" id="goGameBtn">Open Game</button>
           <a class="button secondary" href="#updates">View Updates</a>
-          <a class="button secondary" href="#creator">Creator</a>
+          <a class="button secondary" href="#testing">Testing Site</a>
         </div>
       </div>
 
@@ -1323,7 +1398,7 @@
                 Media
               </div>
               <h3 id="slideTitle">Atmosphere</h3>
-              <p id="slideText">A dark, premium visual foundation built for REDACTED-5.</p>
+              <p id="slideText">A dark, premium visual foundation for REDACTED-5.</p>
             </div>
           </div>
 
@@ -1391,80 +1466,147 @@
     </div>
   </section>
 
-  <section class="page" data-page="playtest">
+  <section class="page" data-page="testing">
     <div class="page-hero">
       <div>
         <div class="section-head">
           <div>
             <h2>Testing Site</h2>
-            <p>Generic users can browse, request access, and send feedback. Admins can unlock extra tools with the login gate.</p>
+            <p>Generic users can browse, request playtest access, and send feedback. Admins can log in and manage requests. This is a front-end gate, so real security still needs a backend if you want it truly locked down.</p>
           </div>
         </div>
 
         <div class="playtest-wrap">
-          <div class="feature reveal-on-scroll" style="opacity:1;transform:none;">
-            <div class="icon">◉</div>
-            <h3>Request a Playtest</h3>
-            <p>Send your Roblox username, your reason, and any notes. That request gets logged and forwarded to the webhook.</p>
+          <div class="split">
+            <div class="form-card">
+              <h3>Request a playtest</h3>
+              <p>Tell me who you are, what you want to test, and how to contact you.</p>
 
-            <form class="form" id="playtestForm">
-              <div class="field">
-                <label for="ptUsername">Roblox Username</label>
-                <input id="ptUsername" name="ptUsername" type="text" placeholder="Your Roblox username" required />
-              </div>
-              <div class="field">
-                <label for="ptReason">Why should you get access?</label>
-                <textarea id="ptReason" name="ptReason" placeholder="Tell me why you want to test the game..." required></textarea>
-              </div>
-              <div class="field">
-                <label for="ptNotes">Extra Notes</label>
-                <textarea id="ptNotes" name="ptNotes" placeholder="Anything else I should know?"></textarea>
-              </div>
-              <div class="actions">
-                <button class="button primary" type="submit">Send Playtest Request</button>
-                <button class="button secondary" type="button" id="adminLoginBtn">Admin Login</button>
-              </div>
-            </form>
+              <form id="requestForm">
+                <div class="field-grid">
+                  <div class="field">
+                    <label for="requestUsername">Roblox username</label>
+                    <input id="requestUsername" name="requestUsername" placeholder="Your Roblox username" required />
+                  </div>
+
+                  <div class="field">
+                    <label for="requestDiscord">Discord username</label>
+                    <input id="requestDiscord" name="requestDiscord" placeholder="Optional" />
+                  </div>
+
+                  <div class="field">
+                    <label for="requestDevice">Device</label>
+                    <input id="requestDevice" name="requestDevice" placeholder="PC, mobile, console..." />
+                  </div>
+
+                  <div class="field">
+                    <label for="requestStyle">Test type</label>
+                    <select id="requestStyle" name="requestStyle">
+                      <option>General playtest</option>
+                      <option>Bug testing</option>
+                      <option>Balance testing</option>
+                      <option>UI / menu testing</option>
+                    </select>
+                  </div>
+
+                  <div class="field full">
+                    <label for="requestNotes">What should we know?</label>
+                    <textarea id="requestNotes" name="requestNotes" placeholder="Tell us why you want to test the game."></textarea>
+                  </div>
+                </div>
+
+                <div class="actions">
+                  <button type="submit" class="button primary">Send Playtest Request</button>
+                </div>
+                <p class="helper">This request is saved locally and sent to the webhook. If browser security blocks the webhook, the request still stays stored in the page data.</p>
+              </form>
+            </div>
+
+            <div class="form-card">
+              <h3>Send feedback</h3>
+              <p>Bug reports, ideas, polish notes, or anything that should make REDACTED-5 better.</p>
+
+              <form id="feedbackForm">
+                <div class="field-grid">
+                  <div class="field">
+                    <label for="feedbackUsername">Roblox username</label>
+                    <input id="feedbackUsername" name="feedbackUsername" placeholder="Your Roblox username" required />
+                  </div>
+
+                  <div class="field">
+                    <label for="feedbackCategory">Category</label>
+                    <select id="feedbackCategory" name="feedbackCategory">
+                      <option>Bug</option>
+                      <option>Suggestion</option>
+                      <option>Balance</option>
+                      <option>UI / Visual</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+
+                  <div class="field full">
+                    <label for="feedbackText">Feedback</label>
+                    <textarea id="feedbackText" name="feedbackText" placeholder="Write your feedback here..." required></textarea>
+                  </div>
+
+                  <div class="field full">
+                    <label for="feedbackLink">Screenshot / clip link</label>
+                    <input id="feedbackLink" name="feedbackLink" placeholder="Optional link" />
+                  </div>
+                </div>
+
+                <div class="actions">
+                  <button type="submit" class="button primary">Send Feedback</button>
+                </div>
+                <p class="helper">This goes to the same webhook and into the local admin dashboard.</p>
+              </form>
+            </div>
           </div>
 
-          <div class="feature reveal-on-scroll" style="opacity:1;transform:none;">
-            <div class="icon">✉</div>
-            <h3>Feedback</h3>
-            <p>Generic users can drop feedback here without needing admin access.</p>
+          <div class="split">
+            <div class="gate">
+              <h3>Admin login</h3>
+              <p>Admins: <strong>MTF_OPERATOR</strong> and <strong>TurtleToed13</strong>. The key below is a UI gate, not real security. For real security, move login to a server.</p>
 
-            <form class="form" id="feedbackForm">
-              <div class="field">
-                <label for="fbName">Username / Name</label>
-                <input id="fbName" name="fbName" type="text" placeholder="Your username" required />
-              </div>
-              <div class="field">
-                <label for="fbCategory">Category</label>
-                <select id="fbCategory" name="fbCategory">
-                  <option>Bug</option>
-                  <option>Suggestion</option>
-                  <option>Balance</option>
-                  <option>UI</option>
-                  <option>Other</option>
-                </select>
-              </div>
-              <div class="field">
-                <label for="fbMessage">Message</label>
-                <textarea id="fbMessage" name="fbMessage" placeholder="Write feedback here..." required></textarea>
-              </div>
-              <div class="actions">
-                <button class="button primary" type="submit">Send Feedback</button>
-              </div>
-            </form>
-
-            <div class="admin-panel" id="adminPanel" style="display:none;">
-              <div class="section-head" style="margin-bottom:10px;">
-                <div>
-                  <h2 style="font-size:1.5rem;">Admin Panel</h2>
-                  <p style="font-size:.95rem;">Only whitelisted admins can use this.</p>
+              <div class="login-row">
+                <div class="field">
+                  <label for="loginUser">Username</label>
+                  <input id="loginUser" placeholder="MTF_OPERATOR / TurtleToed13" />
                 </div>
-                <button class="button secondary" id="logoutAdminBtn" type="button">Logout</button>
+                <div class="field">
+                  <label for="loginKey">Access key</label>
+                  <input id="loginKey" type="password" placeholder="Admin key" />
+                </div>
+                <div class="field" style="justify-content:end;">
+                  <label>&nbsp;</label>
+                  <button class="button primary" id="loginBtn" type="button">Log In</button>
+                </div>
               </div>
-              <div class="admin-list" id="adminList"></div>
+
+              <div class="actions" style="margin-top:10px;">
+                <button class="button secondary" id="logoutBtn" type="button">Log Out</button>
+                <button class="button secondary" id="clearDataBtn" type="button">Clear Stored Queue</button>
+              </div>
+
+              <div class="helper" id="loginState" style="margin-top:12px;">
+                Not signed in.
+              </div>
+            </div>
+
+            <div class="dashboard" id="dashboard">
+              <div class="dashboard-grid">
+                <div class="form-card">
+                  <h3>Playtest requests</h3>
+                  <p>Incoming requests from visitors.</p>
+                  <div class="list" id="requestsList"></div>
+                </div>
+
+                <div class="form-card">
+                  <h3>Feedback queue</h3>
+                  <p>Everything sent through the feedback form.</p>
+                  <div class="list" id="feedbackList"></div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1527,9 +1669,9 @@
           Launching
         </div>
         <h2>Opening REDACTED-5</h2>
-        <p>Use the button below. It opens the game in a new tab instead of redirecting in the current page.</p>
+        <p>Click the button to open the game in a new tab.</p>
         <div class="actions" style="justify-content:center;">
-          <a class="button danger" id="manualGameLink" href="https://www.roblox.com/games/131283297263046/REDACTED-5" target="_blank" rel="noopener noreferrer">Open Game in New Tab</a>
+          <a class="button danger" id="manualGameLink" href="https://www.roblox.com/games/131283297263046/REDACTED-5" target="_blank" rel="noreferrer">Open Game in New Tab</a>
           <a class="button secondary" href="#home">Back Home</a>
         </div>
       </div>
@@ -1543,43 +1685,14 @@
     <div id="footerRight">Classified. Cinematic. Clean.</div>
   </div>
 </footer>
-```
-
-  </div>
-
-  <div id="adminModal" style="display:none;position:fixed;inset:0;z-index:220;background:rgba(0,0,0,.65);backdrop-filter:blur(14px);align-items:center;justify-content:center;padding:20px;">
-    <div style="width:min(100%, 520px);border-radius:30px;border:1px solid rgba(255,255,255,.10);background:rgba(12,14,20,.92);box-shadow:0 30px 100px rgba(0,0,0,.55);padding:22px;">
-      <div class="section-head" style="margin-bottom:14px;">
-        <div>
-          <h2 style="font-size:1.8rem;">Admin Login</h2>
-          <p style="font-size:.95rem;">Whitelisted usernames: MTF_OPERATOR and TurtleToed13</p>
-        </div>
-        <button class="button secondary" id="closeAdminModalBtn" type="button">Close</button>
-      </div>
-
-```
-  <form class="form" id="adminForm">
-    <div class="field">
-      <label for="adminUser">Username</label>
-      <input id="adminUser" type="text" placeholder="MTF_OPERATOR" required />
-    </div>
-    <div class="field">
-      <label for="adminKey">Access Key</label>
-      <input id="adminKey" type="password" placeholder="Admin key" required />
-    </div>
-    <div class="actions">
-      <button class="button primary" type="submit">Unlock Admin Mode</button>
-    </div>
-  </form>
-</div>
-```
+ 
 
   </div>
 
   <script>
     /*
-      CONFIG BLOCK
-      Change these values at the top for fast edits.
+      CONFIG BLOCK — edit this first.
+      UI gate only: real security requires a backend, because pure HTML/JS cannot securely protect login data.
     */
     const CONFIG = {
       siteName: "REDACTED-5",
@@ -1589,13 +1702,13 @@
       heroLead: "A cinematic, high-end site built around your game identity: sharp glass panels, soft blur, premium contrast, and a serious classified tone.",
       gameUrl: "https://www.roblox.com/games/131283297263046/REDACTED-5",
       creatorProfileUrl: "https://www.roblox.com/users/3028124482/profile",
-      webhookUrl: "https://discord.com/api/webhooks/1522007954835116193/ucvoDdbwSkBru-IuM00TOMClkFL8kjWAmAMrngSjYF5SLbWFQ9E7UboFfA-sU5vTCEJF",
       adminUsers: ["MTF_OPERATOR", "TurtleToed13"],
-      adminKey: "CHANGE_THIS_TO_A_PRIVATE_KEY",
+      adminKey: "REDACTED5-ADMIN",
+      discordWebhook: "https://discord.com/api/webhooks/1522007954835116193/ucvoDdbwSkBru-IuM00TOMClkFL8kjWAmAMrngSjYF5SLbWFQ9E7UboFfA-sU5vTCEJF",
       toast: {
         badge: "Playtest Notice",
         title: "Playtest access online.",
-        body: "Open the Testing Site page to check the latest testing notes."
+        body: "Open the Testing page to check the latest testing notes."
       },
       creatorBio: "Put your short bio here. This section is built to look like a premium profile panel instead of a boring text block.",
       updates: [
@@ -1608,13 +1721,13 @@
         {
           date: "Build 02",
           title: "Pages added",
-          body: "Home, Updates, Testing Site, Creator, and Game pages now live in one file and switch cleanly by hash.",
+          body: "Home, Updates, Testing, Creator, and Game pages now live in one file and switch cleanly by hash.",
           tag: "Pages / routing"
         },
         {
           date: "Build 03",
           title: "Launch flow",
-          body: "The Game page now opens the Roblox game in a new tab instead of redirecting the current page.",
+          body: "The Game page now acts like a dedicated launch screen and opens the Roblox game in a new tab.",
           tag: "Redirect / launch"
         }
       ],
@@ -1637,6 +1750,12 @@
       ]
     };
 
+    const STORAGE_KEYS = {
+      requests: "redacted5_requests",
+      feedback: "redacted5_feedback",
+      auth: "redacted5_auth"
+    };
+
     const topbar = document.getElementById("topbar");
     const shell = document.getElementById("shell");
     const refreshScreen = document.getElementById("refreshScreen");
@@ -1653,22 +1772,9 @@
     const slideTitle = document.getElementById("slideTitle");
     const slideText = document.getElementById("slideText");
     const reelRail = document.getElementById("reelRail");
-    const playtestForm = document.getElementById("playtestForm");
-    const feedbackForm = document.getElementById("feedbackForm");
-    const playtestText = document.getElementById("playtestText");
     const creatorName = document.getElementById("creatorName");
     const creatorBio = document.getElementById("creatorBio");
-    const adminPanel = document.getElementById("adminPanel");
-    const adminList = document.getElementById("adminList");
-    const adminLoginBtn = document.getElementById("adminLoginBtn");
-    const adminModal = document.getElementById("adminModal");
-    const adminForm = document.getElementById("adminForm");
-    const adminUser = document.getElementById("adminUser");
-    const adminKey = document.getElementById("adminKey");
-    const closeAdminModalBtn = document.getElementById("closeAdminModalBtn");
-    const logoutAdminBtn = document.getElementById("logoutAdminBtn");
     const manualGameLink = document.getElementById("manualGameLink");
-    const openGameBtn = document.getElementById("openGameBtn");
     const toast = document.getElementById("ownerToast");
     const toastBadge = document.getElementById("toastBadge");
     const toastTitle = document.getElementById("toastTitle");
@@ -1679,39 +1785,51 @@
     const navLinks = [...document.querySelectorAll("[data-nav]")];
     const pages = [...document.querySelectorAll("[data-page]")];
 
-    const PLAYTEST_STORAGE_KEY = "redacted5_playtest_queue";
-    const ADMIN_STORAGE_KEY = "redacted5_admin_session";
+    const requestForm = document.getElementById("requestForm");
+    const feedbackForm = document.getElementById("feedbackForm");
+    const loginUser = document.getElementById("loginUser");
+    const loginKey = document.getElementById("loginKey");
+    const loginBtn = document.getElementById("loginBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const clearDataBtn = document.getElementById("clearDataBtn");
+    const loginState = document.getElementById("loginState");
+    const dashboard = document.getElementById("dashboard");
+    const requestsList = document.getElementById("requestsList");
+    const feedbackList = document.getElementById("feedbackList");
+    const goGameBtn = document.getElementById("goGameBtn");
+    const manualGameUrl = CONFIG.gameUrl;
 
-    let currentAdmin = null;
     let activeSlide = 0;
-    let redirectTimer = null;
+    let currentRole = "visitor";
+    let currentUser = "";
 
-    function readQueue() {
+    function loadJSON(key, fallback) {
       try {
-        return JSON.parse(localStorage.getItem(PLAYTEST_STORAGE_KEY) || "[]");
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : fallback;
       } catch {
-        return [];
+        return fallback;
       }
     }
 
-    function writeQueue(queue) {
-      localStorage.setItem(PLAYTEST_STORAGE_KEY, JSON.stringify(queue));
+    function saveJSON(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
     }
 
-    function pushQueue(item) {
-      const queue = readQueue();
-      queue.unshift(item);
-      writeQueue(queue.slice(0, 100));
-      renderAdminPanel();
+    function getAuth() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEYS.auth) || "null");
+      } catch {
+        return null;
+      }
     }
 
-    function escapeHtml(str) {
-      return String(str)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#39;");
+    function setAuth(auth) {
+      localStorage.setItem(STORAGE_KEYS.auth, JSON.stringify(auth));
+    }
+
+    function clearAuth() {
+      localStorage.removeItem(STORAGE_KEYS.auth);
     }
 
     function renderConfig() {
@@ -1729,6 +1847,7 @@
       footerLeft.textContent = CONFIG.siteName;
       footerRight.textContent = "Classified. Cinematic. Clean.";
       manualGameLink.href = CONFIG.gameUrl;
+      creatorName.textContent = "About the Creator";
       creatorBio.textContent = CONFIG.creatorBio;
     }
 
@@ -1738,19 +1857,19 @@
         const card = document.createElement("article");
         card.className = "update-card reveal-on-scroll";
         card.innerHTML = `
-          <div class="date">${escapeHtml(item.date)}</div>
-          <h3>${escapeHtml(item.title)}</h3>
-          <p>${escapeHtml(item.body)}</p>
-          <span class="tag">${escapeHtml(item.tag)}</span>
+          <div class="date">${item.date}</div>
+          <h3>${item.title}</h3>
+          <p>${item.body}</p>
+          <span class="tag">${item.tag}</span>
         `;
         updatesGrid.appendChild(card);
 
         if (index === 0) {
           homeUpdatePreview.innerHTML = `
-            <div class="date">${escapeHtml(item.date)}</div>
-            <h3>${escapeHtml(item.title)}</h3>
-            <p>${escapeHtml(item.body)}</p>
-            <span class="tag">${escapeHtml(item.tag)}</span>
+            <div class="date">${item.date}</div>
+            <h3>${item.title}</h3>
+            <p>${item.body}</p>
+            <span class="tag">${item.tag}</span>
           `;
         }
       });
@@ -1763,9 +1882,9 @@
         btn.className = "slide-chip";
         btn.type = "button";
         btn.innerHTML = `
-          <img src="${escapeHtml(slide.image)}" alt="${escapeHtml(slide.title)}">
-          <strong>${escapeHtml(slide.title)}</strong>
-          <span>${escapeHtml(slide.text)}</span>
+          <img src="${slide.image}" alt="${slide.title}">
+          <strong>${slide.title}</strong>
+          <span>${slide.text}</span>
         `;
         btn.addEventListener("click", () => setSlide(index));
         reelRail.appendChild(btn);
@@ -1779,34 +1898,97 @@
       slidePreview.alt = slide.title;
       slideTitle.textContent = slide.title;
       slideText.textContent = slide.text;
-      [...document.querySelectorAll(".slide-chip")].forEach((el, i) => el.classList.toggle("active", i === index));
+
+      [...document.querySelectorAll(".slide-chip")].forEach((el, i) => {
+        el.classList.toggle("active", i === index);
+      });
     }
 
-    function pageNameFromHash() {
-      const hash = location.hash.replace("#", "").trim();
-      return hash || "home";
-    }
+    function setRole(role, user) {
+      currentRole = role;
+      currentUser = user || "";
 
-    function showPage(name) {
-      pages.forEach(page => page.classList.toggle("active", page.dataset.page === name));
-      navLinks.forEach(link => link.classList.toggle("active", link.dataset.nav === name));
-
-      if (name === "game") {
-        clearTimeout(redirectTimer);
+      if (role === "admin") {
+        loginState.innerHTML = `<strong>Signed in:</strong> ${currentUser} <br>Admin access granted.`;
+        dashboard.classList.add("active");
+      } else {
+        loginState.innerHTML = `Not signed in.`;
+        dashboard.classList.remove("active");
       }
 
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      document.title = `${CONFIG.siteName} | ${name.charAt(0).toUpperCase() + name.slice(1)}`;
+      saveJSON(STORAGE_KEYS.auth, { role, user: currentUser });
+      renderQueues();
     }
 
-    function route() {
-      showPage(pageNameFromHash());
-      if (pageNameFromHash() === "game") {
-        clearTimeout(redirectTimer);
-        redirectTimer = setTimeout(() => {
-          window.open(CONFIG.gameUrl, "_blank", "noopener,noreferrer");
-        }, 350);
+    function renderQueues() {
+      const requests = loadJSON(STORAGE_KEYS.requests, []);
+      const feedback = loadJSON(STORAGE_KEYS.feedback, []);
+
+      requestsList.innerHTML = requests.length ? "" : `<div class="item"><strong>No requests yet.</strong><p>New playtest requests will appear here.</p></div>`;
+      feedbackList.innerHTML = feedback.length ? "" : `<div class="item"><strong>No feedback yet.</strong><p>New feedback will appear here.</p></div>`;
+
+      requests.slice().reverse().forEach((entry) => {
+        const item = document.createElement("div");
+        item.className = "item";
+        item.innerHTML = `
+          <div class="item-top">
+            <strong>${entry.username}</strong>
+            <span class="meta">${entry.time}</span>
+          </div>
+          <p><strong>Discord:</strong> ${entry.discord || "N/A"}<br><strong>Device:</strong> ${entry.device || "N/A"}<br><strong>Type:</strong> ${entry.type}<br><strong>Notes:</strong> ${entry.notes || "—"}</p>
+        `;
+        requestsList.appendChild(item);
+      });
+
+      feedback.slice().reverse().forEach((entry) => {
+        const item = document.createElement("div");
+        item.className = "item";
+        item.innerHTML = `
+          <div class="item-top">
+            <strong>${entry.username} — ${entry.category}</strong>
+            <span class="meta">${entry.time}</span>
+          </div>
+          <p>${entry.text}<br><strong>Link:</strong> ${entry.link || "N/A"}</p>
+        `;
+        feedbackList.appendChild(item);
+      });
+    }
+
+    async function sendWebhook(payload) {
+      try {
+        await fetch(CONFIG.discordWebhook, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+      } catch (err) {
+        console.warn("Webhook send failed:", err);
       }
+    }
+
+    function nowStamp() {
+      return new Date().toLocaleString();
+    }
+
+    function addRequest(entry) {
+      const arr = loadJSON(STORAGE_KEYS.requests, []);
+      arr.push(entry);
+      saveJSON(STORAGE_KEYS.requests, arr);
+      renderQueues();
+    }
+
+    function addFeedback(entry) {
+      const arr = loadJSON(STORAGE_KEYS.feedback, []);
+      arr.push(entry);
+      saveJSON(STORAGE_KEYS.feedback, arr);
+      renderQueues();
+    }
+
+    function toastShow(title, body) {
+      toastTitle.textContent = title;
+      toastBody.textContent = body;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 4600);
     }
 
     function isReloadNavigation() {
@@ -1821,105 +2003,150 @@
       }
     }
 
-    function showOwnerToast() {
-      toast.classList.add("show");
-      setTimeout(() => toast.classList.remove("show"), 4600);
+    function pageNameFromHash() {
+      const hash = location.hash.replace("#", "").trim();
+      return hash || "home";
     }
 
-    function openAdminModal() {
-      adminModal.style.display = "flex";
-      adminUser.focus();
+    let redirectTimer = null;
+    function showPage(name) {
+      pages.forEach(page => page.classList.toggle("active", page.dataset.page === name));
+      navLinks.forEach(link => link.classList.toggle("active", link.dataset.nav === name));
+      window.scrollTo({ top: 0, behavior: "auto" });
+      document.title = `${CONFIG.siteName} | ${name.charAt(0).toUpperCase() + name.slice(1)}`;
+
+      if (name === "game") {
+        clearTimeout(redirectTimer);
+      }
     }
 
-    function closeAdminModal() {
-      adminModal.style.display = "none";
+    function route() {
+      const page = pageNameFromHash();
+      showPage(page);
     }
 
-    function saveAdminSession(name) {
-      currentAdmin = name;
-      sessionStorage.setItem(ADMIN_STORAGE_KEY, name);
-      renderAdminPanel();
+    function updateDashboardAccess() {
+      const auth = getAuth();
+      if (auth && auth.role === "admin") {
+        setRole("admin", auth.user);
+      } else {
+        setRole("visitor", "");
+      }
     }
 
-    function clearAdminSession() {
-      currentAdmin = null;
-      sessionStorage.removeItem(ADMIN_STORAGE_KEY);
-      renderAdminPanel();
-    }
+    document.getElementById("goGameBtn").addEventListener("click", () => {
+      window.open(CONFIG.gameUrl, "_blank", "noopener,noreferrer");
+      location.hash = "#game";
+    });
 
-    function renderAdminPanel() {
-      const loggedIn = Boolean(currentAdmin);
-      adminPanel.style.display = loggedIn ? "block" : "none";
-      adminList.innerHTML = "";
+    loginBtn.addEventListener("click", () => {
+      const user = loginUser.value.trim();
+      const key = loginKey.value.trim();
 
-      if (!loggedIn) return;
-
-      const queue = readQueue();
-
-      if (!queue.length) {
-        adminList.innerHTML = `<div class="admin-item"><h4>No requests yet</h4><p>Playtest and feedback submissions will appear here.</p></div>`;
+      if (!user) {
+        toastShow("Login required", "Enter a username first.");
         return;
       }
 
-      queue.forEach((item, index) => {
-        const node = document.createElement("div");
-        node.className = "admin-item";
-        node.innerHTML = `
-          <h4>${escapeHtml(item.type)} — ${escapeHtml(item.username || item.name || "Unknown")}</h4>
-          <p>${escapeHtml(item.message)}</p>
-          <div class="meta">
-            <span class="chip">${escapeHtml(item.time)}</span>
-            <span class="chip">${escapeHtml(item.source)}</span>
-            <span class="chip">${escapeHtml(item.type)}</span>
-          </div>
-        `;
-        adminList.appendChild(node);
-      });
-
-      const clearBtn = document.createElement("button");
-      clearBtn.className = "button secondary";
-      clearBtn.type = "button";
-      clearBtn.textContent = "Clear Queue";
-      clearBtn.style.marginTop = "12px";
-      clearBtn.addEventListener("click", () => {
-        writeQueue([]);
-        renderAdminPanel();
-      });
-      adminList.appendChild(clearBtn);
-    }
-
-    async function sendWebhook(payload) {
-      try {
-        const response = await fetch(CONFIG.webhookUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
-        return response.ok;
-      } catch (error) {
-        return false;
+      if (CONFIG.adminUsers.includes(user) && key === CONFIG.adminKey) {
+        setRole("admin", user);
+        toastShow("Admin access granted", `${user} is now signed in.`);
+      } else {
+        toastShow("Access denied", "That username or key is not valid for admin mode.");
       }
-    }
+    });
 
-    function webhookEmbed(title, description, fields) {
-      return {
-        username: CONFIG.siteName,
-        avatar_url: "",
-        content: "",
-        embeds: [{
-          title,
-          description,
-          color: 11611903,
-          fields,
-          footer: { text: CONFIG.siteName },
-          timestamp: new Date().toISOString()
-        }]
+    logoutBtn.addEventListener("click", () => {
+      clearAuth();
+      setRole("visitor", "");
+      toastShow("Signed out", "Admin access was removed.");
+    });
+
+    clearDataBtn.addEventListener("click", () => {
+      localStorage.removeItem(STORAGE_KEYS.requests);
+      localStorage.removeItem(STORAGE_KEYS.feedback);
+      renderQueues();
+      toastShow("Queue cleared", "Stored requests and feedback were removed.");
+    });
+
+    requestForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const username = document.getElementById("requestUsername").value.trim();
+      const discord = document.getElementById("requestDiscord").value.trim();
+      const device = document.getElementById("requestDevice").value.trim();
+      const type = document.getElementById("requestStyle").value.trim();
+      const notes = document.getElementById("requestNotes").value.trim();
+
+      const entry = {
+        username,
+        discord,
+        device,
+        type,
+        notes,
+        time: nowStamp()
       };
-    }
 
-    function nowStamp() {
-      return new Date().toLocaleString();
-    }
+      addRequest(entry);
+
+      await sendWebhook({
+        username: "REDACTED-5 Requests",
+        avatar_url: "https://www.roblox.com/headshot-thumbnail/image?userId=1&width=420&height=420&format=png",
+        embeds: [{
+          title: "New Playtest Request",
+          color: 0xB7C8FF,
+          fields: [
+            { name: "Roblox Username", value: username || "N/A", inline: true },
+            { name: "Discord", value: discord || "N/A", inline: true },
+            { name: "Device", value: device || "N/A", inline: true },
+            { name: "Type", value: type || "N/A", inline: false },
+            { name: "Notes", value: notes || "N/A", inline: false }
+          ],
+          footer: { text: entry.time }
+        }]
+      });
+
+      requestForm.reset();
+      toastShow("Request sent", "Playtest request submitted.");
+    });
+
+    feedbackForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const username = document.getElementById("feedbackUsername").value.trim();
+      const category = document.getElementById("feedbackCategory").value.trim();
+      const text = document.getElementById("feedbackText").value.trim();
+      const link = document.getElementById("feedbackLink").value.trim();
+
+      const entry = {
+        username,
+        category,
+        text,
+        link,
+        time: nowStamp()
+      };
+
+      addFeedback(entry);
+
+      await sendWebhook({
+        username: "REDACTED-5 Feedback",
+        avatar_url: "https://www.roblox.com/headshot-thumbnail/image?userId=1&width=420&height=420&format=png",
+        embeds: [{
+          title: "New Feedback",
+          color: 0xD9B0FF,
+          fields: [
+            { name: "Roblox Username", value: username || "N/A", inline: true },
+            { name: "Category", value: category || "N/A", inline: true },
+            { name: "Screenshot / Clip", value: link || "N/A", inline: false },
+            { name: "Feedback", value: text || "N/A", inline: false }
+          ],
+          footer: { text: entry.time }
+        }]
+      });
+
+      feedbackForm.reset();
+      toastShow("Feedback sent", "Feedback submitted.");
+    });
+
+    toastClose.addEventListener("click", () => toast.classList.remove("show"));
 
     window.addEventListener("scroll", () => {
       if (window.scrollY > 8) topbar.classList.add("shrink");
@@ -1953,95 +2180,6 @@
       document.querySelectorAll(".reveal-on-scroll").forEach((el) => revealObserver.observe(el));
     }
 
-    document.getElementById("openGameBtn").addEventListener("click", () => {
-      window.open(CONFIG.gameUrl, "_blank", "noopener,noreferrer");
-    });
-
-    adminLoginBtn.addEventListener("click", openAdminModal);
-    closeAdminModalBtn.addEventListener("click", closeAdminModal);
-    adminModal.addEventListener("click", (e) => {
-      if (e.target === adminModal) closeAdminModal();
-    });
-
-    adminForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const u = adminUser.value.trim();
-      const k = adminKey.value.trim();
-      const allowed = CONFIG.adminUsers.map(x => x.toLowerCase()).includes(u.toLowerCase()) && k === CONFIG.adminKey;
-      if (!allowed) {
-        alert("Invalid admin credentials.");
-        return;
-      }
-      saveAdminSession(u);
-      closeAdminModal();
-    });
-
-    logoutAdminBtn.addEventListener("click", clearAdminSession);
-
-    playtestForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const username = document.getElementById("ptUsername").value.trim();
-      const reason = document.getElementById("ptReason").value.trim();
-      const notes = document.getElementById("ptNotes").value.trim();
-
-      const item = {
-        type: "Playtest Request",
-        username,
-        message: `Reason:\n${reason}\n\nNotes:\n${notes || "None"}`,
-        source: "Testing Site",
-        time: nowStamp()
-      };
-
-      pushQueue(item);
-
-      const ok = await sendWebhook(webhookEmbed(
-        "Playtest Request",
-        "A user submitted a playtest request.",
-        [
-          { name: "Roblox Username", value: username, inline: true },
-          { name: "Reason", value: reason.slice(0, 1024) || "None", inline: false },
-          { name: "Notes", value: (notes || "None").slice(0, 1024), inline: false }
-        ]
-      ));
-
-      alert(ok ? "Playtest request sent." : "Playtest request saved locally. Webhook may be blocked by browser/CORS.");
-      e.target.reset();
-      if (currentAdmin) renderAdminPanel();
-    });
-
-    feedbackForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const name = document.getElementById("fbName").value.trim();
-      const category = document.getElementById("fbCategory").value.trim();
-      const message = document.getElementById("fbMessage").value.trim();
-
-      const item = {
-        type: `Feedback — ${category}`,
-        username: name,
-        message,
-        source: "Testing Site",
-        time: nowStamp()
-      };
-
-      pushQueue(item);
-
-      const ok = await sendWebhook(webhookEmbed(
-        "Feedback",
-        "A user submitted feedback.",
-        [
-          { name: "User", value: name, inline: true },
-          { name: "Category", value: category, inline: true },
-          { name: "Message", value: message.slice(0, 1024), inline: false }
-        ]
-      ));
-
-      alert(ok ? "Feedback sent." : "Feedback saved locally. Webhook may be blocked by browser/CORS.");
-      e.target.reset();
-      if (currentAdmin) renderAdminPanel();
-    });
-
-    toastClose.addEventListener("click", () => toast.classList.remove("show"));
-
     window.addEventListener("hashchange", route);
 
     if (isReloadNavigation()) {
@@ -2060,14 +2198,10 @@
     renderSlides();
     setSlide(0);
     observeRevealElements();
-
-    const savedAdmin = sessionStorage.getItem(ADMIN_STORAGE_KEY);
-    if (savedAdmin && CONFIG.adminUsers.map(x => x.toLowerCase()).includes(savedAdmin.toLowerCase())) {
-      currentAdmin = savedAdmin;
-    }
-    renderAdminPanel();
-    showOwnerToast();
+    updateDashboardAccess();
     route();
+    renderQueues();
+    toastShow(CONFIG.toast.title, CONFIG.toast.body);
 
     setInterval(() => {
       const next = (activeSlide + 1) % CONFIG.slides.length;
