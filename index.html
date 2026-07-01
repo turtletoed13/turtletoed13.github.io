@@ -212,17 +212,24 @@
       color:#08111f;
     }
 
-    .page{
-      max-width:var(--max);
-      margin:0 auto;
-      padding:34px 16px 112px;
-      display:none;
-      animation: pageIn .35s var(--ease);
-    }
+.page{
+    max-width:var(--max);
+    margin:0 auto;
+    padding:34px 16px 112px;
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+    position:absolute;
+    inset:0;
+    transition:opacity .35s var(--ease);
+}
 
-    .page.active{
-      display:block;
-    }
+.page.active{
+    position:relative;
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+}
 
     @keyframes pageIn{
       from{opacity:.02; transform:translateY(10px)}
@@ -2009,16 +2016,25 @@
     }
 
     let redirectTimer = null;
-    function showPage(name) {
-      pages.forEach(page => page.classList.toggle("active", page.dataset.page === name));
-      navLinks.forEach(link => link.classList.toggle("active", link.dataset.nav === name));
-      window.scrollTo({ top: 0, behavior: "auto" });
-      document.title = `${CONFIG.siteName} | ${name.charAt(0).toUpperCase() + name.slice(1)}`;
+function showPage(name) {
+    pages.forEach(page => {
+        page.classList.toggle("active", page.dataset.page === name);
+    });
 
-      if (name === "game") {
+    navLinks.forEach(link => {
+        link.classList.toggle("active", link.dataset.nav === name);
+    });
+
+    document.title = `${CONFIG.siteName} | ${name.charAt(0).toUpperCase() + name.slice(1)}`;
+
+    requestAnimationFrame(() => {
+        window.scrollTo(0, 0);
+    });
+
+    if (name === "game") {
         clearTimeout(redirectTimer);
-      }
     }
+}
 
     function route() {
       const page = pageNameFromHash();
