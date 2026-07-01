@@ -1,942 +1,2085 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redacted-5 | Cinematic Experience</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-    <style>
-        :root {
-            --bg-dark: #050507;
-            --glass-bg: rgba(15, 15, 25, 0.4);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-glow: rgba(255, 255, 255, 0.03);
-            --accent: #ffffff;
-            --accent-muted: #86868b;
-            --text-main: #f5f5f7;
-            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            user-select: none;
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            font-family: var(--font-family);
-            overflow-x: hidden;
-            min-height: 100vh;
-        }
-
-        /* Ambient Noise Overlay */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            opacity: 0.02;
-            z-index: 9999;
-            pointer-events: none;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-        }
-
-        /* Background & Lighting */
-        .ambient-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 110%;
-            height: 110%;
-            z-index: -1;
-            background-size: cover;
-            background-position: center;
-            transform: translate(-5%, -5%);
-            transition: transform 0.1s ease-out;
-            will-change: transform;
-        }
-
-        .ambient-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at 50% 30%, rgba(15, 15, 30, 0.2) 0%, var(--bg-dark) 85%);
-        }
-
-        /* Refresh Screen Overlay */
-        #loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--bg-dark);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            z-index: 10000;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .loader-ring {
-            width: 60px;
-            height: 60px;
-            border: 2px solid rgba(255, 255, 255, 0.05);
-            border-top-color: var(--accent);
-            border-radius: 50%;
-            animation: spin 1s infinite linear;
-            margin-bottom: 24px;
-        }
-
-        .loader-text {
-            font-size: 14px;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--accent-muted);
-            font-weight: 300;
-            animation: pulse 2s infinite ease-in-out;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-
-        /* Global Typography & UI elements */
-        h1, h2, h3 {
-            font-weight: 700;
-            letter-spacing: -0.02em;
-        }
-
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        /* Sticky Navbar */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            background: rgba(5, 5, 7, 0.3);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-            transition: var(--transition-smooth);
-            padding: 24px 0;
-        }
-
-        nav.shrink {
-            padding: 14px 0;
-            background: rgba(5, 5, 7, 0.75);
-            border-bottom: 1px solid var(--glass-border);
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 40px;
-        }
-
-        .nav-logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 18px;
-            font-weight: 600;
-            letter-spacing: -0.01em;
-            cursor: pointer;
-        }
-
-        .nav-logo img {
-            width: 28px;
-            height: 28px;
-            border-radius: 6px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 36px;
-        }
-
-        .nav-item {
-            font-size: 14px;
-            font-weight: 400;
-            color: var(--accent-muted);
-            cursor: pointer;
-            position: relative;
-            transition: color 0.3s ease;
-        }
-
-        .nav-item:hover, .nav-item.active {
-            color: var(--text-main);
-        }
-
-        .nav-item::after {
-            content: '';
-            position: absolute;
-            bottom: -6px;
-            left: 50%;
-            width: 0;
-            height: 1px;
-            background: var(--accent);
-            transition: var(--transition-smooth);
-            transform: translateX(-50%);
-        }
-
-        .nav-item.active::after {
-            width: 16px;
-        }
-
-        /* Hamburger Menu */
-        .menu-toggle {
-            display: none;
-            flex-direction: column;
-            gap: 6px;
-            cursor: pointer;
-            z-index: 1001;
-        }
-
-        .menu-toggle span {
-            width: 24px;
-            height: 1px;
-            background-color: var(--text-main);
-            transition: var(--transition-smooth);
-        }
-
-        .menu-toggle.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-        .menu-toggle.open span:nth-child(2) { opacity: 0; }
-        .menu-toggle.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
-
-        /* Premium Components */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 14px 28px;
-            font-size: 14px;
-            font-weight: 500;
-            border-radius: 30px;
-            transition: var(--transition-smooth);
-            cursor: pointer;
-            gap: 10px;
-        }
-
-        .btn-primary {
-            background: var(--text-main);
-            color: var(--bg-dark);
-            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 15px 35px rgba(255, 255, 255, 0.2);
-        }
-
-        .btn-secondary {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            color: var(--text-main);
-            border: 1px solid var(--glass-border);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-4px);
-        }
-
-        /* Layout Structure */
-        main {
-            margin-top: 0;
-            position: relative;
-            z-index: 1;
-        }
-
-        .page {
-            display: none;
-            min-height: 100vh;
-            padding-top: 120px;
-            animation: pageFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        .page.active {
-            display: block;
-        }
-
-        @keyframes pageFadeIn {
-            from { opacity: 0; filter: blur(10px); transform: translateY(20px); }
-            to { opacity: 1; filter: blur(0); transform: translateY(0); }
-        }
-
-        /* Glass Cards */
-        .glass-panel {
-            background: var(--glass-bg);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid var(--glass-border);
-            box-shadow: inset 0 1px 0 var(--glass-glow), 0 20px 50px rgba(0, 0, 0, 0.3);
-            border-radius: 24px;
-            transition: var(--transition-smooth);
-        }
-
-        /* Scroll Reveal Effect Class */
-        .reveal {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* ==================== HOME PAGE ==================== */
-        #home {
-            padding-top: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .hero-section {
-            height: 100vh;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 0 24px;
-            position: relative;
-        }
-
-        .hero-title {
-            font-size: clamp(48px, 8vw, 110px);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: -0.03em;
-            line-height: 1.0;
-            background: linear-gradient(180deg, #ffffff 30%, rgba(255, 255, 255, 0.6) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 24px;
-            animation: heroPulse 8s ease-in-out infinite alternate;
-        }
-
-        @keyframes heroPulse {
-            0% { transform: scale(1); filter: brightness(1); }
-            100% { transform: scale(1.02); filter: brightness(1.1); }
-        }
-
-        .hero-subtitle {
-            font-size: clamp(16px, 2vw, 20px);
-            color: var(--accent-muted);
-            font-weight: 300;
-            max-width: 600px;
-            margin-bottom: 48px;
-            letter-spacing: 0.01em;
-        }
-
-        .hero-cta-group {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        /* ==================== UPDATES PAGE ==================== */
-        .section-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 40px 24px 100px;
-        }
-
-        .section-header {
-            margin-bottom: 60px;
-            text-align: center;
-        }
-
-        .section-title {
-            font-size: 42px;
-            font-weight: 600;
-            margin-bottom: 12px;
-        }
-
-        .section-subtitle {
-            color: var(--accent-muted);
-            font-size: 16px;
-        }
-
-        .updates-feed {
-            display: flex;
-            flex-direction: column;
-            gap: 32px;
-        }
-
-        .update-card {
-            padding: 40px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .update-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(255, 255, 255, 0.15);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 30px 60px rgba(0, 0, 0, 0.4);
-        }
-
-        .update-badge {
-            position: absolute;
-            top: 40px;
-            right: 40px;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .update-card.pinned {
-            border-color: rgba(255, 255, 255, 0.25);
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(15, 15, 25, 0.4) 100%);
-        }
-
-        .update-card.pinned .update-badge {
-            background: #ffffff;
-            color: #000000;
-            border: none;
-        }
-
-        .update-date {
-            font-size: 13px;
-            color: var(--accent-muted);
-            margin-bottom: 14px;
-            display: block;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .update-title {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 16px;
-        }
-
-        .update-desc {
-            color: var(--accent-muted);
-            line-height: 1.6;
-            font-size: 15px;
-        }
-
-        /* ==================== PLAYTEST PAGE ==================== */
-        .control-panel {
-            max-width: 650px;
-            margin: 0 auto;
-            padding: 48px;
-        }
-
-        .form-group {
-            margin-bottom: 28px;
-            position: relative;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--accent-muted);
-            margin-bottom: 10px;
-            font-weight: 500;
-        }
-
-        .form-control {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 16px;
-            color: var(--text-main);
-            font-family: var(--font-family);
-            font-size: 15px;
-            transition: var(--transition-smooth);
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: rgba(255, 255, 255, 0.3);
-            background: rgba(0, 0, 0, 0.3);
-        }
-
-        textarea.form-control {
-            resize: none;
-            height: 140px;
-        }
-
-        .btn-submit {
-            width: 100%;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-main);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            font-size: 13px;
-        }
-
-        .btn-submit:hover {
-            background: var(--text-main);
-            color: var(--bg-dark);
-        }
-
-        /* Terminal Logs Status effect */
-        .terminal-overlay {
-            display: none;
-            margin-top: 32px;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            font-family: monospace;
-            font-size: 12px;
-            color: #86868b;
-        }
-
-        .terminal-line {
-            margin-bottom: 6px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .terminal-success {
-            color: #34c759;
-        }
-
-        /* ==================== CREATOR PAGE ==================== */
-        .creator-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 60px;
-        }
-
-        .iframe-container {
-            width: 100%;
-            height: 520px;
-            border-radius: 24px;
-            overflow: hidden;
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
-        }
-
-        .iframe-container iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: #111;
-        }
-
-        .about-box {
-            padding: 48px;
-        }
-
-        .about-title {
-            font-size: 28px;
-            margin-bottom: 20px;
-        }
-
-        .about-text {
-            color: var(--accent-muted);
-            line-height: 1.7;
-            font-size: 16px;
-        }
-
-        /* Smooth Slider Carousel */
-        .carousel-container {
-            width: 100%;
-            overflow: hidden;
-            position: relative;
-            padding: 20px 0;
-        }
-
-        .carousel-track {
-            display: flex;
-            gap: 24px;
-            width: max-content;
-            animation: scrollCarousel 30s linear infinite;
-        }
-
-        .carousel-track:hover {
-            animation-play-state: paused;
-        }
-
-        .carousel-slide {
-            width: 380px;
-            height: 240px;
-            border-radius: 16px;
-            background-size: cover;
-            background-position: center;
-            border: 1px solid var(--glass-border);
-            transition: var(--transition-smooth);
-            filter: grayscale(20%) brightness(0.8);
-        }
-
-        .carousel-slide:hover {
-            transform: scale(1.03) translateY(-4px);
-            filter: grayscale(0%) brightness(1);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        @keyframes scrollCarousel {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(calc(-380px * 3 - 24px * 3)); }
-        }
-
-        /* Responsive Layouts */
-        @media(max-width: 768px) {
-            .nav-links {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100vw;
-                height: 100vh;
-                background: rgba(5, 5, 7, 0.96);
-                backdrop-filter: blur(30px);
-                -webkit-backdrop-filter: blur(30px);
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                gap: 40px;
-                z-index: 1000;
-            }
-
-            .nav-links.open {
-                display: flex;
-            }
-
-            .nav-item {
-                font-size: 22px;
-            }
-
-            .menu-toggle {
-                display: flex;
-            }
-
-            .nav-container {
-                padding: 0 24px;
-            }
-
-            .update-card {
-                padding: 24px;
-            }
-
-            .update-badge {
-                position: relative;
-                top: 0;
-                right: 0;
-                display: inline-block;
-                margin-bottom: 16px;
-            }
-
-            .control-panel, .about-box {
-                padding: 24px;
-            }
-
-            .iframe-container {
-                height: 400px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>REDACTED-5</title>
+  <meta name="description" content="REDACTED-5 — premium cinematic game website." />
+  <meta name="theme-color" content="#050608" />
+
+  <style>
+    :root{
+      --bg0:#040507;
+      --bg1:#07090d;
+      --bg2:#0d1018;
+      --text:#f4f7fb;
+      --muted:rgba(244,247,251,.68);
+      --muted2:rgba(244,247,251,.48);
+      --glass:rgba(14,16,22,.60);
+      --glass2:rgba(10,12,18,.76);
+      --line:rgba(255,255,255,.09);
+      --line2:rgba(255,255,255,.14);
+      --accent:#b7c8ff;
+      --accent2:#d9b0ff;
+      --danger:#ff5b68;
+      --shadow:0 30px 100px rgba(0,0,0,.50);
+      --shadow2:0 16px 40px rgba(0,0,0,.30);
+      --radius:28px;
+      --radius2:18px;
+      --max:1240px;
+      --ease:cubic-bezier(.2,.8,.2,1);
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      min-height:100vh;
+      overflow-x:hidden;
+      color:var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(183,200,255,.16), transparent 24%),
+        radial-gradient(circle at 82% 16%, rgba(217,176,255,.13), transparent 22%),
+        radial-gradient(circle at 50% 90%, rgba(255,255,255,.06), transparent 28%),
+        linear-gradient(180deg, var(--bg0), var(--bg1) 42%, var(--bg2));
+      position:relative;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:0;
+      background:
+        radial-gradient(circle at var(--mx,50%) var(--my,20%), rgba(255,255,255,.08), transparent 16%);
+      mix-blend-mode:screen;
+      opacity:.8;
+    }
+
+    .noise{
+      position:fixed;
+      inset:0;
+      z-index:1;
+      pointer-events:none;
+      opacity:.045;
+      background-image:
+        linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px);
+      background-size:42px 42px;
+      mask-image: radial-gradient(circle at center, black 36%, transparent 100%);
+    }
+
+    .app{
+      position:relative;
+      z-index:2;
+      min-height:100vh;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:40;
+      padding:18px 16px 0;
+    }
+
+    .topbar-inner{
+      max-width:var(--max);
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      padding:16px 18px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:24px;
+      background:rgba(14,16,22,.62);
+      backdrop-filter:blur(26px);
+      -webkit-backdrop-filter:blur(26px);
+      box-shadow:0 18px 50px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06);
+      transition:transform .35s var(--ease), background .35s var(--ease), border-color .35s var(--ease);
+    }
+
+    .topbar-inner.shrink{
+      transform:translateY(-2px);
+      background:rgba(9,10,14,.76);
+      border-color:rgba(255,255,255,.08);
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+    }
+
+    .brand-mark{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      overflow:hidden;
+      flex:0 0 auto;
+      background:
+        radial-gradient(circle at 28% 28%, rgba(255,255,255,.92), transparent 18%),
+        linear-gradient(135deg, rgba(183,200,255,1), rgba(217,176,255,1));
+      box-shadow:0 14px 30px rgba(183,200,255,.16);
+    }
+
+    .brand-mark img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .brand-text{
+      display:flex;
+      flex-direction:column;
+      min-width:0;
+      line-height:1.1;
+    }
+
+    .brand-text strong{
+      font-size:.99rem;
+      letter-spacing:.2px;
+      font-weight:800;
+    }
+
+    .brand-text span{
+      margin-top:3px;
+      color:var(--muted);
+      font-size:.86rem;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .nav{
+      display:flex;
+      align-items:center;
+      gap:22px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .nav a{
+      color:rgba(244,247,251,.80);
+      text-decoration:none;
+      font-size:.95rem;
+      font-weight:600;
+      position:relative;
+      transition:color .25s var(--ease), transform .25s var(--ease);
+    }
+
+    .nav a:hover{
+      color:#fff;
+      transform:translateY(-1px);
+    }
+
+    .nav a.active{
+      color:#fff;
+    }
+
+    .nav a::after{
+      content:"";
+      position:absolute;
+      left:0;
+      bottom:-9px;
+      width:100%;
+      height:1px;
+      transform:scaleX(0);
+      transform-origin:center;
+      transition:transform .25s var(--ease);
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.68), transparent);
+    }
+
+    .nav a:hover::after,
+    .nav a.active::after{
+      transform:scaleX(1);
+    }
+
+    .nav .pill{
+      padding:11px 16px;
+      border-radius:999px;
+      background:linear-gradient(135deg, rgba(244,247,251,.96), rgba(208,220,255,.9));
+      color:#08111f;
+      box-shadow:0 14px 30px rgba(255,255,255,.08);
+    }
+
+    .nav .pill:hover{
+      transform:translateY(-1px);
+      color:#08111f;
+    }
+
+    .page{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:34px 16px 112px;
+      display:none;
+      animation: pageIn .35s var(--ease);
+    }
+
+    .page.active{
+      display:block;
+    }
+
+    @keyframes pageIn{
+      from{opacity:.02; transform:translateY(10px)}
+      to{opacity:1; transform:translateY(0)}
+    }
+
+    .hero{
+      min-height:calc(100vh - 98px);
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:30px;
+      align-items:center;
+      padding-top:18px;
+    }
+
+    .hero-copy{
+      padding:8px 0 18px;
+    }
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:9px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.045);
+      backdrop-filter:blur(16px);
+      color:rgba(244,247,251,.84);
+      font-size:.92rem;
+      margin-bottom:18px;
+    }
+
+    .eyebrow-dot{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow:0 0 18px rgba(183,200,255,.55);
+    }
+
+    h1{
+      font-size:clamp(3.4rem, 7.4vw, 6.9rem);
+      line-height:.93;
+      letter-spacing:-.07em;
+      max-width:11ch;
+      font-weight:900;
+    }
+
+    .grad{
+      background:linear-gradient(135deg, #fff 12%, #b9ceff 42%, #dfb8ff 76%, #fff 100%);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+
+    .lead{
+      margin-top:22px;
+      max-width:58ch;
+      color:var(--muted);
+      font-size:1.08rem;
+      line-height:1.78;
+    }
+
+    .actions{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-top:28px;
+    }
+
+    .button{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:14px 20px;
+      border-radius:999px;
+      text-decoration:none;
+      font-weight:800;
+      letter-spacing:.01em;
+      transition:transform .25s var(--ease), box-shadow .25s var(--ease), background .25s var(--ease), border-color .25s var(--ease);
+      will-change:transform;
+      border:1px solid transparent;
+      cursor:pointer;
+      font:inherit;
+    }
+
+    .button.primary{
+      color:#08111f;
+      background:linear-gradient(135deg, #f4f7ff, #cddcff);
+      box-shadow:0 18px 48px rgba(165,190,255,.16);
+    }
+
+    .button.secondary{
+      color:var(--text);
+      background:rgba(255,255,255,.045);
+      border-color:rgba(255,255,255,.10);
+      backdrop-filter:blur(18px);
+    }
+
+    .button.danger{
+      color:#fff;
+      background:linear-gradient(135deg, rgba(255,91,104,.95), rgba(255,135,145,.88));
+      box-shadow:0 18px 48px rgba(255,91,104,.16);
+    }
+
+    .button:hover{
+      transform:translateY(-2px);
+    }
+
+    .button.primary:hover{
+      box-shadow:0 22px 60px rgba(165,190,255,.24);
+    }
+
+    .button.secondary:hover{
+      background:rgba(255,255,255,.065);
+      border-color:rgba(255,255,255,.14);
+    }
+
+    .showcase{
+      position:relative;
+      min-height:560px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .orb{
+      position:absolute;
+      width:470px;
+      height:470px;
+      border-radius:50%;
+      background:
+        radial-gradient(circle at 28% 28%, rgba(255,255,255,.40), transparent 18%),
+        radial-gradient(circle at 45% 45%, rgba(183,200,255,.22), transparent 38%),
+        radial-gradient(circle at 68% 68%, rgba(217,176,255,.18), transparent 48%);
+      filter:blur(8px);
+      opacity:.9;
+      animation:drift 10s var(--ease) infinite alternate;
+    }
+
+    .card-shell{
+      position:relative;
+      width:min(100%, 540px);
+      aspect-ratio:4 / 5;
+      border-radius:36px;
+      border:1px solid rgba(255,255,255,.10);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.09), transparent 16%),
+        rgba(10,12,18,.75);
+      backdrop-filter:blur(26px);
+      -webkit-backdrop-filter:blur(26px);
+      box-shadow:var(--shadow), inset 0 1px 0 rgba(255,255,255,.06);
+      overflow:hidden;
+      transform:perspective(1400px) rotateY(-10deg) rotateX(7deg);
+      transition:transform .35s var(--ease);
+    }
+
+    .card-shell:hover{
+      transform:perspective(1400px) rotateY(-7deg) rotateX(4deg) translateY(-2px);
+    }
+
+    .card-shell::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at 20% 18%, rgba(183,200,255,.20), transparent 22%),
+        radial-gradient(circle at 80% 10%, rgba(217,176,255,.14), transparent 18%),
+        linear-gradient(180deg, rgba(255,255,255,.06), transparent 25%);
+      pointer-events:none;
+    }
+
+    .hero-bg{
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.45)),
+        url("MovementBackround.png") center/cover no-repeat;
+      filter:saturate(1.05) contrast(1.02);
+      opacity:.35;
+      transform:scale(1.04);
+    }
+
+    .shell-top{
+      position:relative;
+      z-index:2;
+      padding:22px 22px 0;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      color:rgba(244,247,251,.74);
+      font-size:.9rem;
+      letter-spacing:.01em;
+    }
+
+    .traffic{
+      display:flex;
+      gap:8px;
+    }
+
+    .traffic span{
+      width:11px;
+      height:11px;
+      border-radius:50%;
+      background:rgba(255,255,255,.18);
+    }
+
+    .panel{
+      position:relative;
+      z-index:2;
+      margin:22px;
+      padding:24px;
+      border-radius:28px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(8,10,16,.44);
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+    }
+
+    .panel + .panel{margin-top:0}
+
+    .mini-title{
+      font-size:.95rem;
+      font-weight:800;
+      margin-bottom:10px;
+      letter-spacing:.01em;
+    }
+
+    .mini-text{
+      color:var(--muted);
+      line-height:1.72;
+      font-size:.98rem;
+    }
+
+    .stats{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:12px;
+    }
+
+    .stat{
+      padding:16px 14px;
+      border-radius:20px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.04);
+    }
+
+    .stat strong{
+      display:block;
+      font-size:1.2rem;
+      letter-spacing:-.03em;
+    }
+
+    .stat span{
+      display:block;
+      margin-top:5px;
+      color:var(--muted);
+      font-size:.85rem;
+    }
+
+    .section-head{
+      display:flex;
+      align-items:end;
+      justify-content:space-between;
+      gap:18px;
+      flex-wrap:wrap;
+      margin-bottom:22px;
+    }
+
+    .section-head h2{
+      font-size:clamp(1.85rem, 3vw, 2.85rem);
+      letter-spacing:-.05em;
+      line-height:1;
+    }
+
+    .section-head p{
+      max-width:62ch;
+      color:var(--muted);
+      line-height:1.72;
+      font-size:1rem;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      gap:18px;
+    }
+
+    .feature{
+      position:relative;
+      border-radius:var(--radius);
+      padding:24px;
+      border:1px solid rgba(255,255,255,.09);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.07), transparent 22%),
+        rgba(12,14,20,.60);
+      backdrop-filter:blur(20px);
+      -webkit-backdrop-filter:blur(20px);
+      box-shadow:var(--shadow2);
+      overflow:hidden;
+      transform:translateY(18px);
+      opacity:0;
+      transition:transform .8s var(--ease), opacity .8s var(--ease), border-color .25s var(--ease), background .25s var(--ease);
+    }
+
+    .feature.reveal{
+      transform:translateY(0);
+      opacity:1;
+    }
+
+    .feature:hover{
+      border-color:rgba(193,210,255,.22);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.09), transparent 22%),
+        rgba(15,18,26,.74);
+    }
+
+    .feature .icon{
+      width:46px;
+      height:46px;
+      border-radius:16px;
+      display:grid;
+      place-items:center;
+      margin-bottom:18px;
+      background:linear-gradient(135deg, rgba(183,200,255,.20), rgba(217,176,255,.16));
+      border:1px solid rgba(255,255,255,.08);
+      color:#fff;
+      font-weight:900;
+    }
+
+    .feature h3{
+      font-size:1.15rem;
+      margin-bottom:10px;
+      letter-spacing:-.02em;
+    }
+
+    .feature p{
+      color:var(--muted);
+      line-height:1.72;
+      font-size:.98rem;
+    }
+
+    .feature .tag{
+      display:inline-flex;
+      margin-top:16px;
+      padding:8px 11px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.08);
+      color:rgba(244,247,251,.74);
+      background:rgba(255,255,255,.04);
+      font-size:.84rem;
+    }
+
+    .reel{
+      margin-top:18px;
+      border-radius:30px;
+      border:1px solid rgba(255,255,255,.09);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.06), transparent 22%),
+        rgba(12,14,20,.60);
+      box-shadow:var(--shadow2);
+      overflow:hidden;
+      padding:18px;
+    }
+
+    .reel-layout{
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:18px;
+      align-items:stretch;
+    }
+
+    .reel-stage{
+      position:relative;
+      min-height:420px;
+      border-radius:26px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.03);
+    }
+
+    .reel-stage img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      opacity:.95;
+      transform:scale(1.02);
+    }
+
+    .reel-overlay{
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(180deg, transparent 0%, rgba(0,0,0,.16) 100%),
+        linear-gradient(90deg, rgba(0,0,0,.52) 0%, rgba(0,0,0,.08) 42%, rgba(0,0,0,.28) 100%);
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-end;
+      padding:24px;
+      gap:10px;
+    }
+
+    .reel-overlay h3{
+      font-size:1.8rem;
+      letter-spacing:-.04em;
+      line-height:1;
+    }
+
+    .reel-overlay p{
+      color:rgba(244,247,251,.74);
+      line-height:1.6;
+      max-width:42ch;
+    }
+
+    .reel-rail{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .slide-chip{
+      flex:1;
+      min-height:0;
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,.09);
+      background:rgba(255,255,255,.04);
+      overflow:hidden;
+      padding:14px;
+      cursor:pointer;
+      transition:transform .25s var(--ease), border-color .25s var(--ease), background .25s var(--ease);
+      text-align:left;
+      color:inherit;
+    }
+
+    .slide-chip:hover{
+      transform:translateY(-1px);
+      border-color:rgba(183,200,255,.20);
+      background:rgba(255,255,255,.06);
+    }
+
+    .slide-chip.active{
+      border-color:rgba(183,200,255,.28);
+      background:rgba(183,200,255,.08);
+    }
+
+    .slide-chip img{
+      width:100%;
+      height:122px;
+      object-fit:cover;
+      display:block;
+      border-radius:16px;
+      margin-bottom:12px;
+    }
+
+    .slide-chip strong{
+      display:block;
+      margin-bottom:6px;
+      font-size:1rem;
+    }
+
+    .slide-chip span{
+      display:block;
+      color:var(--muted);
+      font-size:.9rem;
+      line-height:1.55;
+    }
+
+    .page-hero{
+      min-height:calc(100vh - 98px);
+      display:grid;
+      align-items:center;
+      padding-top:18px;
+    }
+
+    .updates-grid{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      gap:18px;
+      margin-top:18px;
+    }
+
+    .update-card{
+      border-radius:var(--radius);
+      padding:24px;
+      border:1px solid rgba(255,255,255,.09);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.07), transparent 22%),
+        rgba(12,14,20,.60);
+      backdrop-filter:blur(20px);
+      -webkit-backdrop-filter:blur(20px);
+      box-shadow:var(--shadow2);
+    }
+
+    .update-card .date{
+      display:inline-flex;
+      margin-bottom:12px;
+      padding:8px 11px;
+      border-radius:999px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      color:rgba(244,247,251,.78);
+      font-size:.84rem;
+    }
+
+    .update-card h3{
+      font-size:1.18rem;
+      margin-bottom:10px;
+    }
+
+    .update-card p{
+      color:var(--muted);
+      line-height:1.7;
+      font-size:.98rem;
+      margin-bottom:14px;
+    }
+
+    .update-card .tag{
+      display:inline-flex;
+      padding:8px 11px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.08);
+      color:rgba(244,247,251,.74);
+      background:rgba(255,255,255,.04);
+      font-size:.84rem;
+    }
+
+    .playtest-wrap{
+      display:grid;
+      grid-template-columns:1fr .92fr;
+      gap:18px;
+      align-items:start;
+      margin-top:18px;
+    }
+
+    .form{
+      display:grid;
+      gap:12px;
+      margin-top:14px;
+    }
+
+    .field{
+      display:grid;
+      gap:8px;
+    }
+
+    .field label{
+      color:rgba(244,247,251,.82);
+      font-size:.9rem;
+      font-weight:700;
+    }
+
+    .field input,
+    .field textarea,
+    .field select{
+      width:100%;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.09);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      padding:14px 15px;
+      outline:none;
+      font:inherit;
+      transition:border-color .25s var(--ease), background .25s var(--ease), transform .25s var(--ease);
+    }
+
+    .field textarea{
+      resize:vertical;
+      min-height:118px;
+    }
+
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus{
+      border-color:rgba(183,200,255,.28);
+      background:rgba(255,255,255,.06);
+    }
+
+    .field input::placeholder,
+    .field textarea::placeholder{
+      color:rgba(244,247,251,.34);
+    }
+
+    .owner-toast{
+      position:fixed;
+      right:18px;
+      bottom:18px;
+      width:min(100%, 360px);
+      border-radius:24px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(12,14,20,.82);
+      backdrop-filter:blur(24px);
+      -webkit-backdrop-filter:blur(24px);
+      box-shadow:var(--shadow);
+      padding:16px;
+      z-index:100;
+      transform:translateY(24px);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .35s var(--ease), transform .35s var(--ease);
+    }
+
+    .owner-toast.show{
+      transform:translateY(0);
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    .owner-toast .top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:10px;
+    }
+
+    .owner-toast .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 11px;
+      border-radius:999px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      font-size:.84rem;
+      color:rgba(244,247,251,.8);
+    }
+
+    .owner-toast .dot{
+      width:8px;height:8px;border-radius:50%;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow:0 0 16px rgba(183,200,255,.55);
+    }
+
+    .owner-toast h4{
+      margin-bottom:6px;
+      font-size:1rem;
+    }
+
+    .owner-toast p{
+      color:var(--muted);
+      line-height:1.55;
+      font-size:.92rem;
+    }
+
+    .owner-toast .bar{
+      margin-top:12px;
+      height:6px;
+      border-radius:999px;
+      overflow:hidden;
+      background:rgba(255,255,255,.06);
+    }
+
+    .owner-toast .bar span{
+      display:block;
+      width:100%;
+      height:100%;
+      transform-origin:left;
+      background:linear-gradient(90deg, rgba(183,200,255,.95), rgba(217,176,255,.95));
+      animation:toastbar 4.6s linear forwards;
+    }
+
+    .admin-panel{
+      margin-top:18px;
+      border-radius:30px;
+      border:1px solid rgba(255,255,255,.09);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.06), transparent 22%),
+        rgba(12,14,20,.60);
+      box-shadow:var(--shadow2);
+      padding:18px;
+    }
+
+    .admin-list{
+      display:grid;
+      gap:12px;
+      margin-top:14px;
+    }
+
+    .admin-item{
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.04);
+      padding:14px;
+    }
+
+    .admin-item h4{
+      font-size:.98rem;
+      margin-bottom:8px;
+    }
+
+    .admin-item p{
+      color:var(--muted);
+      line-height:1.6;
+      font-size:.92rem;
+      white-space:pre-wrap;
+    }
+
+    .admin-item .meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:10px;
+    }
+
+    .chip{
+      display:inline-flex;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.04);
+      color:rgba(244,247,251,.74);
+      font-size:.82rem;
+    }
+
+    .refresh-screen{
+      position:fixed;
+      inset:0;
+      z-index:200;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background:
+        radial-gradient(circle at 50% 24%, rgba(183,200,255,.14), transparent 24%),
+        linear-gradient(180deg, rgba(3,4,6,.98), rgba(8,10,14,.98));
+      padding:24px;
+    }
+
+    .refresh-screen.active{
+      display:flex;
+    }
+
+    .refresh-shell{
+      width:min(100%, 520px);
+      border-radius:34px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(14,16,22,.64);
+      backdrop-filter:blur(26px);
+      -webkit-backdrop-filter:blur(26px);
+      box-shadow:var(--shadow);
+      padding:34px 28px;
+      text-align:center;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .refresh-shell::before{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background:radial-gradient(circle, rgba(255,255,255,.10), transparent 42%);
+      animation:sweep 2.8s linear infinite;
+      pointer-events:none;
+    }
+
+    .refresh-icon{
+      width:92px;
+      height:92px;
+      margin:0 auto 18px;
+      position:relative;
+      display:grid;
+      place-items:center;
+    }
+
+    .ring{
+      position:absolute;
+      inset:0;
+      border-radius:50%;
+      border:1px solid rgba(255,255,255,.12);
+      animation:spin 1.5s linear infinite;
+    }
+
+    .ring.two{
+      inset:12px;
+      animation-duration:2.3s;
+      border-color:rgba(183,200,255,.18);
+    }
+
+    .ring.three{
+      inset:24px;
+      animation-duration:3.4s;
+      border-color:rgba(217,176,255,.16);
+    }
+
+    .pulse{
+      position:absolute;
+      width:18px;
+      height:18px;
+      border-radius:50%;
+      background:linear-gradient(135deg, #fff, #cfdcff);
+      box-shadow:0 0 28px rgba(255,255,255,.22);
+      animation:pulse 1.2s ease-in-out infinite;
+    }
+
+    .refresh-title{
+      font-size:clamp(2rem, 4vw, 2.9rem);
+      letter-spacing:-.05em;
+      line-height:1;
+      margin-bottom:10px;
+      font-weight:900;
+    }
+
+    .refresh-title .grad{
+      background:linear-gradient(135deg, #fff, #cbd9ff 46%, #e1bbff 84%, #fff);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+
+    .refresh-text{
+      color:var(--muted);
+      font-size:1rem;
+      line-height:1.75;
+      max-width:36ch;
+      margin:0 auto;
+    }
+
+    .refresh-bar{
+      height:10px;
+      border-radius:999px;
+      margin-top:24px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      overflow:hidden;
+    }
+
+    .refresh-bar span{
+      display:block;
+      height:100%;
+      width:38%;
+      border-radius:inherit;
+      background:linear-gradient(90deg, rgba(255,255,255,.25), rgba(183,200,255,.92), rgba(217,176,255,.88), rgba(255,255,255,.24));
+      animation:load 1.05s ease-in-out infinite;
+    }
+
+    .game-launch{
+      min-height:calc(100vh - 98px);
+      display:grid;
+      place-items:center;
+      text-align:center;
+    }
+
+    .launch-card{
+      width:min(100%, 640px);
+      border-radius:34px;
+      padding:34px 28px;
+      border:1px solid rgba(255,255,255,.10);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.08), transparent 22%),
+        rgba(12,14,20,.62);
+      backdrop-filter:blur(26px);
+      -webkit-backdrop-filter:blur(26px);
+      box-shadow:var(--shadow);
+    }
+
+    .launch-card h2{
+      font-size:clamp(2rem, 4.4vw, 3rem);
+      letter-spacing:-.05em;
+      margin-bottom:10px;
+    }
+
+    .launch-card p{
+      color:var(--muted);
+      line-height:1.75;
+      max-width:42ch;
+      margin:0 auto 20px;
+    }
+
+    .iframe-shell{
+      margin-top:18px;
+      border-radius:28px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.09);
+      background:rgba(255,255,255,.03);
+      box-shadow:var(--shadow2);
+    }
+
+    .iframe-shell iframe{
+      width:100%;
+      height:720px;
+      border:0;
+      display:block;
+      background:#0b0d12;
+    }
+
+    .fallback-link{
+      margin-top:12px;
+      color:var(--muted);
+      font-size:.92rem;
+    }
+
+    .fallback-link a{
+      color:#dbe5ff;
+      text-decoration:none;
+    }
+
+    .footer{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:0 16px 36px;
+      color:rgba(244,247,251,.54);
+      font-size:.92rem;
+    }
+
+    .footer-inner{
+      border-top:1px solid rgba(255,255,255,.08);
+      padding-top:18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+
+    @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+    @keyframes pulse{0%,100%{transform:scale(.92);opacity:.68}50%{transform:scale(1.2);opacity:1}}
+    @keyframes sweep{from{transform:translateX(-8%) rotate(0deg)}to{transform:translateX(8%) rotate(360deg)}}
+    @keyframes load{0%{transform:translateX(-90%)}50%{transform:translateX(120%)}100%{transform:translateX(-90%)}}
+    @keyframes drift{from{transform:translateY(-6px) translateX(-3px) scale(1)}to{transform:translateY(10px) translateX(8px) scale(1.03)}}
+    @keyframes toastbar{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+
+    @media (max-width:1040px){
+      .hero,
+      .playtest-wrap,
+      .reel-layout,
+      .updates-grid{
+        grid-template-columns:1fr;
+      }
+
+      .hero{
+        min-height:auto;
+        padding-top:66px;
+      }
+
+      .showcase{
+        min-height:460px;
+      }
+
+      .grid{
+        grid-template-columns:1fr;
+      }
+
+      h1{max-width:none}
+    }
+
+    @media (max-width:720px){
+      .topbar{
+        padding-left:10px;
+        padding-right:10px;
+      }
+
+      .topbar-inner{
+        padding:14px;
+        border-radius:20px;
+      }
+
+      .nav{gap:14px}
+      .brand-text span{display:none}
+      .hero{padding-top:52px}
+      .lead{font-size:1rem}
+      .stats{grid-template-columns:1fr}
+      .card-shell{transform:none}
+      .card-shell:hover{transform:translateY(-2px)}
+      .reel-stage{min-height:320px}
+      .iframe-shell iframe{height:520px}
+    }
+  </style>
+
 </head>
 <body>
+  <div class="noise"></div>
 
-    <div class="ambient-bg" id="parallaxBg"></div>
-    <div class="ambient-overlay"></div>
+  <div class="refresh-screen" id="refreshScreen" aria-hidden="true">
+    <div class="refresh-shell">
+      <div class="refresh-icon" aria-hidden="true">
+        <div class="ring"></div>
+        <div class="ring two"></div>
+        <div class="ring three"></div>
+        <div class="pulse"></div>
+      </div>
+      <div class="refresh-title"><span class="grad">Refreshing</span></div>
+      <p class="refresh-text" id="refreshMessage">Please wait while REDACTED-5 reloads the interface.</p>
+      <div class="refresh-bar" aria-hidden="true"><span></span></div>
+    </div>
+  </div>
 
-    <div id="loader">
-        <div class="loader-ring"></div>
-        <div class="loader-text">Refreshing... Please wait</div>
+  <div class="owner-toast" id="ownerToast">
+    <div class="top">
+      <div class="badge"><span class="dot"></span><span id="toastBadge">Playtest Notice</span></div>
+      <button class="button secondary" id="toastClose" style="padding:8px 12px;border-radius:14px;">Close</button>
+    </div>
+    <h4 id="toastTitle">Playtest access online.</h4>
+    <p id="toastBody">Open the Playtest page to check the latest testing notes.</p>
+    <div class="bar"><span></span></div>
+  </div>
+
+  <div class="app">
+    <header class="topbar">
+      <div class="topbar-inner" id="topbar">
+        <div class="brand">
+          <div class="brand-mark">
+            <img src="RedactedP.png" alt="Redacted-5 icon" />
+          </div>
+          <div class="brand-text">
+            <strong id="brandName">REDACTED-5</strong>
+            <span id="brandSub">Premium classified game interface</span>
+          </div>
+        </div>
+
+```
+    <nav class="nav" aria-label="Primary">
+      <a href="#home" data-nav="home">Home</a>
+      <a href="#updates" data-nav="updates">Updates</a>
+      <a href="#playtest" data-nav="playtest">Testing Site</a>
+      <a href="#creator" data-nav="creator">Creator</a>
+      <a href="#game" data-nav="game" class="pill">Game</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="page" data-page="home">
+    <div class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow">
+          <span class="eyebrow-dot"></span>
+          <span id="heroEyebrow">Classified tactical experience</span>
+        </div>
+
+        <h1><span class="grad" id="heroTitle">REDACTED-5</span> Is Live.</h1>
+
+        <p class="lead" id="heroLead">
+          A cinematic, high-end site built around your game identity: sharp glass panels, soft blur, premium contrast, and a serious classified tone.
+        </p>
+
+        <div class="actions">
+          <button class="button primary" id="openGameBtn">Open Game</button>
+          <a class="button secondary" href="#updates">View Updates</a>
+          <a class="button secondary" href="#creator">Creator</a>
+        </div>
+      </div>
+
+      <div class="showcase">
+        <div class="orb"></div>
+
+        <div class="card-shell" id="shell">
+          <div class="hero-bg"></div>
+          <div class="shell-top">
+            <div class="traffic" aria-hidden="true">
+              <span></span><span></span><span></span>
+            </div>
+            <div id="showcaseCaption">Secure Preview</div>
+          </div>
+
+          <div class="panel" style="margin-top:22px;">
+            <div class="mini-title">Mission Brief</div>
+            <div class="mini-text">
+              Built for a darker, more premium look with a blurred top banner, polished depth, and a cinematic background pulled from your image file.
+            </div>
+
+            <div class="stats">
+              <div class="stat"><strong>01</strong><span>Glass UI</span></div>
+              <div class="stat"><strong>02</strong><span>Scroll motion</span></div>
+              <div class="stat"><strong>03</strong><span>Custom pages</span></div>
+            </div>
+          </div>
+
+          <div class="panel" style="margin-top:0;">
+            <div class="mini-title">Interface Quality</div>
+            <div class="mini-text">
+              The layout uses restrained motion, layered lighting, and a cleaner composition so it feels much more expensive than a basic fan page.
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <nav id="navbar">
-        <div class="nav-container">
-            <div class="nav-logo" onclick="switchPage('home')">
-                <img id="navIcon" src="" alt="Logo">
-                <span>REDACTED-5</span>
-            </div>
-            <div class="nav-links" id="navLinks">
-                <div class="nav-item active" onclick="switchPage('home')">Home</div>
-                <div class="nav-item" onclick="switchPage('updates')">Updates</div>
-                <div class="nav-item" onclick="switchPage('playtest')">Control Panel</div>
-                <div class="nav-item" onclick="switchPage('creator')">Developer</div>
-            </div>
-            <div class="menu-toggle" id="menuToggle" onclick="toggleMobileMenu()">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+    <section style="margin-top:24px;">
+      <div class="section-head">
+        <div>
+          <h2>Media reel</h2>
+          <p>Scroll down and the showcase changes feel like a cinematic slideshow instead of a plain image dump.</p>
         </div>
-    </nav>
+      </div>
 
-    <main>
-        
-        <section id="home" class="page active">
-            <div class="hero-section">
-                <h1 class="hero-title">Redacted-5</h1>
-                <p class="hero-subtitle">Step into the absolute frontier of high-fidelity physics and immersive competitive operations on Roblox.</p>
-                <div class="hero-cta-group">
-                    <a id="heroPlayBtn" href="#" target="_blank" class="btn btn-primary">
-                        <i class="fa-solid fa-play"></i> Play Operational Build
-                    </a>
-                    <div class="btn btn-secondary" onclick="switchPage('updates')">Review Intel</div>
-                </div>
+      <div class="reel">
+        <div class="reel-layout">
+          <div class="reel-stage">
+            <img id="slidePreview" src="MovementBackround.png" alt="Redacted-5 media slide" />
+            <div class="reel-overlay">
+              <div class="eyebrow" style="margin-bottom:0;width:fit-content;">
+                <span class="eyebrow-dot"></span>
+                Media
+              </div>
+              <h3 id="slideTitle">Atmosphere</h3>
+              <p id="slideText">A dark, premium visual foundation built for REDACTED-5.</p>
             </div>
-        </section>
+          </div>
 
-        <section id="updates" class="page">
-            <div class="section-container">
-                <div class="section-header reveal">
-                    <h2 class="section-title">System Logs</h2>
-                    <p class="section-subtitle">Real-time deployment streams and environment modifications.</p>
+          <div class="reel-rail" id="reelRail"></div>
+        </div>
+      </div>
+    </section>
+
+    <section style="margin-top:28px;">
+      <div class="section-head">
+        <div>
+          <h2>Built to feel like a real game brand.</h2>
+          <p>Less clutter, more presence. The page uses large typography, soft glass, and a stronger visual hierarchy so REDACTED-5 looks polished immediately.</p>
+        </div>
+      </div>
+
+      <div class="grid">
+        <article class="feature reveal-on-scroll">
+          <div class="icon">✦</div>
+          <h3>Premium Blur</h3>
+          <p>The top banner stays glassy and crisp, like a modern product site instead of a generic game page.</p>
+          <span class="tag">Frozen glass</span>
+        </article>
+
+        <article class="feature reveal-on-scroll">
+          <div class="icon">◌</div>
+          <h3>Cinematic Depth</h3>
+          <p>Layered lights, gradients, and your background image create a stronger sense of atmosphere.</p>
+          <span class="tag">Dark prestige</span>
+        </article>
+
+        <article class="feature reveal-on-scroll">
+          <div class="icon">↻</div>
+          <h3>Custom Refresh</h3>
+          <p>When the page reloads, users briefly see a custom waiting screen with animation instead of a plain white flash.</p>
+          <span class="tag">Custom loader</span>
+        </article>
+      </div>
+    </section>
+
+    <section style="margin-top:28px;">
+      <div class="section-head">
+        <div>
+          <h2>Latest update preview</h2>
+          <p>There is a full updates page too, but this keeps the home page feeling alive.</p>
+        </div>
+        <a class="button secondary" href="#updates">Open Updates Page</a>
+      </div>
+      <div class="update-card" id="homeUpdatePreview"></div>
+    </section>
+  </section>
+
+  <section class="page" data-page="updates">
+    <div class="page-hero">
+      <div>
+        <div class="section-head">
+          <div>
+            <h2>Updates</h2>
+            <p>Live changelog, patch notes, and whatever you want to place here next. Edit the CONFIG block at the top and this page updates automatically.</p>
+          </div>
+        </div>
+
+        <div class="updates-grid" id="updatesGrid"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page" data-page="playtest">
+    <div class="page-hero">
+      <div>
+        <div class="section-head">
+          <div>
+            <h2>Testing Site</h2>
+            <p>Generic users can browse, request access, and send feedback. Admins can unlock extra tools with the login gate.</p>
+          </div>
+        </div>
+
+        <div class="playtest-wrap">
+          <div class="feature reveal-on-scroll" style="opacity:1;transform:none;">
+            <div class="icon">◉</div>
+            <h3>Request a Playtest</h3>
+            <p>Send your Roblox username, your reason, and any notes. That request gets logged and forwarded to the webhook.</p>
+
+            <form class="form" id="playtestForm">
+              <div class="field">
+                <label for="ptUsername">Roblox Username</label>
+                <input id="ptUsername" name="ptUsername" type="text" placeholder="Your Roblox username" required />
+              </div>
+              <div class="field">
+                <label for="ptReason">Why should you get access?</label>
+                <textarea id="ptReason" name="ptReason" placeholder="Tell me why you want to test the game..." required></textarea>
+              </div>
+              <div class="field">
+                <label for="ptNotes">Extra Notes</label>
+                <textarea id="ptNotes" name="ptNotes" placeholder="Anything else I should know?"></textarea>
+              </div>
+              <div class="actions">
+                <button class="button primary" type="submit">Send Playtest Request</button>
+                <button class="button secondary" type="button" id="adminLoginBtn">Admin Login</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="feature reveal-on-scroll" style="opacity:1;transform:none;">
+            <div class="icon">✉</div>
+            <h3>Feedback</h3>
+            <p>Generic users can drop feedback here without needing admin access.</p>
+
+            <form class="form" id="feedbackForm">
+              <div class="field">
+                <label for="fbName">Username / Name</label>
+                <input id="fbName" name="fbName" type="text" placeholder="Your username" required />
+              </div>
+              <div class="field">
+                <label for="fbCategory">Category</label>
+                <select id="fbCategory" name="fbCategory">
+                  <option>Bug</option>
+                  <option>Suggestion</option>
+                  <option>Balance</option>
+                  <option>UI</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="fbMessage">Message</label>
+                <textarea id="fbMessage" name="fbMessage" placeholder="Write feedback here..." required></textarea>
+              </div>
+              <div class="actions">
+                <button class="button primary" type="submit">Send Feedback</button>
+              </div>
+            </form>
+
+            <div class="admin-panel" id="adminPanel" style="display:none;">
+              <div class="section-head" style="margin-bottom:10px;">
+                <div>
+                  <h2 style="font-size:1.5rem;">Admin Panel</h2>
+                  <p style="font-size:.95rem;">Only whitelisted admins can use this.</p>
                 </div>
-                <div class="updates-feed" id="updatesFeed">
-                    </div>
+                <button class="button secondary" id="logoutAdminBtn" type="button">Logout</button>
+              </div>
+              <div class="admin-list" id="adminList"></div>
             </div>
-        </section>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        <section id="playtest" class="page">
-            <div class="section-container">
-                <div class="section-header reveal">
-                    <h2 class="section-title">Telemetry Request</h2>
-                    <p class="section-subtitle">Submit system parameters directly to internal developers.</p>
-                </div>
-                <div class="glass-panel control-panel reveal">
-                    <form id="playtestForm" onsubmit="handleFormSubmit(event)">
-                        <div class="form-group">
-                            <label class="form-label">Network Identifier / Roblox Username</label>
-                            <input type="text" id="formUser" class="form-control" placeholder="Identity string..." required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Diagnostic Summary / Message</label>
-                            <textarea id="formMessage" class="form-control" placeholder="Provide system environment feedback..." required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-submit">Establish Protocol Uplink</button>
-                    </form>
-                    <div class="terminal-overlay" id="terminalStatus">
-                        </div>
-                </div>
+  <section class="page" data-page="creator">
+    <div class="page-hero">
+      <div>
+        <div class="section-head">
+          <div>
+            <h2>Creator</h2>
+            <p>About the developer, the profile embed, and a clean place for basic info.</p>
+          </div>
+        </div>
+
+        <div class="grid" style="grid-template-columns:1fr .95fr;">
+          <article class="feature reveal-on-scroll" style="opacity:1;transform:none;">
+            <div class="icon">⌁</div>
+            <h3 id="creatorName">About the Creator</h3>
+            <p id="creatorBio">
+              Put your short bio here. This section is built to look like a premium profile panel instead of a boring text block.
+            </p>
+            <div class="actions" style="margin-top:18px;">
+              <a class="button primary" href="https://www.roblox.com/users/3028124482/profile" target="_blank" rel="noreferrer">Open Roblox Profile</a>
             </div>
-        </section>
+          </article>
 
-        <section id="creator" class="page">
-            <div class="section-container creator-wrapper">
-                <div class="section-header reveal">
-                    <h2 class="section-title">Development Core</h2>
-                    <p class="section-subtitle">Secure engineering profile configuration registry.</p>
-                </div>
-                
-                <div class="iframe-container reveal">
-                    <iframe id="creatorIframe" src="" sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe>
-                </div>
+          <article class="feature reveal-on-scroll" style="opacity:1;transform:none;">
+            <div class="icon">▣</div>
+            <h3>Embedded Profile</h3>
+            <p>Roblox may block iframe embedding on some pages, but the frame is included as requested and a fallback link is shown below it.</p>
+            <span class="tag">Iframe + fallback</span>
+          </article>
+        </div>
 
-                <div class="glass-panel about-box reveal">
-                    <h3 class="about-title">Architectural Mandate</h3>
-                    <p class="about-text">
-                        Pioneering structural engine configurations to output production standards matching modern AAA experiences. Project Redacted-5 handles low-latency mechanics natively to alter current perceptions of procedural netcode execution frameworks.
-                    </p>
-                </div>
+        <div class="iframe-shell" style="margin-top:18px;">
+          <iframe
+            src="https://www.roblox.com/users/3028124482/profile"
+            title="Roblox Creator Profile"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
 
-                <div class="carousel-container reveal">
-                    <div class="carousel-track" id="carouselTrack">
-                        </div>
-                </div>
-            </div>
-        </section>
+        <div class="fallback-link">
+          If the profile does not load inside the frame, open it here:
+          <a href="https://www.roblox.com/users/3028124482/profile" target="_blank" rel="noreferrer">Roblox Creator Profile</a>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    </main>
+  <section class="page" data-page="game">
+    <div class="game-launch">
+      <div class="launch-card">
+        <div class="eyebrow" style="margin-bottom:14px;">
+          <span class="eyebrow-dot"></span>
+          Launching
+        </div>
+        <h2>Opening REDACTED-5</h2>
+        <p>Use the button below. It opens the game in a new tab instead of redirecting in the current page.</p>
+        <div class="actions" style="justify-content:center;">
+          <a class="button danger" id="manualGameLink" href="https://www.roblox.com/games/131283297263046/REDACTED-5" target="_blank" rel="noopener noreferrer">Open Game in New Tab</a>
+          <a class="button secondary" href="#home">Back Home</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
 
-    <script>
-        // GLOBAL CONFIG OBJECT
-        const CONFIG = {
-            GAME_URL: "https://www.roblox.com/games/131283297263046/REDACTED-5",
-            CREATOR_PROFILE: "https://www.roblox.com/users/3028124482/profile",
-            BACKGROUND_IMAGE: "MovementBackround.png",
-            ICON: "RedactedP.png"
-        };
+<footer class="footer">
+  <div class="footer-inner">
+    <div id="footerLeft">REDACTED-5</div>
+    <div id="footerRight">Classified. Cinematic. Clean.</div>
+  </div>
+</footer>
+```
 
-        // Static architectural mock metadata sets to sustain clean pipeline structure
-        const MOCK_UPDATES = [
-            { title: "Operation Nightfall Protocol", date: "July 01, 2026", desc: "Implemented complex volumetric shading pipeline and zero-latency input buffer translation layer matrix.", pinned: true },
-            { title: "Sub-System Asset Refresh", date: "June 24, 2026", desc: "Overhauled mechanical sound acoustics. Fixed geometric ray tracing leakage occurrences along perimeter sectors.", pinned: false },
-            { title: "Netcode Optimization Matrix", date: "June 12, 2026", desc: "Interpolation frequency limits increased to 240Hz matching production level frame arrays natively.", pinned: false }
-        ];
+  </div>
 
-        // Global Application Context Init Execution
-        document.addEventListener("DOMContentLoaded", () => {
-            // Apply assets dynamically via master CONFIG architecture map safely
-            document.getElementById("parallaxBg").style.backgroundImage = `url('${CONFIG.BACKGROUND_IMAGE}')`;
-            document.getElementById("navIcon").src = CONFIG.ICON;
-            document.getElementById("heroPlayBtn").href = CONFIG.GAME_URL;
-            document.getElementById("creatorIframe").src = CONFIG.CREATOR_PROFILE;
+  <div id="adminModal" style="display:none;position:fixed;inset:0;z-index:220;background:rgba(0,0,0,.65);backdrop-filter:blur(14px);align-items:center;justify-content:center;padding:20px;">
+    <div style="width:min(100%, 520px);border-radius:30px;border:1px solid rgba(255,255,255,.10);background:rgba(12,14,20,.92);box-shadow:0 30px 100px rgba(0,0,0,.55);padding:22px;">
+      <div class="section-head" style="margin-bottom:14px;">
+        <div>
+          <h2 style="font-size:1.8rem;">Admin Login</h2>
+          <p style="font-size:.95rem;">Whitelisted usernames: MTF_OPERATOR and TurtleToed13</p>
+        </div>
+        <button class="button secondary" id="closeAdminModalBtn" type="button">Close</button>
+      </div>
 
-            buildUpdatesFeed();
-            buildCarousel();
-            setupParallaxAndAnimations();
+```
+  <form class="form" id="adminForm">
+    <div class="field">
+      <label for="adminUser">Username</label>
+      <input id="adminUser" type="text" placeholder="MTF_OPERATOR" required />
+    </div>
+    <div class="field">
+      <label for="adminKey">Access Key</label>
+      <input id="adminKey" type="password" placeholder="Admin key" required />
+    </div>
+    <div class="actions">
+      <button class="button primary" type="submit">Unlock Admin Mode</button>
+    </div>
+  </form>
+</div>
+```
 
-            // Fire UI loading dynamic delay sequences
-            setTimeout(() => {
-                const loader = document.getElementById("loader");
-                loader.style.opacity = "0";
-                setTimeout(() => loader.style.display = "none", 800);
-            }, 1400);
+  </div>
+
+  <script>
+    /*
+      CONFIG BLOCK
+      Change these values at the top for fast edits.
+    */
+    const CONFIG = {
+      siteName: "REDACTED-5",
+      brandSubtitle: "Premium classified game interface",
+      heroEyebrow: "Classified tactical experience",
+      heroTitle: "REDACTED-5",
+      heroLead: "A cinematic, high-end site built around your game identity: sharp glass panels, soft blur, premium contrast, and a serious classified tone.",
+      gameUrl: "https://www.roblox.com/games/131283297263046/REDACTED-5",
+      creatorProfileUrl: "https://www.roblox.com/users/3028124482/profile",
+      webhookUrl: "https://discord.com/api/webhooks/1522007954835116193/ucvoDdbwSkBru-IuM00TOMClkFL8kjWAmAMrngSjYF5SLbWFQ9E7UboFfA-sU5vTCEJF",
+      adminUsers: ["MTF_OPERATOR", "TurtleToed13"],
+      adminKey: "CHANGE_THIS_TO_A_PRIVATE_KEY",
+      toast: {
+        badge: "Playtest Notice",
+        title: "Playtest access online.",
+        body: "Open the Testing Site page to check the latest testing notes."
+      },
+      creatorBio: "Put your short bio here. This section is built to look like a premium profile panel instead of a boring text block.",
+      updates: [
+        {
+          date: "Build 01",
+          title: "Premium site overhaul",
+          body: "The interface was rebuilt with a darker cinematic theme, better spacing, glass panels, and stronger motion.",
+          tag: "UI / visual pass"
+        },
+        {
+          date: "Build 02",
+          title: "Pages added",
+          body: "Home, Updates, Testing Site, Creator, and Game pages now live in one file and switch cleanly by hash.",
+          tag: "Pages / routing"
+        },
+        {
+          date: "Build 03",
+          title: "Launch flow",
+          body: "The Game page now opens the Roblox game in a new tab instead of redirecting the current page.",
+          tag: "Redirect / launch"
+        }
+      ],
+      slides: [
+        {
+          image: "MovementBackround.png",
+          title: "Atmosphere",
+          text: "A dark, premium visual foundation for REDACTED-5."
+        },
+        {
+          image: "MovementBackround.png",
+          title: "Cinematic Motion",
+          text: "Scroll-friendly presentation with a smoother, studio-style feel."
+        },
+        {
+          image: "RedactedP.png",
+          title: "Brand Mark",
+          text: "Your icon sits cleanly in the UI and works as the site identity."
+        }
+      ]
+    };
+
+    const topbar = document.getElementById("topbar");
+    const shell = document.getElementById("shell");
+    const refreshScreen = document.getElementById("refreshScreen");
+    const refreshMessage = document.getElementById("refreshMessage");
+    const brandName = document.getElementById("brandName");
+    const brandSub = document.getElementById("brandSub");
+    const heroEyebrow = document.getElementById("heroEyebrow");
+    const heroTitle = document.getElementById("heroTitle");
+    const heroLead = document.getElementById("heroLead");
+    const showcaseCaption = document.getElementById("showcaseCaption");
+    const updatesGrid = document.getElementById("updatesGrid");
+    const homeUpdatePreview = document.getElementById("homeUpdatePreview");
+    const slidePreview = document.getElementById("slidePreview");
+    const slideTitle = document.getElementById("slideTitle");
+    const slideText = document.getElementById("slideText");
+    const reelRail = document.getElementById("reelRail");
+    const playtestForm = document.getElementById("playtestForm");
+    const feedbackForm = document.getElementById("feedbackForm");
+    const playtestText = document.getElementById("playtestText");
+    const creatorName = document.getElementById("creatorName");
+    const creatorBio = document.getElementById("creatorBio");
+    const adminPanel = document.getElementById("adminPanel");
+    const adminList = document.getElementById("adminList");
+    const adminLoginBtn = document.getElementById("adminLoginBtn");
+    const adminModal = document.getElementById("adminModal");
+    const adminForm = document.getElementById("adminForm");
+    const adminUser = document.getElementById("adminUser");
+    const adminKey = document.getElementById("adminKey");
+    const closeAdminModalBtn = document.getElementById("closeAdminModalBtn");
+    const logoutAdminBtn = document.getElementById("logoutAdminBtn");
+    const manualGameLink = document.getElementById("manualGameLink");
+    const openGameBtn = document.getElementById("openGameBtn");
+    const toast = document.getElementById("ownerToast");
+    const toastBadge = document.getElementById("toastBadge");
+    const toastTitle = document.getElementById("toastTitle");
+    const toastBody = document.getElementById("toastBody");
+    const toastClose = document.getElementById("toastClose");
+    const footerLeft = document.getElementById("footerLeft");
+    const footerRight = document.getElementById("footerRight");
+    const navLinks = [...document.querySelectorAll("[data-nav]")];
+    const pages = [...document.querySelectorAll("[data-page]")];
+
+    const PLAYTEST_STORAGE_KEY = "redacted5_playtest_queue";
+    const ADMIN_STORAGE_KEY = "redacted5_admin_session";
+
+    let currentAdmin = null;
+    let activeSlide = 0;
+    let redirectTimer = null;
+
+    function readQueue() {
+      try {
+        return JSON.parse(localStorage.getItem(PLAYTEST_STORAGE_KEY) || "[]");
+      } catch {
+        return [];
+      }
+    }
+
+    function writeQueue(queue) {
+      localStorage.setItem(PLAYTEST_STORAGE_KEY, JSON.stringify(queue));
+    }
+
+    function pushQueue(item) {
+      const queue = readQueue();
+      queue.unshift(item);
+      writeQueue(queue.slice(0, 100));
+      renderAdminPanel();
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function renderConfig() {
+      document.title = CONFIG.siteName;
+      brandName.textContent = CONFIG.siteName;
+      brandSub.textContent = CONFIG.brandSubtitle;
+      heroEyebrow.textContent = CONFIG.heroEyebrow;
+      heroTitle.textContent = CONFIG.heroTitle;
+      heroLead.textContent = CONFIG.heroLead;
+      showcaseCaption.textContent = "Secure Preview";
+      refreshMessage.textContent = `Please wait while ${CONFIG.siteName} reloads the interface.`;
+      toastBadge.textContent = CONFIG.toast.badge;
+      toastTitle.textContent = CONFIG.toast.title;
+      toastBody.textContent = CONFIG.toast.body;
+      footerLeft.textContent = CONFIG.siteName;
+      footerRight.textContent = "Classified. Cinematic. Clean.";
+      manualGameLink.href = CONFIG.gameUrl;
+      creatorBio.textContent = CONFIG.creatorBio;
+    }
+
+    function renderUpdates() {
+      updatesGrid.innerHTML = "";
+      CONFIG.updates.forEach((item, index) => {
+        const card = document.createElement("article");
+        card.className = "update-card reveal-on-scroll";
+        card.innerHTML = `
+          <div class="date">${escapeHtml(item.date)}</div>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p>${escapeHtml(item.body)}</p>
+          <span class="tag">${escapeHtml(item.tag)}</span>
+        `;
+        updatesGrid.appendChild(card);
+
+        if (index === 0) {
+          homeUpdatePreview.innerHTML = `
+            <div class="date">${escapeHtml(item.date)}</div>
+            <h3>${escapeHtml(item.title)}</h3>
+            <p>${escapeHtml(item.body)}</p>
+            <span class="tag">${escapeHtml(item.tag)}</span>
+          `;
+        }
+      });
+    }
+
+    function renderSlides() {
+      reelRail.innerHTML = "";
+      CONFIG.slides.forEach((slide, index) => {
+        const btn = document.createElement("button");
+        btn.className = "slide-chip";
+        btn.type = "button";
+        btn.innerHTML = `
+          <img src="${escapeHtml(slide.image)}" alt="${escapeHtml(slide.title)}">
+          <strong>${escapeHtml(slide.title)}</strong>
+          <span>${escapeHtml(slide.text)}</span>
+        `;
+        btn.addEventListener("click", () => setSlide(index));
+        reelRail.appendChild(btn);
+      });
+    }
+
+    function setSlide(index) {
+      activeSlide = index;
+      const slide = CONFIG.slides[index];
+      slidePreview.src = slide.image;
+      slidePreview.alt = slide.title;
+      slideTitle.textContent = slide.title;
+      slideText.textContent = slide.text;
+      [...document.querySelectorAll(".slide-chip")].forEach((el, i) => el.classList.toggle("active", i === index));
+    }
+
+    function pageNameFromHash() {
+      const hash = location.hash.replace("#", "").trim();
+      return hash || "home";
+    }
+
+    function showPage(name) {
+      pages.forEach(page => page.classList.toggle("active", page.dataset.page === name));
+      navLinks.forEach(link => link.classList.toggle("active", link.dataset.nav === name));
+
+      if (name === "game") {
+        clearTimeout(redirectTimer);
+      }
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      document.title = `${CONFIG.siteName} | ${name.charAt(0).toUpperCase() + name.slice(1)}`;
+    }
+
+    function route() {
+      showPage(pageNameFromHash());
+      if (pageNameFromHash() === "game") {
+        clearTimeout(redirectTimer);
+        redirectTimer = setTimeout(() => {
+          window.open(CONFIG.gameUrl, "_blank", "noopener,noreferrer");
+        }, 350);
+      }
+    }
+
+    function isReloadNavigation() {
+      try {
+        const nav = performance.getEntriesByType?.("navigation")?.[0];
+        if (nav && nav.type === "reload") return true;
+      } catch (_) {}
+      try {
+        return performance.navigation && performance.navigation.type === 1;
+      } catch (_) {
+        return false;
+      }
+    }
+
+    function showOwnerToast() {
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 4600);
+    }
+
+    function openAdminModal() {
+      adminModal.style.display = "flex";
+      adminUser.focus();
+    }
+
+    function closeAdminModal() {
+      adminModal.style.display = "none";
+    }
+
+    function saveAdminSession(name) {
+      currentAdmin = name;
+      sessionStorage.setItem(ADMIN_STORAGE_KEY, name);
+      renderAdminPanel();
+    }
+
+    function clearAdminSession() {
+      currentAdmin = null;
+      sessionStorage.removeItem(ADMIN_STORAGE_KEY);
+      renderAdminPanel();
+    }
+
+    function renderAdminPanel() {
+      const loggedIn = Boolean(currentAdmin);
+      adminPanel.style.display = loggedIn ? "block" : "none";
+      adminList.innerHTML = "";
+
+      if (!loggedIn) return;
+
+      const queue = readQueue();
+
+      if (!queue.length) {
+        adminList.innerHTML = `<div class="admin-item"><h4>No requests yet</h4><p>Playtest and feedback submissions will appear here.</p></div>`;
+        return;
+      }
+
+      queue.forEach((item, index) => {
+        const node = document.createElement("div");
+        node.className = "admin-item";
+        node.innerHTML = `
+          <h4>${escapeHtml(item.type)} — ${escapeHtml(item.username || item.name || "Unknown")}</h4>
+          <p>${escapeHtml(item.message)}</p>
+          <div class="meta">
+            <span class="chip">${escapeHtml(item.time)}</span>
+            <span class="chip">${escapeHtml(item.source)}</span>
+            <span class="chip">${escapeHtml(item.type)}</span>
+          </div>
+        `;
+        adminList.appendChild(node);
+      });
+
+      const clearBtn = document.createElement("button");
+      clearBtn.className = "button secondary";
+      clearBtn.type = "button";
+      clearBtn.textContent = "Clear Queue";
+      clearBtn.style.marginTop = "12px";
+      clearBtn.addEventListener("click", () => {
+        writeQueue([]);
+        renderAdminPanel();
+      });
+      adminList.appendChild(clearBtn);
+    }
+
+    async function sendWebhook(payload) {
+      try {
+        const response = await fetch(CONFIG.webhookUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
         });
+        return response.ok;
+      } catch (error) {
+        return false;
+      }
+    }
 
-        // Dynamic System Data Translators
-        function buildUpdatesFeed() {
-            const container = document.getElementById("updatesFeed");
-            container.innerHTML = MOCK_UPDATES.map(item => `
-                <div class="glass-panel update-card reveal ${item.pinned ? 'pinned' : ''}">
-                    <span class="update-badge">${item.pinned ? 'Priority Terminal' : 'Routine'}</span>
-                    <span class="update-date">${item.date}</span>
-                    <h3 class="update-title">${item.title}</h3>
-                    <p class="update-desc">${item.desc}</p>
-                </div>
-            `).join('');
-        }
+    function webhookEmbed(title, description, fields) {
+      return {
+        username: CONFIG.siteName,
+        avatar_url: "",
+        content: "",
+        embeds: [{
+          title,
+          description,
+          color: 11611903,
+          fields,
+          footer: { text: CONFIG.siteName },
+          timestamp: new Date().toISOString()
+        }]
+      };
+    }
 
-        function buildCarousel() {
-            const track = document.getElementById("carouselTrack");
-            // Standard placeholder templates generated dynamically passing configuration
-            const slides = Array(6).fill(null).map(() => `
-                <div class="carousel-slide" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.7)), url('${CONFIG.BACKGROUND_IMAGE}');"></div>
-            `).join('');
-            track.innerHTML = slides + slides; // Double stack arrays to generate infinite seamless visual wraparounds
-        }
+    function nowStamp() {
+      return new Date().toLocaleString();
+    }
 
-        // Global Navigation Architecture Routines
-        function switchPage(pageId) {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            
-            // Manage clean DOM page flips
-            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 8) topbar.classList.add("shrink");
+      else topbar.classList.remove("shrink");
+    });
 
-            const targetPage = document.getElementById(pageId);
-            if (targetPage) targetPage.classList.add('active');
+    window.addEventListener("mousemove", (e) => {
+      const x = (e.clientX / window.innerWidth) * 100;
+      const y = (e.clientY / window.innerHeight) * 100;
+      document.documentElement.style.setProperty("--mx", `${x}%`);
+      document.documentElement.style.setProperty("--my", `${y}%`);
+    });
 
-            // Set active highlighted node
-            const navItems = document.querySelectorAll('.nav-item');
-            const indexMap = { 'home': 0, 'updates': 1, 'playtest': 2, 'creator': 3 };
-            if (navItems[indexMap[pageId]]) navItems[indexMap[pageId]].classList.add('active');
+    window.addEventListener("mousemove", (e) => {
+      if (!shell) return;
+      const rect = shell.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = (e.clientX - cx) / 42;
+      const dy = (e.clientY - cy) / 42;
+      shell.style.transform = `perspective(1400px) rotateY(${(-10 + dx) * 0.22}deg) rotateX(${(7 - dy) * 0.22}deg)`;
+    });
 
-            // Handle Mobile Layer dismissals
-            document.getElementById("navLinks").classList.remove("open");
-            document.getElementById("menuToggle").classList.remove("open");
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add("reveal");
+      });
+    }, { threshold: 0.18 });
 
-            // Re-fire animations checks dynamically on view transitions
-            setTimeout(triggerScrollReveal, 50);
-        }
+    function observeRevealElements() {
+      document.querySelectorAll(".reveal-on-scroll").forEach((el) => revealObserver.observe(el));
+    }
 
-        function toggleMobileMenu() {
-            document.getElementById("navLinks").classList.toggle("open");
-            document.getElementById("menuToggle").classList.toggle("open");
-        }
+    document.getElementById("openGameBtn").addEventListener("click", () => {
+      window.open(CONFIG.gameUrl, "_blank", "noopener,noreferrer");
+    });
 
-        // Telemetry Developer Panel Process Logic
-        function handleFormSubmit(event) {
-            event.preventDefault();
-            const terminal = document.getElementById("terminalStatus");
-            const user = document.getElementById("formUser").value;
-            const msg = document.getElementById("formMessage").value;
-            
-            terminal.style.display = "block";
-            terminal.innerHTML = `
-                <div class="terminal-line"><span>[SYS]</span> Initializing uplink protocol matrix...</div>
-            `;
+    adminLoginBtn.addEventListener("click", openAdminModal);
+    closeAdminModalBtn.addEventListener("click", closeAdminModal);
+    adminModal.addEventListener("click", (e) => {
+      if (e.target === adminModal) closeAdminModal();
+    });
 
-            const sequences = [
-                { text: `[SYS] Connecting client tunnel verified as: "${user}"`, delay: 600 },
-                { text: "[SYS] Packing architectural payload diagnostics safely...", delay: 1300 },
-                { text: "[SYS] Syncing package telemetry layers into remote core arrays...", delay: 2100 },
-                { text: "✓ DATA TRANSMISSION COMPLETE. SYSTEM LINK ESTABLISHED.", class: "terminal-success", delay: 2800 }
-            ];
+    adminForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const u = adminUser.value.trim();
+      const k = adminKey.value.trim();
+      const allowed = CONFIG.adminUsers.map(x => x.toLowerCase()).includes(u.toLowerCase()) && k === CONFIG.adminKey;
+      if (!allowed) {
+        alert("Invalid admin credentials.");
+        return;
+      }
+      saveAdminSession(u);
+      closeAdminModal();
+    });
 
-            sequences.forEach(seq => {
-                setTimeout(() => {
-                    const line = document.createElement("div");
-                    line.className = "terminal-line" + (seq.class ? ` ${seq.class}` : '');
-                    line.innerText = seq.text;
-                    terminal.appendChild(line);
-                }, seq.delay);
-            });
+    logoutAdminBtn.addEventListener("click", clearAdminSession);
 
-            document.getElementById("playtestForm").reset();
-        }
+    playtestForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const username = document.getElementById("ptUsername").value.trim();
+      const reason = document.getElementById("ptReason").value.trim();
+      const notes = document.getElementById("ptNotes").value.trim();
 
-        // Parallax and Premium Animation Interceptors
-        function setupParallaxAndAnimations() {
-            const bg = document.getElementById("parallaxBg");
-            const navbar = document.getElementById("navbar");
+      const item = {
+        type: "Playtest Request",
+        username,
+        message: `Reason:\n${reason}\n\nNotes:\n${notes || "None"}`,
+        source: "Testing Site",
+        time: nowStamp()
+      };
 
-            window.addEventListener("mousemove", (e) => {
-                const moveX = (e.clientX - window.innerWidth / 2) * 0.015;
-                const moveY = (e.clientY - window.innerHeight / 2) * 0.015;
-                bg.style.transform = `translate(calc(-5% + ${moveX}px), calc(-5% + ${moveY}px))`;
-            });
+      pushQueue(item);
 
-            window.addEventListener("scroll", () => {
-                // Shrink Navbar implementation safely
-                if (window.scrollY > 50) {
-                    navbar.classList.add("shrink");
-                } else {
-                    navbar.classList.remove("shrink");
-                }
-                triggerScrollReveal();
-            });
+      const ok = await sendWebhook(webhookEmbed(
+        "Playtest Request",
+        "A user submitted a playtest request.",
+        [
+          { name: "Roblox Username", value: username, inline: true },
+          { name: "Reason", value: reason.slice(0, 1024) || "None", inline: false },
+          { name: "Notes", value: (notes || "None").slice(0, 1024), inline: false }
+        ]
+      ));
 
-            triggerScrollReveal();
-        }
+      alert(ok ? "Playtest request sent." : "Playtest request saved locally. Webhook may be blocked by browser/CORS.");
+      e.target.reset();
+      if (currentAdmin) renderAdminPanel();
+    });
 
-        function triggerScrollReveal() {
-            const reveals = document.querySelectorAll(".reveal");
-            reveals.forEach(element => {
-                const windowHeight = window.innerHeight;
-                const elementTop = element.getBoundingClientRect().top;
-                const elementVisible = 100;
+    feedbackForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = document.getElementById("fbName").value.trim();
+      const category = document.getElementById("fbCategory").value.trim();
+      const message = document.getElementById("fbMessage").value.trim();
 
-                if (elementTop < windowHeight - elementVisible) {
-                    element.classList.add("visible");
-                }
-            });
-        }
-    </script>
+      const item = {
+        type: `Feedback — ${category}`,
+        username: name,
+        message,
+        source: "Testing Site",
+        time: nowStamp()
+      };
+
+      pushQueue(item);
+
+      const ok = await sendWebhook(webhookEmbed(
+        "Feedback",
+        "A user submitted feedback.",
+        [
+          { name: "User", value: name, inline: true },
+          { name: "Category", value: category, inline: true },
+          { name: "Message", value: message.slice(0, 1024), inline: false }
+        ]
+      ));
+
+      alert(ok ? "Feedback sent." : "Feedback saved locally. Webhook may be blocked by browser/CORS.");
+      e.target.reset();
+      if (currentAdmin) renderAdminPanel();
+    });
+
+    toastClose.addEventListener("click", () => toast.classList.remove("show"));
+
+    window.addEventListener("hashchange", route);
+
+    if (isReloadNavigation()) {
+      refreshScreen.classList.add("active");
+      refreshScreen.setAttribute("aria-hidden", "false");
+      window.addEventListener("load", () => {
+        setTimeout(() => {
+          refreshScreen.classList.remove("active");
+          refreshScreen.setAttribute("aria-hidden", "true");
+        }, 1450);
+      });
+    }
+
+    renderConfig();
+    renderUpdates();
+    renderSlides();
+    setSlide(0);
+    observeRevealElements();
+
+    const savedAdmin = sessionStorage.getItem(ADMIN_STORAGE_KEY);
+    if (savedAdmin && CONFIG.adminUsers.map(x => x.toLowerCase()).includes(savedAdmin.toLowerCase())) {
+      currentAdmin = savedAdmin;
+    }
+    renderAdminPanel();
+    showOwnerToast();
+    route();
+
+    setInterval(() => {
+      const next = (activeSlide + 1) % CONFIG.slides.length;
+      setSlide(next);
+    }, 4200);
+
+    setTimeout(() => {
+      document.querySelectorAll(".reveal-on-scroll").forEach((el) => {
+        if (el.getBoundingClientRect().top < window.innerHeight * 0.88) el.classList.add("reveal");
+      });
+    }, 150);
+  </script>
+
 </body>
 </html>
