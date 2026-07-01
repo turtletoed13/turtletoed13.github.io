@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Redacted-5</title>
-  <meta name="description" content="Redacted-5 — a premium cinematic game website." />
+  <meta name="description" content="Redacted-5 — cinematic Roblox game website." />
   <meta name="theme-color" content="#050608" />
 
   <style>
@@ -13,13 +13,13 @@
       --bg0:#040507;
       --bg1:#07090d;
       --bg2:#0d1018;
-      --glass: rgba(14, 16, 22, 0.56);
-      --glass-strong: rgba(10, 12, 18, 0.78);
+      --glass: rgba(14, 16, 22, 0.58);
+      --glass-strong: rgba(8, 10, 14, 0.84);
       --line: rgba(255,255,255,.09);
       --line-strong: rgba(255,255,255,.14);
       --text:#f4f7fb;
       --muted: rgba(244,247,251,.68);
-      --muted2: rgba(244,247,251,.48);
+      --muted2: rgba(244,247,251,.50);
       --accent:#b7c8ff;
       --accent2:#d9b0ff;
       --danger:#ff5b68;
@@ -166,7 +166,7 @@
     .nav{
       display:flex;
       align-items:center;
-      gap:24px;
+      gap:14px;
       flex-wrap:wrap;
       justify-content:flex-end;
     }
@@ -178,40 +178,33 @@
       font-weight:600;
       position:relative;
       transition: color .25s var(--ease), opacity .25s var(--ease), transform .25s var(--ease);
+      padding:10px 12px;
+      border-radius:999px;
     }
 
     .nav a:hover{
       color:#fff;
       transform:translateY(-1px);
+      background: rgba(255,255,255,.04);
     }
 
-    .nav a::after{
-      content:"";
-      position:absolute;
-      left:0;
-      bottom:-9px;
-      width:100%;
-      height:1px;
-      transform:scaleX(0);
-      transform-origin:center;
-      transition:transform .25s var(--ease);
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,.68), transparent);
-    }
-
-    .nav a:hover::after{
-      transform:scaleX(1);
-    }
-
-    .nav .pill{
-      padding:11px 16px;
-      border-radius:999px;
-      background: linear-gradient(135deg, rgba(244,247,251,.96), rgba(208,220,255,.9));
+    .nav a.active{
       color:#08111f;
-      box-shadow: 0 14px 30px rgba(255,255,255,.08);
+      background: linear-gradient(135deg, #f4f7ff, #cddcff);
     }
 
-    .nav .pill:hover{
-      transform:translateY(-1px);
+    .nav a.active:hover{
+      background: linear-gradient(135deg, #f4f7ff, #cddcff);
+      color:#08111f;
+    }
+
+    .page{
+      display:none;
+      animation: pageIn .45s var(--ease);
+    }
+
+    .page.active{
+      display:block;
     }
 
     .hero{
@@ -295,6 +288,7 @@
       transition: transform .25s var(--ease), box-shadow .25s var(--ease), background .25s var(--ease), border-color .25s var(--ease);
       will-change: transform;
       border:1px solid transparent;
+      cursor:pointer;
     }
 
     .button.primary{
@@ -308,6 +302,12 @@
       background: rgba(255,255,255,.045);
       border-color: rgba(255,255,255,.10);
       backdrop-filter: blur(18px);
+    }
+
+    .button.danger{
+      color:#fff;
+      background: linear-gradient(135deg, rgba(255,91,104,.92), rgba(209,67,77,.88));
+      box-shadow: 0 18px 48px rgba(255,91,104,.16);
     }
 
     .button:hover{
@@ -600,29 +600,228 @@
       pointer-events:none;
     }
 
-    .footer{
-      max-width:var(--max);
-      margin:0 auto;
-      padding: 0 16px 36px;
-      color: rgba(244,247,251,.54);
-      font-size:.92rem;
+    .cards{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap:18px;
+      margin-top:18px;
     }
 
-    .footer-inner{
-      border-top:1px solid rgba(255,255,255,.08);
-      padding-top:18px;
+    .list-card{
+      border-radius:var(--radius);
+      padding:24px;
+      border:1px solid rgba(255,255,255,.09);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.06), transparent 20%),
+        rgba(12, 14, 20, .60);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .list-card h3{
+      font-size:1.1rem;
+      margin-bottom:10px;
+      letter-spacing:-.02em;
+    }
+
+    .list-card p{
+      color:var(--muted);
+      line-height:1.72;
+    }
+
+    .timeline{
+      display:grid;
+      gap:14px;
+      margin-top:18px;
+    }
+
+    .update-item{
       display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:16px;
+      gap:14px;
+      padding:18px;
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,.09);
+      background: rgba(255,255,255,.04);
+    }
+
+    .update-badge{
+      width:50px;
+      height:50px;
+      flex:0 0 auto;
+      border-radius:18px;
+      display:grid;
+      place-items:center;
+      font-weight:900;
+      color:#08111f;
+      background: linear-gradient(135deg, #f4f7ff, #cddcff);
+    }
+
+    .update-content h4{
+      margin-bottom:6px;
+      font-size:1rem;
+      letter-spacing:-.02em;
+    }
+
+    .update-content span{
+      display:block;
+      color:var(--muted2);
+      font-size:.86rem;
+      margin-bottom:8px;
+    }
+
+    .update-content p{
+      color:var(--muted);
+      line-height:1.7;
+    }
+
+    .redirect-box{
+      max-width:780px;
+      margin:0 auto;
+      padding: 20px 16px 0;
+    }
+
+    .redirect-card{
+      border-radius:34px;
+      border:1px solid rgba(255,255,255,.10);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.08), transparent 20%),
+        rgba(10, 12, 18, .74);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .redirect-hero{
+      position:relative;
+      min-height:420px;
+      padding:34px;
+      display:flex;
+      align-items:flex-end;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.65)),
+        url("MovementBackround.png") center/cover no-repeat;
+    }
+
+    .redirect-copy{
+      width:min(100%, 520px);
+    }
+
+    .redirect-copy h2{
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      line-height:.95;
+      letter-spacing:-.06em;
+      margin-bottom:10px;
+    }
+
+    .redirect-copy p{
+      color: rgba(244,247,251,.72);
+      line-height:1.75;
+      margin-bottom:18px;
+      max-width:50ch;
+    }
+
+    .redirect-actions{
+      display:flex;
+      gap:12px;
       flex-wrap:wrap;
     }
 
-    /* Refresh screen */
-    .refresh-screen{
+    .profile-wrap{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap:18px;
+      margin-top:18px;
+    }
+
+    .profile-frame{
+      border-radius:28px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.09);
+      background: rgba(255,255,255,.03);
+      min-height:720px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .profile-frame iframe{
+      width:100%;
+      height:100%;
+      min-height:720px;
+      border:0;
+      background:#000;
+    }
+
+    .profile-note{
+      border-radius:28px;
+      padding:24px;
+      border:1px solid rgba(255,255,255,.09);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.06), transparent 20%),
+        rgba(12, 14, 20, .60);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .profile-note h3{
+      font-size:1.1rem;
+      margin-bottom:10px;
+      letter-spacing:-.02em;
+    }
+
+    .profile-note p{
+      color:var(--muted);
+      line-height:1.72;
+      margin-bottom:12px;
+    }
+
+    .profile-note ul{
+      padding-left:18px;
+      color:var(--muted);
+      line-height:1.8;
+    }
+
+    .toast{
+      position:fixed;
+      top:18px;
+      right:18px;
+      z-index:120;
+      width:min(92vw, 380px);
+      padding:16px 16px 16px 18px;
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(11, 13, 18, .74);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      box-shadow: var(--shadow-soft);
+      transform: translateY(-18px);
+      opacity:0;
+      pointer-events:none;
+      transition: transform .35s var(--ease), opacity .35s var(--ease);
+    }
+
+    .toast.show{
+      transform: translateY(0);
+      opacity:1;
+    }
+
+    .toast-title{
+      font-weight:900;
+      margin-bottom:6px;
+      letter-spacing:-.02em;
+    }
+
+    .toast-text{
+      color:var(--muted);
+      line-height:1.65;
+      font-size:.95rem;
+    }
+
+    .refresh-overlay{
       position:fixed;
       inset:0;
-      z-index:200;
+      z-index:300;
       display:none;
       align-items:center;
       justify-content:center;
@@ -632,7 +831,7 @@
       padding:24px;
     }
 
-    .refresh-screen.active{
+    .refresh-overlay.active{
       display:flex;
     }
 
@@ -740,6 +939,28 @@
       animation: load 1.05s ease-in-out infinite;
     }
 
+    .hidden{
+      display:none !important;
+    }
+
+    .footer{
+      max-width:var(--max);
+      margin:0 auto;
+      padding: 0 16px 36px;
+      color: rgba(244,247,251,.54);
+      font-size:.92rem;
+    }
+
+    .footer-inner{
+      border-top:1px solid rgba(255,255,255,.08);
+      padding-top:18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+
     @keyframes spin{
       from{ transform:rotate(0deg); }
       to{ transform:rotate(360deg); }
@@ -766,6 +987,11 @@
       to{ transform:translateY(10px) translateX(8px) scale(1.03); }
     }
 
+    @keyframes pageIn{
+      from{ opacity:.35; transform: translateY(8px); }
+      to{ opacity:1; transform: translateY(0); }
+    }
+
     @media (max-width: 1040px){
       .hero{
         grid-template-columns:1fr;
@@ -777,7 +1003,9 @@
         min-height:460px;
       }
 
-      .grid{
+      .grid,
+      .cards,
+      .profile-wrap{
         grid-template-columns:1fr;
       }
 
@@ -798,7 +1026,7 @@
       }
 
       .nav{
-        gap:14px;
+        gap:8px;
       }
 
       .brand-text span{
@@ -824,6 +1052,11 @@
       .card-shell:hover{
         transform:translateY(-2px);
       }
+
+      .redirect-hero{
+        min-height:340px;
+        padding:24px;
+      }
     }
   </style>
 
@@ -831,7 +1064,12 @@
 <body>
   <div class="noise"></div>
 
-  <div class="refresh-screen" id="refreshScreen" aria-hidden="true">
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true">
+    <div class="toast-title" id="toastTitle">Redacted-5</div>
+    <div class="toast-text" id="toastText">Website loaded.</div>
+  </div>
+
+  <div class="refresh-overlay" id="refreshOverlay" aria-hidden="true">
     <div class="refresh-shell">
       <div class="refresh-icon" aria-hidden="true">
         <div class="ring"></div>
@@ -850,151 +1088,228 @@
       <div class="topbar-inner" id="topbar">
         <div class="brand">
           <div class="brand-mark">
-            <img src="RedactedP.png" alt="Redacted-5 icon" />
+            <img id="brandIcon" src="RedactedP.png" alt="Redacted-5 icon" />
           </div>
           <div class="brand-text">
-            <strong>Redacted-5</strong>
-            <span>Premium classified game interface</span>
+            <strong id="siteName">Redacted-5</strong>
+            <span id="siteTagline">Premium classified game interface</span>
           </div>
         </div>
 
 ```
     <nav class="nav" aria-label="Primary">
-      <a href="#home">Home</a>
-      <a href="#about">About</a>
-      <a href="#media">Media</a>
-      <a href="#contact" class="pill">Contact</a>
+      <a href="#home" data-route="home">Home</a>
+      <a href="#updates" data-route="updates">Updates</a>
+      <a href="#game" data-route="game">Game</a>
+      <a href="#playtest" data-route="playtest">Playtest</a>
+      <a href="#creator" data-route="creator">Creator</a>
     </nav>
   </div>
 </header>
 
 <main>
-  <section class="hero" id="home">
-    <div class="hero-copy">
-      <div class="eyebrow">
-        <span class="eyebrow-dot"></span>
-        Classified tactical experience
-      </div>
-
-      <h1>
-        <span class="grad">Redacted-5</span>
-        Is Live.
-      </h1>
-
-      <p class="lead">
-        A cinematic, high-end site built around your game identity: sharp glass panels, soft blur, premium contrast, and a serious classified tone.
-      </p>
-
-      <div class="actions">
-        <a class="button primary" href="#media">Open Media</a>
-        <a class="button secondary" href="#about">Read More</a>
-      </div>
-    </div>
-
-    <div class="showcase">
-      <div class="orb"></div>
-
-      <div class="card-shell" id="shell">
-        <div class="hero-bg"></div>
-
-        <div class="shell-top">
-          <div class="traffic" aria-hidden="true">
-            <span></span><span></span><span></span>
-          </div>
-          <div>Secure Preview</div>
+  <section class="page active" id="page-home">
+    <section class="hero" id="home">
+      <div class="hero-copy">
+        <div class="eyebrow">
+          <span class="eyebrow-dot"></span>
+          <span id="eyebrowText">Classified tactical experience</span>
         </div>
 
-        <div class="panel" style="margin-top:22px;">
-          <div class="mini-title">Mission Brief</div>
-          <div class="mini-text">
-            Built for a darker, more premium look with a blurred top banner, polished depth, and a cinematic background pulled from your image file.
+        <h1>
+          <span class="grad" id="heroTitle">Redacted-5</span>
+          <span id="heroSubtitle">Is Live.</span>
+        </h1>
+
+        <p class="lead" id="heroLead">
+          A cinematic, premium site built around your game identity: blurred chrome, stronger hierarchy, soft motion, and a cleaner classified tone.
+        </p>
+
+        <div class="actions">
+          <a class="button primary" href="#game">Play Game</a>
+          <a class="button secondary" href="#updates">See Updates</a>
+          <a class="button secondary" href="#creator">Creator</a>
+        </div>
+      </div>
+
+      <div class="showcase">
+        <div class="orb"></div>
+
+        <div class="card-shell" id="shell">
+          <div class="hero-bg"></div>
+
+          <div class="shell-top">
+            <div class="traffic" aria-hidden="true">
+              <span></span><span></span><span></span>
+            </div>
+            <div id="previewLabel">Secure Preview</div>
           </div>
 
-          <div class="stats">
-            <div class="stat">
-              <strong>01</strong>
-              <span>Glass UI</span>
+          <div class="panel" style="margin-top:22px;">
+            <div class="mini-title" id="previewTitle">Mission Brief</div>
+            <div class="mini-text" id="previewText">
+              Built to feel more like a studio launch page than a generic game site.
             </div>
-            <div class="stat">
-              <strong>02</strong>
-              <span>Scroll motion</span>
+
+            <div class="stats">
+              <div class="stat">
+                <strong>01</strong>
+                <span>Glass UI</span>
+              </div>
+              <div class="stat">
+                <strong>02</strong>
+                <span>Page routing</span>
+              </div>
+              <div class="stat">
+                <strong>03</strong>
+                <span>Open toast</span>
+              </div>
             </div>
-            <div class="stat">
-              <strong>03</strong>
-              <span>Refresh screen</span>
+          </div>
+
+          <div class="panel" style="margin-top:0;">
+            <div class="mini-title">Interface Quality</div>
+            <div class="mini-text">
+              Strong contrast, cleaner spacing, and a more cinematic card system make the page feel much more complete.
             </div>
           </div>
         </div>
+      </div>
+    </section>
+  </section>
 
-        <div class="panel" style="margin-top:0;">
-          <div class="mini-title">Interface Quality</div>
-          <div class="mini-text">
-            The layout uses restrained motion, layered lighting, and a cleaner composition so it feels much more expensive than a basic fan page.
+  <section class="page" id="page-updates">
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h2 id="updatesTitle">Update Log</h2>
+          <p id="updatesDesc">A structured update page for patch notes, feature drops, and future devlogs.</p>
+        </div>
+        <a class="button secondary" href="#home">Back Home</a>
+      </div>
+
+      <div class="timeline" id="updateTimeline"></div>
+    </section>
+  </section>
+
+  <section class="page" id="page-game">
+    <section class="section">
+      <div class="redirect-box">
+        <div class="redirect-card">
+          <div class="redirect-hero">
+            <div class="redirect-copy">
+              <h2>Launching the game.</h2>
+              <p>
+                You are being redirected to the Roblox experience. If it does not open automatically, press the button below.
+              </p>
+              <div class="redirect-actions">
+                <a class="button primary" id="openGameBtn" href="https://www.roblox.com/games/131283297263046/REDACTED-5" target="_blank" rel="noopener noreferrer">Open Redacted-5</a>
+                <a class="button secondary" href="#home">Cancel</a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   </section>
 
-  <section class="section" id="about">
-    <div class="section-head">
-      <div>
-        <h2>Designed to feel like a real game brand.</h2>
-        <p>Less clutter, more presence. The page uses large typography, soft glass, and a stronger visual hierarchy so Redacted-5 looks polished immediately.</p>
+  <section class="page" id="page-playtest">
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h2>Playtest</h2>
+          <p>Give testers a clean place to check the build, read rules, and contact you without clutter.</p>
+        </div>
+        <a class="button secondary" href="#home">Back Home</a>
       </div>
-    </div>
 
-    <div class="grid">
-      <article class="feature reveal-on-scroll">
-        <div class="icon">✦</div>
-        <h3>Premium Blur</h3>
-        <p>The top banner stays glassy and crisp, like a modern product site instead of a generic game page.</p>
-        <span class="tag">Frozen glass</span>
-      </article>
+      <div class="cards">
+        <article class="list-card">
+          <h3>Open Request</h3>
+          <p>
+            This page can act like a playtest hub. Add your Discord tag, a form link, or a simple request message here.
+          </p>
+        </article>
 
-      <article class="feature reveal-on-scroll">
-        <div class="icon">◌</div>
-        <h3>Cinematic Depth</h3>
-        <p>Layered lights, gradients, and your background image create a stronger sense of atmosphere.</p>
-        <span class="tag">Dark prestige</span>
-      </article>
+        <article class="list-card">
+          <h3>What testers should know</h3>
+          <p>
+            Keep feedback focused on bugs, performance, balance, and map flow. Use this space to post the current testing goal.
+          </p>
+        </article>
+      </div>
 
-      <article class="feature reveal-on-scroll">
-        <div class="icon">↻</div>
-        <h3>Refresh Experience</h3>
-        <p>When the page reloads, users briefly see a custom waiting screen with animation instead of a plain white flash.</p>
-        <span class="tag">Custom loader</span>
-      </article>
-    </div>
+      <div class="media" style="margin-top:18px;">
+        <img src="MovementBackround.png" alt="Redacted-5 playtest background" />
+      </div>
+
+      <div class="cards">
+        <article class="list-card">
+          <h3>Playtest Notice</h3>
+          <p>
+            Every time the website opens, a sleek notification appears at the top. You can edit that message in the config block.
+          </p>
+        </article>
+
+        <article class="list-card">
+          <h3>Quick Actions</h3>
+          <p>
+            Add a “Join Test” button, a whitelist notice, or a changelog snippet here when you are ready.
+          </p>
+        </article>
+      </div>
+    </section>
   </section>
 
-  <section class="section" id="media">
-    <div class="section-head">
-      <div>
-        <h2>Media spotlight</h2>
-        <p>Your screenshot can sit here as a big featured panel if you want the page to feel more like a studio launch site.</p>
+  <section class="page" id="page-creator">
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h2>Creator</h2>
+          <p>About the developer, with a profile embed attempt and a fallback link in case Roblox blocks the iframe.</p>
+        </div>
+        <a class="button secondary" href="#home">Back Home</a>
       </div>
-    </div>
 
-    <div class="media">
-      <img src="MovementBackround.png" alt="Redacted-5 background screenshot" />
-    </div>
-  </section>
+      <div class="profile-wrap">
+        <div class="profile-frame">
+          <iframe
+            src="https://www.roblox.com/users/3028124482/profile"
+            title="Roblox profile for the creator"
+            loading="lazy"
+            referrerpolicy="no-referrer"
+            allow="fullscreen"
+          ></iframe>
+        </div>
 
-  <section class="section" id="contact">
-    <div class="section-head">
-      <div>
-        <h2>Keep expanding it.</h2>
-        <p>This single file already supports your icon, your background image, a custom refresh state, and a much more premium layout.</p>
+        <aside class="profile-note">
+          <h3>About Redacted-5</h3>
+          <p>
+            This is the creator page. Use it for your bio, socials, development notes, or contact links.
+          </p>
+          <p>
+            Roblox may block the embedded profile in some browsers or may refuse iframe display. If that happens, the fallback still gives users a direct path.
+          </p>
+          <ul>
+            <li>Game: Redacted-5</li>
+            <li>Creator profile: linked above</li>
+            <li>Style: premium, cinematic, minimal</li>
+          </ul>
+
+          <div class="actions" style="margin-top:18px;">
+            <a class="button primary" href="https://www.roblox.com/users/3028124482/profile" target="_blank" rel="noopener noreferrer">Open Profile</a>
+            <a class="button secondary" href="#updates">View Updates</a>
+          </div>
+        </aside>
       </div>
-    </div>
+    </section>
   </section>
 </main>
 
 <footer class="footer">
   <div class="footer-inner">
-    <div>Redacted-5</div>
-    <div>Classified. Cinematic. Clean.</div>
+    <div id="footerLeft">Redacted-5</div>
+    <div id="footerRight">Classified. Cinematic. Clean.</div>
   </div>
 </footer>
 ```
@@ -1002,9 +1317,171 @@
   </div>
 
   <script>
+    const CONFIG = {
+      siteName: "Redacted-5",
+      siteTagline: "Premium classified game interface",
+      eyebrowText: "Classified tactical experience",
+      heroTitle: "Redacted-5",
+      heroSubtitle: "Is Live.",
+      heroLead: "A cinematic, premium site built around your game identity: blurred chrome, stronger hierarchy, soft motion, and a cleaner classified tone.",
+      previewLabel: "Secure Preview",
+      previewTitle: "Mission Brief",
+      previewText: "Built to feel more like a studio launch page than a generic game site.",
+      welcomeTitle: "Redacted-5 Loaded",
+      welcomeText: "Welcome back. The site is ready.",
+      updateTitle: "Update Log",
+      updateDesc: "A structured update page for patch notes, feature drops, and future devlogs.",
+      gameUrl: "https://www.roblox.com/games/131283297263046/REDACTED-5",
+      profileUrl: "https://www.roblox.com/users/3028124482/profile",
+      openGameDelayMs: 1200,
+      refreshOverlayMs: 1400,
+      updates: [
+        {
+          badge: "01",
+          title: "Premium UI pass",
+          date: "Latest",
+          text: "The interface now uses a blurred top banner, stronger page structure, and a more cinematic home layout."
+        },
+        {
+          badge: "02",
+          title: "Page routing",
+          date: "Navigation",
+          text: "The site now behaves like a multi-page experience with Home, Updates, Game, Playtest, and Creator pages."
+        },
+        {
+          badge: "03",
+          title: "Playtest hub",
+          date: "Feature",
+          text: "A dedicated playtest page gives you room for tester instructions, request messaging, and future forms."
+        }
+      ]
+    };
+
+    const pages = {
+      home: document.getElementById("page-home"),
+      updates: document.getElementById("page-updates"),
+      game: document.getElementById("page-game"),
+      playtest: document.getElementById("page-playtest"),
+      creator: document.getElementById("page-creator")
+    };
+
+    const navLinks = Array.from(document.querySelectorAll(".nav a"));
     const topbar = document.getElementById("topbar");
     const shell = document.getElementById("shell");
-    const refreshScreen = document.getElementById("refreshScreen");
+    const refreshOverlay = document.getElementById("refreshOverlay");
+    const toast = document.getElementById("toast");
+    const toastTitle = document.getElementById("toastTitle");
+    const toastText = document.getElementById("toastText");
+    const updateTimeline = document.getElementById("updateTimeline");
+    const openGameBtn = document.getElementById("openGameBtn");
+
+    const siteName = document.getElementById("siteName");
+    const siteTagline = document.getElementById("siteTagline");
+    const eyebrowText = document.getElementById("eyebrowText");
+    const heroTitle = document.getElementById("heroTitle");
+    const heroSubtitle = document.getElementById("heroSubtitle");
+    const heroLead = document.getElementById("heroLead");
+    const previewLabel = document.getElementById("previewLabel");
+    const previewTitle = document.getElementById("previewTitle");
+    const previewText = document.getElementById("previewText");
+    const updatesTitle = document.getElementById("updatesTitle");
+    const updatesDesc = document.getElementById("updatesDesc");
+    const footerLeft = document.getElementById("footerLeft");
+    const footerRight = document.getElementById("footerRight");
+    const brandIcon = document.getElementById("brandIcon");
+
+    siteName.textContent = CONFIG.siteName;
+    siteTagline.textContent = CONFIG.siteTagline;
+    eyebrowText.textContent = CONFIG.eyebrowText;
+    heroTitle.textContent = CONFIG.heroTitle;
+    heroSubtitle.textContent = CONFIG.heroSubtitle;
+    heroLead.textContent = CONFIG.heroLead;
+    previewLabel.textContent = CONFIG.previewLabel;
+    previewTitle.textContent = CONFIG.previewTitle;
+    previewText.textContent = CONFIG.previewText;
+    updatesTitle.textContent = CONFIG.updateTitle;
+    updatesDesc.textContent = CONFIG.updateDesc;
+    footerLeft.textContent = CONFIG.siteName;
+    footerRight.textContent = "Classified. Cinematic. Clean.";
+    openGameBtn.href = CONFIG.gameUrl;
+    brandIcon.src = "RedactedP.png";
+
+    function renderUpdates() {
+      updateTimeline.innerHTML = CONFIG.updates.map(item => `
+        <article class="update-item">
+          <div class="update-badge">${item.badge}</div>
+          <div class="update-content">
+            <h4>${item.title}</h4>
+            <span>${item.date}</span>
+            <p>${item.text}</p>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    renderUpdates();
+
+    function showToast(title, text, duration = 3300) {
+      toastTitle.textContent = title;
+      toastText.textContent = text;
+      toast.classList.add("show");
+      clearTimeout(showToast._timer);
+      showToast._timer = setTimeout(() => toast.classList.remove("show"), duration);
+    }
+
+    function showRefreshOverlay(duration = CONFIG.refreshOverlayMs) {
+      refreshOverlay.classList.add("active");
+      refreshOverlay.setAttribute("aria-hidden", "false");
+      window.setTimeout(() => {
+        refreshOverlay.classList.remove("active");
+        refreshOverlay.setAttribute("aria-hidden", "true");
+      }, duration);
+    }
+
+    function setActivePage(pageName) {
+      Object.entries(pages).forEach(([key, el]) => {
+        el.classList.toggle("active", key === pageName);
+      });
+
+      navLinks.forEach(link => {
+        const route = link.getAttribute("data-route");
+        link.classList.toggle("active", route === pageName);
+      });
+
+      if (pageName === "updates") {
+        renderUpdates();
+      }
+
+      if (pageName === "game") {
+        window.setTimeout(() => {
+          window.location.href = CONFIG.gameUrl;
+        }, CONFIG.openGameDelayMs);
+      }
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function routeFromHash() {
+      const hash = (window.location.hash || "#home").replace("#", "");
+      if (pages[hash]) return hash;
+      return "home";
+    }
+
+    window.addEventListener("hashchange", () => {
+      setActivePage(routeFromHash());
+    });
+
+    window.addEventListener("load", () => {
+      setActivePage(routeFromHash());
+      showToast(CONFIG.welcomeTitle, CONFIG.welcomeText);
+      showRefreshOverlay();
+
+      setTimeout(() => {
+        document.querySelectorAll(".feature").forEach((el, index) => {
+          setTimeout(() => el.classList.add("reveal"), index * 120);
+        });
+      }, 150);
+    });
 
     window.addEventListener("scroll", () => {
       if (window.scrollY > 8) topbar.classList.add("shrink");
@@ -1034,41 +1511,12 @@
       }
     }, { threshold: 0.18 });
 
-    document.querySelectorAll(".reveal-on-scroll").forEach((el) => revealObserver.observe(el));
+    document.querySelectorAll(".feature").forEach((el) => revealObserver.observe(el));
 
-    function isReloadNavigation() {
-      try {
-        const nav = performance.getEntriesByType?.("navigation")?.[0];
-        if (nav && nav.type === "reload") return true;
-      } catch (_) {}
-
-      try {
-        return performance.navigation && performance.navigation.type === 1;
-      } catch (_) {
-        return false;
-      }
-    }
-
-    if (isReloadNavigation()) {
-      refreshScreen.classList.add("active");
-      refreshScreen.setAttribute("aria-hidden", "false");
-
-      window.addEventListener("load", () => {
-        setTimeout(() => {
-          refreshScreen.classList.remove("active");
-          refreshScreen.setAttribute("aria-hidden", "true");
-        }, 1450);
-      });
-    }
-
-    // Add a tiny delay so above-the-fold cards animate in if already visible.
-    setTimeout(() => {
-      document.querySelectorAll(".reveal-on-scroll").forEach((el) => {
-        if (el.getBoundingClientRect().top < window.innerHeight * 0.88) {
-          el.classList.add("reveal");
-        }
-      });
-    }, 150);
+    // Keep playtest page and creator page feeling alive by revealing cards.
+    document.querySelectorAll(".list-card, .update-item").forEach((el) => {
+      el.style.opacity = "1";
+    });
   </script>
 
 </body>
