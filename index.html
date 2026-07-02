@@ -1694,61 +1694,48 @@
       CONFIG BLOCK — edit this first.
       UI gate only: real security requires a backend, because pure HTML/JS cannot securely protect login data.
     */
-    const CONFIG = {
-      siteName: "REDACTED-5",
-      brandSubtitle: "Premium classified game interface",
-      heroEyebrow: "Classified tactical experience",
-      heroTitle: "REDACTED-5",
-      heroLead: "A cinematic, high-end site built around your game identity: sharp glass panels, soft blur, premium contrast, and a serious classified tone.",
-      gameUrl: "https://www.roblox.com/games/131283297263046/REDACTED-5",
-      creatorProfileUrl: "https://www.roblox.com/users/3028124482/profile",
-      adminUsers: ["MTF_OPERATOR", "TurtleToed13"],
-      adminKey: "REDACTED5-ADMIN",
-      discordWebhook: "https://discord.com/api/webhooks/1522007954835116193/ucvoDdbwSkBru-IuM00TOMClkFL8kjWAmAMrngSjYF5SLbWFQ9E7UboFfA-sU5vTCEJF",
-      toast: {
-        badge: "Playtest Notice",
-        title: "Playtest access online.",
-        body: "Open the Testing page to check the latest testing notes."
-      },
-      creatorBio: "Put your short bio here. This section is built to look like a premium profile panel instead of a boring text block.",
-      updates: [
-        {
-          date: "Build 01",
-          title: "Premium site overhaul",
-          body: "The interface was rebuilt with a darker cinematic theme, better spacing, glass panels, and stronger motion.",
-          tag: "UI / visual pass"
-        },
-        {
-          date: "Build 02",
-          title: "Pages added",
-          body: "Home, Updates, Testing, Creator, and Game pages now live in one file and switch cleanly by hash.",
-          tag: "Pages / routing"
-        },
-        {
-          date: "Build 03",
-          title: "Launch flow",
-          body: "The Game page now acts like a dedicated launch screen and opens the Roblox game in a new tab.",
-          tag: "Redirect / launch"
-        }
-      ],
-      slides: [
-        {
-          image: "MovementBackround.png",
-          title: "Atmosphere",
-          text: "A dark, premium visual foundation for REDACTED-5."
-        },
-        {
-          image: "MovementBackround.png",
-          title: "Cinematic Motion",
-          text: "Scroll-friendly presentation with a smoother, studio-style feel."
-        },
-        {
-          image: "RedactedP.png",
-          title: "Brand Mark",
-          text: "Your icon sits cleanly in the UI and works as the site identity."
-        }
-      ]
-    };
+const CONFIG = {
+  siteName: "REDACTED-5",
+  brandSubtitle: "Cinematic game experience archive",
+
+  heroEyebrow: "A project by Tristan",
+  heroTitle: "REDACTED-5",
+  heroLead:
+    "A cinematic, high-contrast showcase built around REDACTED-5. Originally developed in Roblox, now expanding into Unreal Engine to push visuals, immersion, and gameplay systems further.",
+
+  gameUrl: "https://www.roblox.com/games/131283297263046/REDACTED-5",
+  creatorProfileUrl: "https://www.roblox.com/users/3028124482/profile",
+
+  adminUsers: ["MTF_OPERATOR", "TurtleToed13"],
+  adminKey: "REDACTED5-ADMIN",
+
+  toast: {
+    badge: "Playtest Notice",
+    title: "Playtest access is active",
+    body: "Open the Testing page to view the latest build notes and changes."
+  },
+
+  creatorBio:
+    "I’m Tristan, a game developer focused on immersive, systems-driven experiences. I started on Roblox and am currently transitioning into Unreal Engine to build higher fidelity, more cinematic projects.",
+
+  updates: [
+    {
+      date: "Build 01",
+      title: "Site Launch / Foundation Build",
+      body:
+        "Initial release of the REDACTED-5 showcase site. Focused on atmosphere, structure, and clean presentation of the project identity.",
+      tag: "UI / foundation"
+    }
+  ],
+
+  slides: [
+    {
+      image: "MovementBackround.png",
+      title: "Motion Revamped",
+      text: "An old game i made, Its just a distant memory."
+    },
+  ]
+};
 
     const STORAGE_KEYS = {
       requests: "redacted5_requests",
