@@ -113,7 +113,7 @@
       gap:12px;
       min-width:0;
     }
-    
+
     .brand-mark{
       width:42px;
       height:42px;
@@ -212,24 +212,17 @@
       color:#08111f;
     }
 
-.page{
-    max-width:var(--max);
-    margin:0 auto;
-    padding:34px 16px 112px;
-    opacity:0;
-    visibility:hidden;
-    pointer-events:none;
-    position:absolute;
-    inset:0;
-    transition:opacity .35s var(--ease);
-}
+    .page{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:34px 16px 112px;
+      display:none;
+      animation: pageIn .35s var(--ease);
+    }
 
-.page.active{
-    position:relative;
-    opacity:1;
-    visibility:visible;
-    pointer-events:auto;
-}
+    .page.active{
+      display:block;
+    }
 
     @keyframes pageIn{
       from{opacity:.02; transform:translateY(10px)}
@@ -1319,7 +1312,7 @@
           </div>
         </div>
 
- 
+```
     <nav class="nav" aria-label="Primary">
       <a href="#home" data-nav="home">Home</a>
       <a href="#updates" data-nav="updates">Updates</a>
@@ -1627,7 +1620,7 @@
         <div class="section-head">
           <div>
             <h2>Creator</h2>
-            <p>A page about the creator.</p>
+            <p>About the developer, the profile embed, and a clean place for basic info.</p>
           </div>
         </div>
 
@@ -1636,10 +1629,10 @@
             <div class="icon">⌁</div>
             <h3 id="creatorName">About the Creator</h3>
             <p id="creatorBio">
-              Hello, My name is Tristan. I create games and other sources of entertainment.
+              Put your short bio here. This section is built to look like a premium profile panel instead of a boring text block.
             </p>
             <div class="actions" style="margin-top:18px;">
-              <a class="button primary" href="https://www.guns.lol/TURTLETOED13" target="_blank" rel="noreferrer">Open Creator's Page</a>
+              <a class="button primary" href="https://www.roblox.com/users/3028124482/profile" target="_blank" rel="noreferrer">Open Roblox Profile</a>
             </div>
           </article>
 
@@ -1653,8 +1646,8 @@
 
         <div class="iframe-shell" style="margin-top:18px;">
           <iframe
-            src="https://guns.lol/TURTLETOED13"
-            title="Creator's Profile Preview"
+            src="https://www.roblox.com/users/3028124482/profile"
+            title="Roblox Creator Profile"
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade">
           </iframe>
@@ -1662,7 +1655,7 @@
 
         <div class="fallback-link">
           If the profile does not load inside the frame, open it here:
-          <a href="https://www.guns.lol/turtletoed13" target="_blank" rel="noreferrer">Creator Profile</a>
+          <a href="https://www.roblox.com/users/3028124482/profile" target="_blank" rel="noreferrer">Roblox Creator Profile</a>
         </div>
       </div>
     </div>
@@ -1692,7 +1685,7 @@
     <div id="footerRight">Classified. Cinematic. Clean.</div>
   </div>
 </footer>
- 
+```
 
   </div>
 
@@ -2016,25 +2009,16 @@
     }
 
     let redirectTimer = null;
-function showPage(name) {
-    pages.forEach(page => {
-        page.classList.toggle("active", page.dataset.page === name);
-    });
+    function showPage(name) {
+      pages.forEach(page => page.classList.toggle("active", page.dataset.page === name));
+      navLinks.forEach(link => link.classList.toggle("active", link.dataset.nav === name));
+      window.scrollTo({ top: 0, behavior: "auto" });
+      document.title = `${CONFIG.siteName} | ${name.charAt(0).toUpperCase() + name.slice(1)}`;
 
-    navLinks.forEach(link => {
-        link.classList.toggle("active", link.dataset.nav === name);
-    });
-
-    document.title = `${CONFIG.siteName} | ${name.charAt(0).toUpperCase() + name.slice(1)}`;
-
-    requestAnimationFrame(() => {
-        window.scrollTo(0, 0);
-    });
-
-    if (name === "game") {
+      if (name === "game") {
         clearTimeout(redirectTimer);
+      }
     }
-}
 
     function route() {
       const page = pageNameFromHash();
