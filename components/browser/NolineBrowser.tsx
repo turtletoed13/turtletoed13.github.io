@@ -103,7 +103,7 @@ export function NolineBrowser() {
 
   const activeVehicle = getVehicleById(vehicleId);
   const activeSite = getSiteById(siteId);
-  const basketItems = basket.map(getVehicleById);
+  const basketItems = basket.map((id) => vehicles.find((vehicle) => vehicle.id === id)).filter((vehicle) => vehicle !== undefined);
 
   function flash(message: string, good = false) {
     setNotice(message);
@@ -183,14 +183,14 @@ export function NolineBrowser() {
       navigateInternal("config");
       return;
     }
-    const route = internalByAddress[value.toLowerCase()];
-    if (route) {
-      navigateInternal(route);
-      return;
-    }
     const site = sites.find((item) => item.domain.toLowerCase() === value.toLowerCase() || item.id === value.toLowerCase() || item.name.toLowerCase() === value.toLowerCase());
     if (site) {
       openSite(site.id);
+      return;
+    }
+    const route = internalByAddress[value.toLowerCase()];
+    if (route) {
+      navigateInternal(route);
       return;
     }
     const vehicle = vehicles.find((item) => item.id === value.toLowerCase() || item.name.toLowerCase() === value.toLowerCase() || item.catalogId.toLowerCase() === value.toLowerCase());
