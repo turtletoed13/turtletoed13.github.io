@@ -1,11 +1,10 @@
 export type RuntimeModelFormat =
   | "glb" | "gltf" | "fbx" | "obj" | "dae" | "3ds"
   | "ply" | "stl" | "amf" | "3mf" | "wrl" | "xyz"
-  | "pcd" | "vox" | "usdz";
+  | "pcd" | "vox" | "usd" | "usda" | "usdc" | "usdz";
 
 export type SourceModelFormat =
-  | "blend" | "max" | "c4d" | "ma" | "mb"
-  | "usd" | "usda" | "usdc";
+  | "blend" | "max" | "c4d" | "ma" | "mb";
 
 export type ModelAsset = {
   vehicleId: string;
