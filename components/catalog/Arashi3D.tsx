@@ -243,7 +243,7 @@ function AssetOrProcedural({
   );
 }
 
-function ModelLoadingOverlay({
+function ArashiModelLoadingOverlay({
   loading,
   authored,
 }: {
@@ -279,7 +279,7 @@ function ModelLoadingOverlay({
   );
 }
 
-function Scene({
+function ArashiScene({
   onLoadingChange,
   onAssetChange,
 }: {
@@ -322,7 +322,7 @@ export function Arashi3D() {
         camera={{ position: [7.5, 4.25, 7.4], fov: 36, near: 0.1, far: 100 }}
         gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
       >
-        <Scene
+        <ArashiScene
           onLoadingChange={handleLoadingChange}
           onAssetChange={handleAssetChange}
         />
@@ -341,7 +341,7 @@ export function Arashi3D() {
         />
       </Canvas>
 
-      <ModelLoadingOverlay loading={loading} authored={authored} />
+      <ArashiModelLoadingOverlay loading={loading} authored={authored} />
 
       <div className="arashi-3d-hint">
         <span>3D</span>
