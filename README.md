@@ -1,35 +1,79 @@
 # NOLINE
 
-NOLINE is the premium in-world browser client for the game.
+**NOLINE** is the premium in-world browser client for the future game.
 
-## Current scope
+## Included now
 
-- Premium dark browser shell
-- Tabs, address bar and service launcher
-- NOLINE home / new-tab experience
-- In-world service directory
-- Local basket and purchase UI
-- No account system
-- No real payment processing
-- Plug-in purchase boundary for the future game backend
-- Responsive desktop/mobile presentation
+- Full dark, glass-heavy browser chrome with responsive desktop/mobile layouts
+- Tabs, address/search bar, navigation controls, service launcher and browser menu
+- Hidden command trigger: type `cmdrun5` into the address bar to reveal the command interface
+- Command search for services and vehicles
+- Local history, bookmarks, basket and browser preferences
+- Service directory with 11 fictional in-world sites
+- Mercury Market storefront
+- Ironclad Exchange for heavy/high-mobility vehicles
+- Aurelion Motors luxury/exotic showroom
+- Dedicated vehicle inspection pages
+- Full digital inspection modal with specifications, factory finishes, feature list and availability
+- Favorites + bookmarks
+- Basket drawer with removal and subtotal
+- Premium checkout flow with loading state, success transition and receipt
+- Purchase UI that turns into a future game handoff instead of inventing an account or payment backend
+- Diagnostics surface for checking local storage, catalog, checkout and future game bridge
 - Reduced-motion support
+- Local persistence via `localStorage`
 
-## Architecture
+## Featured vehicle
 
-The client deliberately keeps game identity and commerce outside the UI.
+**Heavy, *ST-17* Arashi**
 
-`lib/store.ts` is the integration boundary. When the game exists, connect:
+Manufacturer: **Kuroda Heavy Industries**
 
-- account/session state
-- player balance
-- inventory
+Catalog ID: `NOLINE-ARASHI`
+
+The vehicle is intentionally fictional and uses a dedicated inspection experience so the game can later replace the catalog data without rebuilding the UI.
+
+## Plug-in game architecture
+
+The browser does **not** own authoritative currency, inventory, ownership or account state.
+
+The integration boundary is `lib/store.ts`.
+
+At game launch, wire a bridge like:
+
+```ts
+window.NOLINE_GAME_BRIDGE = {
+  purchase: async (context) => {
+    // Call your server-authoritative purchase/economy layer.
+    return gamePurchase(context);
+  },
+  navigate: (url) => {
+    // Optional game-side routing.
+    gameNavigate(url);
+  },
+  getState: () => {
+    // Optional current player/game state.
+    return gameState;
+  },
+};
+```
+
+The existing UI can stay intact while the future game supplies:
+
+- player identity
+- wallet/balance
 - ownership
-- purchases
-- server-authoritative checkout
-- website routing
+- inventory
+- purchase authorization
+- delivery/garage assignment
+- game-side website routing
+- player-specific settings/profile sync
 
-The browser UI should not be trusted with currency or ownership decisions.
+## Current browser behavior
+
+NOLINE is intentionally usable without an account. Browser preferences and lightweight browsing data are local until the game account layer exists.
+
+`cmdrun5` is a real browser command, not placeholder copy.
 
 ## Development
 
@@ -38,14 +82,12 @@ npm install
 npm run dev
 ```
 
-Then open the local Next.js development server.
+The project uses Next.js App Router and a single client-side browser surface so the game integration point stays easy to replace or embed later.
 
 ## Branding
 
 Browser name: **NOLINE**
 
-Vehicle naming format example:
+Vehicle naming example:
 
-**Heavy, ST-17 Arashi**
-
-NOLINE is the browser/product name and is intentionally independent from the future game's account system.
+**Heavy, *ST-17* Arashi**
