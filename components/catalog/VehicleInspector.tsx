@@ -1,10 +1,25 @@
 "use client";
 
-import { ArrowRight, Check, ChevronRight, X, Zap } from "lucide-react";
-import { useRef, useState, type CSSProperties, type MouseEvent } from "react";
+import {
+  ArrowRight,
+  Check,
+  ChevronRight,
+  Gauge,
+  Maximize2,
+  Palette,
+  RotateCw,
+  ShieldCheck,
+  X,
+  Zap,
+  ZoomIn,
+} from "lucide-react";
+import { useState, type CSSProperties } from "react";
 import type { Vehicle } from "../../types/catalog";
+import { Arashi3D } from "./Arashi3D";
 
 const money = (value: number) => "$" + value.toLocaleString("en-US");
+
+type InspectTab = "configure" | "engineering" | "specifications";
 
 export function VehicleInspector({
   vehicle,
@@ -15,123 +30,235 @@ export function VehicleInspector({
   onClose: () => void;
   onPurchase: () => void;
 }) {
-  const stageRef = useRef<HTMLDivElement>(null);
   const [finish, setFinish] = useState(vehicle.colors[0]);
+  const [tab, setTab] = useState<InspectTab>("configure");
 
-  const handleMove = (event: MouseEvent<HTMLDivElement>) => {
-    const stage = stageRef.current;
-    if (!stage) return;
-
-    const rect = stage.getBoundingClientRect();
-    const x = (event.clientX - rect.left) / rect.width;
-    const y = (event.clientY - rect.top) / rect.height;
-
-    stage.style.setProperty("--inspect-x", `${(x * 100).toFixed(1)}%`);
-    stage.style.setProperty("--inspect-y", `${(y * 100).toFixed(1)}%`);
-    stage.style.setProperty("--inspect-tx", `${((x - 0.5) * 16).toFixed(1)}px`);
-    stage.style.setProperty("--inspect-ty", `${((y - 0.5) * 12).toFixed(1)}px`);
-    stage.style.setProperty("--inspect-rx", `${((0.5 - y) * 2).toFixed(2)}deg`);
-    stage.style.setProperty("--inspect-ry", `${((x - 0.5) * 2.6).toFixed(2)}deg`);
-  };
-
-  const handleLeave = () => {
-    const stage = stageRef.current;
-    if (!stage) return;
-    stage.style.setProperty("--inspect-x", "50%");
-    stage.style.setProperty("--inspect-y", "45%");
-    stage.style.setProperty("--inspect-tx", "0px");
-    stage.style.setProperty("--inspect-ty", "0px");
-    stage.style.setProperty("--inspect-rx", "0deg");
-    stage.style.setProperty("--inspect-ry", "0deg");
-  };
+  const isArashi = vehicle.id === "arashi";
+  const primaryStats = vehicle.stats.slice(0, 4);
+  const remainingStats = vehicle.stats.slice(4);
 
   return (
-    <div className="modal-backdrop inspection-backdrop" onMouseDown={(event) => event.currentTarget === event.target && onClose()}>
-      <div className="vehicle-inspector-premium">
-        <div className="inspection-head">
-          <div>
-            <span className="kicker">DIGITAL INSPECTION / {vehicle.manufacturer}</span>
-            <h2>{vehicle.name}</h2>
-          </div>
-          <button className="inspection-close" onClick={onClose} aria-label="Close inspection"><X size={17}/></button>
-        </div>
-
-        <div
-          ref={stageRef}
-          className={`inspection-stage-premium ${vehicle.id === "arashi" ? "inspection-heavy" : ""}`}
-          onMouseMove={handleMove}
-          onMouseLeave={handleLeave}
-        >
-          <div className="inspection-grid"/>
-          <div className="inspection-light"/>
-          <div className="inspection-ring inspection-ring-one"/>
-          <div className="inspection-ring inspection-ring-two"/>
-          <div
-            className="inspection-machine-premium"
-            style={{ "--machine-color": finish } as CSSProperties}
-          >
-            <div
-              className="inspection-machine-art"
-              style={vehicle.image ? { backgroundImage: `url(${vehicle.image})` } : undefined}
-            />
-            <span>{vehicle.id === "arashi" ? "ST-17" : vehicle.brand}</span>
-          </div>
-          <div className="inspection-stage-top">
-            <span>01 / VISUAL SYSTEM</span>
-            <span>{vehicle.catalogId}</span>
-          </div>
-          <div className="inspection-live"><Zap size={11}/><span>LIVE SPEC VIEW</span></div>
-          <div className="inspection-readout"><span>AVAILABILITY</span><strong>{vehicle.stockLabel}</strong></div>
-        </div>
-
-        <div className="inspection-spec-strip">
-          {vehicle.stats.slice(0, 4).map((stat) => (
-            <div key={stat.label}>
-              <span>{stat.label}</span>
-              <strong>{stat.value}</strong>
+    <div
+      className="inspection-studio-backdrop"
+      role="dialog"
+      aria-modal="true"
+      aria-label={`Inspect ${vehicle.name}`}
+      onMouseDown={(event) => event.currentTarget === event.target && onClose()}
+    >
+      <div className="vehicle-inspector-studio">
+        <header className="studio-header">
+          <div className="studio-header-left">
+            <div className="studio-mark"><span>NL</span></div>
+            <div>
+              <div className="studio-breadcrumb">NOLINE / DIGITAL STUDIO / {vehicle.catalogId}</div>
+              <div className="studio-heading-row">
+                <h2>Vehicle inspection</h2>
+                <span className="studio-status"><i /> LIVE</span>
+              </div>
             </div>
-          ))}
-        </div>
+          </div>
+          <button className="studio-close" onClick={onClose} aria-label="Close inspection"><X size={18} /></button>
+        </header>
 
-        <div className="inspection-body-grid">
-          <section className="inspection-finish-panel">
-            <span className="kicker">FINISH</span>
-            <h3>Make it yours.</h3>
-            <p>Select the factory finish before acquisition.</p>
-            <div className="premium-swatches">
-              {vehicle.colors.map((color, index) => (
-                <button
-                  key={color}
-                  onClick={() => setFinish(color)}
-                  className={finish === color ? "selected" : ""}
-                  style={{ "--swatch-color": color } as CSSProperties}
-                  aria-label={`Select finish ${index + 1}`}
-                >
-                  <span/>
-                  {finish === color && <Check size={11}/>}
-                </button>
-              ))}
+        <div className="studio-hero">
+          <section className={`studio-stage ${isArashi ? "studio-stage-heavy" : ""}`}>
+            <div className="studio-stage-backdrop" />
+            <div className="studio-stage-lines" />
+            <div className="studio-stage-orbit orbit-a" />
+            <div className="studio-stage-orbit orbit-b" />
+
+            <div className="studio-stage-label studio-label-top">
+              <span>OBJECT / {vehicle.category.toUpperCase()}</span>
+              <b>01</b>
             </div>
-            <div className="selected-finish"><span>SELECTED FINISH</span><strong>{finish}</strong></div>
+
+            <div className="studio-stage-asset">
+              {isArashi ? (
+                <Arashi3D />
+              ) : (
+                <>
+                  <div
+                    className="studio-flat-model"
+                    style={vehicle.image ? { backgroundImage: `url(${vehicle.image})` } : undefined}
+                  />
+                  <div className="studio-flat-reflection" />
+                </>
+              )}
+            </div>
+
+            <div className="studio-stage-label studio-label-bottom">
+              <span><RotateCw size={11} /> DRAG TO ORBIT</span>
+              <span><ZoomIn size={11} /> SCROLL TO ZOOM</span>
+            </div>
+
+            <div className="studio-corner studio-corner-tl" />
+            <div className="studio-corner studio-corner-tr" />
+            <div className="studio-corner studio-corner-bl" />
+            <div className="studio-corner studio-corner-br" />
           </section>
 
-          <section className="inspection-feature-panel">
-            <span className="kicker">ENGINEERING</span>
-            <h3>What you get.</h3>
-            <div>
-              {vehicle.features.map((feature, index) => (
-                <div key={feature} className="inspection-feature-row">
-                  <span>0{index + 1}</span><Check size={12}/><strong>{feature}</strong><ChevronRight size={11}/>
+          <aside className="studio-command-panel">
+            <div className="studio-command-top">
+              <div>
+                <span className="studio-eyebrow">{vehicle.manufacturer}</span>
+                <h1>{vehicle.name}</h1>
+                <p>{vehicle.tagline}</p>
+              </div>
+              <span className={`studio-category ${isArashi ? "heavy" : ""}`}>{vehicle.category}</span>
+            </div>
+
+            <div className="studio-price">
+              <div>
+                <span>{vehicle.originalPrice ? "CURRENT OFFER" : "CATALOG PRICE"}</span>
+                <strong>{money(vehicle.price)}</strong>
+              </div>
+              {vehicle.saleLabel && <b>{vehicle.saleLabel}</b>}
+            </div>
+
+            <div className="studio-stock">
+              <span className="studio-stock-dot" />
+              <div>
+                <strong>{vehicle.stockLabel}</strong>
+                <small>{vehicle.delivery}</small>
+              </div>
+            </div>
+
+            <div className="studio-primary-stats">
+              {primaryStats.map((stat) => (
+                <div key={stat.label}>
+                  <span>{stat.label}</span>
+                  <strong>{stat.value}</strong>
                 </div>
               ))}
             </div>
-          </section>
+
+            <div className="studio-command-actions">
+              <button className="studio-acquire" onClick={onPurchase}>
+                <span>Continue to acquisition</span>
+                <ArrowRight size={15} />
+              </button>
+              <div className="studio-assurance">
+                <ShieldCheck size={13} />
+                <span>Secure game-server handoff</span>
+              </div>
+            </div>
+          </aside>
         </div>
 
-        <div className="inspection-footer">
-          <div className="inspection-total"><span>TOTAL</span><strong>{money(vehicle.price)}</strong><small>{vehicle.delivery}</small></div>
-          <button className="button blue inspection-buy" onClick={onPurchase}><span>Continue to acquisition</span><ArrowRight size={14}/></button>
+        <div className="studio-toolbar">
+          <div className="studio-tabs" role="tablist" aria-label="Inspection sections">
+            <button className={tab === "configure" ? "active" : ""} onClick={() => setTab("configure")} role="tab" aria-selected={tab === "configure"}>
+              <Palette size={13} /> Configure
+            </button>
+            <button className={tab === "engineering" ? "active" : ""} onClick={() => setTab("engineering")} role="tab" aria-selected={tab === "engineering"}>
+              <Gauge size={13} /> Engineering
+            </button>
+            <button className={tab === "specifications" ? "active" : ""} onClick={() => setTab("specifications")} role="tab" aria-selected={tab === "specifications"}>
+              <Maximize2 size={13} /> Specifications
+            </button>
+          </div>
+          <div className="studio-toolbar-meta">
+            <Zap size={12} />
+            <span>LIVE DIGITAL TWIN</span>
+          </div>
         </div>
+
+        <div className="studio-content">
+          {tab === "configure" && (
+            <section className="studio-config-view">
+              <div className="studio-config-copy">
+                <span className="studio-eyebrow">FACTORY FINISH</span>
+                <h3>Choose the final surface.</h3>
+                <p>Preview the finish before you hand the vehicle to the acquisition flow.</p>
+                <div className="studio-finish-row">
+                  {vehicle.colors.map((color, index) => (
+                    <button
+                      key={color}
+                      className={finish === color ? "selected" : ""}
+                      onClick={() => setFinish(color)}
+                      style={{ "--finish": color } as CSSProperties}
+                      aria-label={`Select finish ${index + 1}`}
+                    >
+                      <span />
+                      {finish === color && <Check size={13} />}
+                    </button>
+                  ))}
+                </div>
+                <div className="studio-selected-finish">
+                  <span>SELECTED FINISH</span>
+                  <strong>{finish.toUpperCase()}</strong>
+                </div>
+              </div>
+
+              <div className="studio-detail-card">
+                <div className="studio-card-head">
+                  <span>VEHICLE PROFILE</span>
+                  <b>{vehicle.catalogId}</b>
+                </div>
+                <div className="studio-profile-grid">
+                  <div><span>Class</span><strong>{vehicle.className}</strong></div>
+                  <div><span>Manufacturer</span><strong>{vehicle.manufacturer}</strong></div>
+                  <div><span>Availability</span><strong>{vehicle.stockLabel}</strong></div>
+                  <div><span>Delivery</span><strong>{vehicle.delivery}</strong></div>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {tab === "engineering" && (
+            <section className="studio-engineering-view">
+              <div className="studio-section-intro">
+                <span className="studio-eyebrow">ENGINEERING</span>
+                <h3>The hardware behind the name.</h3>
+                <p>{vehicle.description}</p>
+              </div>
+              <div className="studio-feature-grid">
+                {vehicle.features.map((feature, index) => (
+                  <div className="studio-feature-item" key={feature}>
+                    <span>0{index + 1}</span>
+                    <div><Check size={13} /><strong>{feature}</strong></div>
+                    <ChevronRight size={14} />
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {tab === "specifications" && (
+            <section className="studio-spec-view">
+              <div className="studio-section-intro">
+                <span className="studio-eyebrow">TECHNICAL DATA</span>
+                <h3>Numbers, without the clutter.</h3>
+                <p>Everything currently published for this catalog object.</p>
+              </div>
+              <div className="studio-spec-grid">
+                {vehicle.stats.map((stat) => (
+                  <div key={stat.label} className="studio-spec-cell">
+                    <span>{stat.label}</span>
+                    <strong>{stat.value}</strong>
+                  </div>
+                ))}
+                {remainingStats.length === 0 && (
+                  <div className="studio-spec-cell studio-spec-note">
+                    <span>STATUS</span>
+                    <strong>FULL DATASET LOADED</strong>
+                  </div>
+                )}
+              </div>
+            </section>
+          )}
+        </div>
+
+        <footer className="studio-footer">
+          <div>
+            <span>ST-17 / NOLINE INSPECTION SYSTEM</span>
+            <small>Configuration is saved for this inspection session.</small>
+          </div>
+          <button className="studio-footer-cta" onClick={onPurchase}>
+            Acquire {vehicle.name}
+            <ArrowRight size={14} />
+          </button>
+        </footer>
       </div>
     </div>
   );
