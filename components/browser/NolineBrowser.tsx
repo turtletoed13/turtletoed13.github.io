@@ -13,7 +13,8 @@ import { MarketPage } from "../pages/MarketPage";
 import { ShowroomPage } from "../pages/ShowroomPage";
 import { SitePage } from "../pages/SitePage";
 import { HistoryPage, BookmarksPage, DownloadsPage, SettingsPage, ConfigPage, DiagnosticsPage } from "../pages/UtilityPages2";
-import { getSiteById, sites } from "../../data/sites";
+import { sites } from "../../data/sites";
+import { getSiteById } from "../../data/site-queries";
 import { browserRoutes } from "../../data/navigation";
 import { getVehicleById, vehicles } from "../../data/vehicle-queries";
 
@@ -237,10 +238,10 @@ export function NolineBrowser() {
     <section className="browser-body">
       {page === "home" && <HomePage onMarket={() => navigateInternal("market")} onServices={() => navigateInternal("services")} onVehicle={() => openVehicle("arashi")} onSite={openSite}/>}
       {page === "services" && <ServicesPage onOpen={openSite}/>}
-      {page === "market" && <MarketPage favorites={favorites} onFavorite={toggleFavorite} onOpenVehicle={openVehicle} onAdd={addVehicle} initialFilter="all"/>}
-      {page === "sale" && <MarketPage favorites={favorites} onFavorite={toggleFavorite} onOpenVehicle={openVehicle} onAdd={addVehicle} initialFilter="sale"/>}
-      {page === "full-price" && <MarketPage favorites={favorites} onFavorite={toggleFavorite} onOpenVehicle={openVehicle} onAdd={addVehicle} initialFilter="full"/>}
-      {page === "special" && <MarketPage favorites={favorites} onFavorite={toggleFavorite} onOpenVehicle={openVehicle} onAdd={addVehicle} initialFilter="special"/>}
+      {page === "market" && <MarketPage favorites={favorites} onFavorite={toggleFavorite} onOpenVehicle={openVehicle} onAdd={addVehicle} onService={(id) => flash("Service request staged for game integration.", true)} initialFilter="all"/>}
+      {page === "sale" && <MarketPage favorites={favorites} onFavorite={toggleFavorite} onOpenVehicle={openVehicle} onAdd={addVehicle} onService={(id) => flash("Service request staged for game integration.", true)} initialFilter="sale"/>}
+      {page === "full-price" && <MarketPage favorites={favorites} onFavorite={toggleFavorite} onOpenVehicle={openVehicle} onAdd={addVehicle} onService={(id) => flash("Service request staged for game integration.", true)} initialFilter="full"/>}
+      {page === "special" && <MarketPage favorites={favorites} onFavorite={toggleFavorite} onOpenVehicle={openVehicle} onAdd={addVehicle} onService={(id) => flash("Service request staged for game integration.", true)} initialFilter="special"/>}
       {page === "showroom" && <ShowroomPage special={siteId === "vanta"} favorites={favorites} onFavorite={toggleFavorite} onOpenVehicle={openVehicle} onAdd={addVehicle}/>}
       {page === "site" && <SitePage site={activeSite} onOpenShowroom={() => setLocation("showroom", activeSite.domain + "/vehicles")} onMarket={() => navigateInternal("market")}/>}
       {page === "vehicle" && <VehicleDetail vehicle={activeVehicle} favorite={favorites.includes(activeVehicle.id)} bookmarked={bookmarks.includes(activeVehicle.id)} onBack={() => navigateInternal("showroom")} onFavorite={() => toggleFavorite(activeVehicle.id)} onBookmark={() => toggleBookmark(activeVehicle.id)} onInspect={() => setInspectOpen(true)} onPurchase={() => setCheckoutVehicle(activeVehicle.id)} onAdd={() => addVehicle(activeVehicle.id)}/>}
