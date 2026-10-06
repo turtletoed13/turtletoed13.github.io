@@ -1,4 +1,5 @@
 import "./globals.css";
+import "./game-client.css";
 
 export const metadata = {
   title: "NOLINE",
