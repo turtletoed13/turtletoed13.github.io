@@ -28,7 +28,7 @@ export type BrowserPage =
 
 type InternalBrowserPage = Exclude<BrowserPage, "site" | "vehicle">;
 
-const internalByAddress: Record<string, BrowserPage> = {
+const internalByAddress: Record<string, InternalBrowserPage> = {
   "noline://home": "home",
   "noline://services": "services",
   "mercury.noline": "market",
