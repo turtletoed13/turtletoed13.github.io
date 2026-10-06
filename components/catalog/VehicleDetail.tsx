@@ -30,7 +30,7 @@ export function VehicleDetail({
     <div className="vehicle-detail-page">
       <div className="detail-top"><button className="back-link" onClick={onBack}><ArrowLeft size={14}/> Back to showroom</button><div className="detail-actions"><button onClick={onBookmark}>{bookmarked ? <BookmarkCheck size={15}/> : <Bookmark size={15}/>}</button><button onClick={onFavorite}>{favorite ? <Heart size={15} fill="currentColor"/> : <Heart size={15}/>}</button><button onClick={() => navigator.clipboard?.writeText(window.location.href)}><Copy size={15}/></button></div></div>
       <div className="detail-hero-grid">
-        <div className={`detail-art ${vehicle.id === "arashi" ? "heavy-detail" : vehicle.specialVehicle ? "special-detail" : ""}`}><div className="detail-machine"><span>{vehicle.id === "arashi" ? "ST-17" : vehicle.brand}</span></div><div className="detail-stamp"><span className={`stock-dot ${vehicle.stock}`}/>{vehicle.stockLabel}</div></div>
+        <div className={`detail-art ${vehicle.id === "arashi" ? "heavy-detail" : vehicle.specialVehicle ? "special-detail" : ""}`} style={vehicle.image ? { backgroundImage: `url(${vehicle.image})` } : undefined}><div className="detail-machine"><span>{vehicle.id === "arashi" ? "ST-17" : vehicle.brand}</span></div><div className="detail-stamp"><span className={`stock-dot ${vehicle.stock}`}/>{vehicle.stockLabel}</div></div>
         <div className="detail-copy">
           <span className="kicker">{vehicle.manufacturer} / {vehicle.className}</span>
           <h1>{vehicle.name}</h1><p className="detail-lead">{vehicle.tagline}</p><p>{vehicle.description}</p>
