@@ -50,7 +50,11 @@ export async function GET(
       const relative = path.relative(vehicleRoot, filePath).split(path.sep).join("/");
       const format = extension as ModelAsset["format"];
       const stem = path.basename(filePath, path.extname(filePath)).toLowerCase();
-      const companion = format === "obj" ? objMaterials.get(stem) : undefined;
+      const sameStemMaterial = format === "obj" ? objMaterials.get(stem) : undefined;
+      const sameDirectoryMaterials = format === "obj"
+        ? allMaterials.filter((material) => path.dirname(material) === path.dirname(filePath))
+        : [];
+      const companion = sameStemMaterial ?? (sameDirectoryMaterials.length === 1 ? sameDirectoryMaterials[0] : undefined);
 
       return {
         vehicleId,
