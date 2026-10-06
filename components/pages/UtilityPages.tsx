@@ -23,7 +23,7 @@ function Shell({ icon: Icon, kicker, title, description, children }: { icon: Luc
   return <div className="page"><div className="page-head"><span className="kicker">{kicker}</span><h1>{title}</h1><p>{description}</p></div><div className="utility-card"><div className="utility-icon"><Icon size={18}/></div>{children}</div></div>;
 }
 
-function Empty({ icon: Icon = Download, title, body }: { icon?: ElementType; title: string; body: string }) {
+function Empty({ icon: Icon = Download, title, body }: { icon?: LucideIcon; title: string; body: string }) {
   return <div className="empty"><span><Icon size={21}/></span><h3>{title}</h3><p>{body}</p></div>;
 }
 
