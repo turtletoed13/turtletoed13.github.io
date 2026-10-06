@@ -2,6 +2,7 @@
 
 import { ChevronDown, Command, Grid2X2, History, Bookmark, Download, Settings, Activity, MoreHorizontal, Plus, RefreshCw, ArrowLeft, ArrowRight, LockKeyhole, ShoppingBag, UserRound, X } from "lucide-react";
 import { sites } from "../../data/sites";
+import type { ElementType } from "react";
 
 export function BrowserChrome({
   title,
@@ -21,7 +22,7 @@ export function BrowserChrome({
   title: string;
   address: string;
   onAddressChange: (value: string) => void;
-  onSubmit: () => void;
+  onSubmit: (value?: string) => void;
   appsOpen: boolean;
   setAppsOpen: (value: boolean) => void;
   menuOpen: boolean;
@@ -64,7 +65,7 @@ export function BrowserChrome({
 
       {appsOpen && <div className="popover apps-popover">
         <div className="popover-title"><span>NOLINE SERVICES</span><button onClick={() => setAppsOpen(false)}><X size={14}/></button></div>
-        <div className="apps-grid">{sites.map((site) => <button key={site.id} onClick={() => { setAppsOpen(false); onAddressChange(site.domain); onSubmit(); }}><span className="app-mark">{site.glyph}</span><b>{site.name}</b><small>{site.category}</small></button>)}</div>
+        <div className="apps-grid">{sites.map((site) => <button key={site.id} onClick={() => { setAppsOpen(false); onAddressChange(site.domain); onSubmit(site.domain); }}><span className="app-mark">{site.glyph}</span><b>{site.name}</b><small>{site.category}</small></button>)}</div>
       </div>}
 
       {menuOpen && <div className="popover browser-popover">
@@ -80,6 +81,6 @@ export function BrowserChrome({
   </>;
 }
 
-function MenuRow({ icon: Icon, text, suffix, onClick }: { icon: typeof History; text: string; suffix?: string; onClick: () => void }) {
+function MenuRow({ icon: Icon, text, suffix, onClick }: { icon: ElementType; text: string; suffix?: string; onClick: () => void }) {
   return <button className="menu-row" onClick={onClick}><Icon size={15}/><span>{text}</span>{suffix && <small>{suffix}</small>}<ChevronDown size={11} style={{ transform: "rotate(-90deg)" }}/></button>;
 }
