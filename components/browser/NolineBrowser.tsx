@@ -16,7 +16,8 @@ import { HistoryPage, BookmarksPage, DownloadsPage, SettingsPage, DiagnosticsPag
 import { sites } from "../../data/sites";
 import { getSiteById } from "../../data/site-queries";
 import { browserRoutes } from "../../data/navigation";
-import { getVehicleById, vehicles } from "../../data/vehicle-queries";
+import { getVehicleById } from "../../data/vehicle-queries";
+import { vehicles } from "../../data/vehicles";
 import { ConfigBrowserPage } from "../pages/ConfigBrowserPage";
 
 export type BrowserPage =
