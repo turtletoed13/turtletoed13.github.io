@@ -236,7 +236,7 @@ export function NolineBrowser() {
     page === "config" ? "NOLINE Configuration" :
     page[0].toUpperCase() + page.slice(1);
 
-  return <main className={`browser ${settings.glass ? "" : "no-glass"} ${settings.compact ? "compact" : ""} ${settings.motion ? "" : "no-motion"}`}>
+  return <main data-client="unreal" className={`browser ${settings.glass ? "" : "no-glass"} ${settings.compact ? "compact" : ""} ${settings.motion ? "" : "no-motion"}`}>
     <div className="ambient ambient-one"/><div className="ambient ambient-two"/>
     <BrowserChrome title={title} address={draft} onAddressChange={(value) => { setDraft(value); setAddressSearch(value); }} onSubmit={(value) => submitAddress(value)} appsOpen={appsOpen} setAppsOpen={setAppsOpen} menuOpen={menuOpen} setMenuOpen={setMenuOpen} basketCount={basket.length} onBasket={() => setBasketOpen(true)} onCommand={() => setCommandOpen(true)} onRoute={navigateInternal} onRefresh={() => flash("Page refreshed", true)}/>
 
