@@ -12,11 +12,12 @@ import { ServicesPage } from "../pages/ServicesPage";
 import { MarketPage } from "../pages/MarketPage";
 import { ShowroomPage } from "../pages/ShowroomPage";
 import { SitePage } from "../pages/SitePage";
-import { HistoryPage, BookmarksPage, DownloadsPage, SettingsPage, ConfigPage, DiagnosticsPage } from "../pages/UtilityPages2";
+import { HistoryPage, BookmarksPage, DownloadsPage, SettingsPage, DiagnosticsPage } from "../pages/UtilityPages";
 import { sites } from "../../data/sites";
 import { getSiteById } from "../../data/site-queries";
 import { browserRoutes } from "../../data/navigation";
 import { getVehicleById, vehicles } from "../../data/vehicle-queries";
+import { ConfigBrowserPage } from "../pages/ConfigBrowserPage";
 
 export type BrowserPage =
   | "home" | "services" | "market" | "sale" | "full-price" | "special"
@@ -167,9 +168,9 @@ export function NolineBrowser() {
     setLocation(next, map[next]);
   }
 
-  function submitAddress(event?: FormEvent) {
+  function submitAddress(valueOverride?: string, event?: FormEvent) {
     event?.preventDefault();
-    const value = draft.trim();
+    const value = (valueOverride ?? draft).trim();
     if (!value) return;
     setAddressSearch("");
     if (value.toLowerCase() === "cmdrun5") {
@@ -233,7 +234,7 @@ export function NolineBrowser() {
 
   return <main className={`browser ${settings.glass ? "" : "no-glass"} ${settings.compact ? "compact" : ""} ${settings.motion ? "" : "no-motion"}`}>
     <div className="ambient ambient-one"/><div className="ambient ambient-two"/>
-    <BrowserChrome title={title} address={draft} onAddressChange={(value) => { setDraft(value); setAddressSearch(value); }} onSubmit={() => submitAddress()} appsOpen={appsOpen} setAppsOpen={setAppsOpen} menuOpen={menuOpen} setMenuOpen={setMenuOpen} basketCount={basket.length} onBasket={() => setBasketOpen(true)} onCommand={() => setCommandOpen(true)} onRoute={navigateInternal} onRefresh={() => flash("Page refreshed", true)}/>
+    <BrowserChrome title={title} address={draft} onAddressChange={(value) => { setDraft(value); setAddressSearch(value); }} onSubmit={(value) => submitAddress(value)} appsOpen={appsOpen} setAppsOpen={setAppsOpen} menuOpen={menuOpen} setMenuOpen={setMenuOpen} basketCount={basket.length} onBasket={() => setBasketOpen(true)} onCommand={() => setCommandOpen(true)} onRoute={navigateInternal} onRefresh={() => flash("Page refreshed", true)}/>
 
     <section className="browser-body">
       {page === "home" && <HomePage onMarket={() => navigateInternal("market")} onServices={() => navigateInternal("services")} onVehicle={() => openVehicle("arashi")} onSite={openSite}/>}
@@ -245,11 +246,11 @@ export function NolineBrowser() {
       {page === "showroom" && <ShowroomPage special={siteId === "vanta"} favorites={favorites} onFavorite={toggleFavorite} onOpenVehicle={openVehicle} onAdd={addVehicle}/>}
       {page === "site" && <SitePage site={activeSite} onOpenShowroom={() => setLocation("showroom", activeSite.domain + "/vehicles")} onMarket={() => navigateInternal("market")}/>}
       {page === "vehicle" && <VehicleDetail vehicle={activeVehicle} favorite={favorites.includes(activeVehicle.id)} bookmarked={bookmarks.includes(activeVehicle.id)} onBack={() => navigateInternal("showroom")} onFavorite={() => toggleFavorite(activeVehicle.id)} onBookmark={() => toggleBookmark(activeVehicle.id)} onInspect={() => setInspectOpen(true)} onPurchase={() => setCheckoutVehicle(activeVehicle.id)} onAdd={() => addVehicle(activeVehicle.id)}/>}
-      {page === "history" && <HistoryPage items={history} onOpen={(url) => { setDraft(url); submitAddress(); }}/>}
+      {page === "history" && <HistoryPage items={history} onOpen={(url) => { setDraft(url); submitAddress(url); }}/>}
       {page === "bookmarks" && <BookmarksPage items={bookmarks} onOpen={openVehicle}/>}
       {page === "downloads" && <DownloadsPage/>}
       {page === "settings" && <SettingsPage settings={settings} setSettings={setSettings}/>}
-      {page === "config" && <ConfigPage/>}
+      {page === "config" && <ConfigBrowserPage/>}
       {page === "diagnostics" && <DiagnosticsPage/>}
     </section>
 
