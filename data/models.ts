@@ -9,7 +9,7 @@ export const runtimeModelFormats: RuntimeModelFormat[] = [
 export const runtimeModelExtensions = new Set<string>(runtimeModelFormats);
 
 export const modelPriority: RuntimeModelFormat[] = [
-  "glb", "gltf", "fbx", "obj", "dae", "usdz", "3ds",
+  "glb", "gltf", "fbx", "obj", "dae", "usd", "usda", "usdc", "usdz", "3ds",
   "3mf", "amf", "ply", "stl", "wrl", "vox", "pcd", "xyz",
 ];
 
