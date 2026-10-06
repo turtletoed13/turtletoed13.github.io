@@ -89,3 +89,16 @@ The browser command surface is address-bar driven:
 `cmdrun5`
 
 This can later expand into commands for navigation, marketplace actions, account features, diagnostics and game-specific tools.
+
+## 3D asset pipeline
+
+Vehicle models live under `public/models/vehicles/<vehicle-id>/`.
+
+NOLINE automatically discovers runtime assets through `/api/models/<vehicle-id>` and selects the highest-priority available asset. GLB/glTF is preferred for production delivery because glTF 2.0 is designed for runtime delivery on the web and supports modern PBR extensions.
+
+The runtime loader layer supports:
+GLB, GLTF, FBX, OBJ + MTL, Collada/DAE, 3DS, 3MF, AMF, VRML/WRL, USD/USDA/USDC/USDZ, PLY, STL, XYZ, PCD and VOX.
+
+Original authoring files are preserved under the vehicle `source/` directory and are intentionally excluded from runtime scanning. This keeps the repository able to retain source masters without shipping authoring projects to the browser.
+
+Imported models are normalized automatically for scale, centering and ground placement, receive the NOLINE showroom lighting treatment, and fall back to the procedural presentation if the asset is missing or fails to load.
