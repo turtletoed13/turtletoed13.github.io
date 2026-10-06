@@ -3,6 +3,7 @@
 import { ArrowLeft, ArrowRight, Bookmark, BookmarkCheck, Check, Copy, Heart, Info, ShoppingBag, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState, type CSSProperties, type MouseEvent } from "react";
 import type { Vehicle } from "../../types/catalog";
+import { Arashi3D } from "./Arashi3D";
 
 const money = (value: number) => "$" + value.toLocaleString("en-US");
 
@@ -140,7 +141,7 @@ export function VehicleDetail({
           <div className="detail-art-noise"/>
           <div className="detail-art-glow"/>
           <div className="detail-art-halo"/>
-          <div className="detail-art-image" style={vehicle.image ? { backgroundImage: `url(${vehicle.image})` } : undefined}/>
+          {vehicle.id === "arashi" ? <Arashi3D /> : <div className="detail-art-image" style={vehicle.image ? { backgroundImage: `url(${vehicle.image})` } : undefined}/>} 
           <div className="detail-art-reflection"/>
           <div className="detail-art-vignette"/>
           <div className="detail-art-topline">
@@ -159,7 +160,7 @@ export function VehicleDetail({
             <span>{vehicle.manufacturer}</span>
             <strong>{vehicle.id === "arashi" ? "ST-17" : vehicle.brand}</strong>
           </div>
-          <div className="detail-art-scroll"><span/><span>Move to explore</span></div>
+          <div className="detail-art-scroll"><span/><span>{vehicle.id === "arashi" ? "Drag the machine" : "Move to explore"}</span></div>
           <div className="detail-art-corners" aria-hidden="true"><i/><i/><i/><i/></div>
         </div>
 
