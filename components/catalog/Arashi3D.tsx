@@ -1,6 +1,6 @@
 "use client";
 
-import { ContactShadows, Float, OrbitControls } from "@react-three/drei";
+import { ContactShadows, Float, OrbitControls, useProgress } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Component, Suspense, useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import * as THREE from "three";
@@ -191,29 +191,45 @@ function ModelLoadingOverlay({
   );
 }
 
-function AssetOrProcedural() {
+function AssetOrProcedural({ onLoadingChange, onAssetChange }: {
+  onLoadingChange: (loading: boolean) => void;
+  onAssetChange: (asset: ModelAsset | null) => void;
+}) {
   const [asset, setAsset] = useState<ModelAsset | null>(null);
-  const [loading, setLoading] = useState(true);
 
-  const ready = useCallback(() => setLoading(false), []);
+  const ready = useCallback(() => onLoadingChange(false), [onLoadingChange]);
 
   useEffect(() => {
     let cancelled = false;
-    const timeout = window.setTimeout(() => setLoading(false), 15000);
+    onLoadingChange(true);
+
+    const timeout = window.setTimeout(() => {
+      if (!cancelled) {
+        onLoadingChange(false);
+        onAssetChange(null);
+      }
+    }, 15000);
 
     fetch("/api/models/arashi", { cache: "no-store" })
-      .then((response) => response.ok ? response.json() as Promise<{ assets?: ModelAsset[] }> : { assets: [] })
+      .then((response) =>
+        response.ok
+          ? response.json() as Promise<{ assets?: ModelAsset[] }>
+          : { assets: [] },
+      )
       .then((result) => {
-        if (!cancelled) {
-          const nextAsset = result.assets?.[0] ?? null;
-          setAsset(nextAsset);
-          if (!nextAsset) setLoading(false);
-        }
+        if (cancelled) return;
+
+        const nextAsset = result.assets?.[0] ?? null;
+        setAsset(nextAsset);
+        onAssetChange(nextAsset);
+
+        if (!nextAsset) onLoadingChange(false);
       })
       .catch(() => {
         if (!cancelled) {
           setAsset(null);
-          setLoading(false);
+          onAssetChange(null);
+          onLoadingChange(false);
         }
       });
 
@@ -221,7 +237,7 @@ function AssetOrProcedural() {
       cancelled = true;
       window.clearTimeout(timeout);
     };
-  }, []);
+  }, [onAssetChange, onLoadingChange]);
 
   const fallback = (
     <Float speed={1.15} rotationIntensity={0.045} floatIntensity={0.18}>
@@ -229,26 +245,108 @@ function AssetOrProcedural() {
     </Float>
   );
 
-  if (!asset) {
-    return (
-      <>
-        {fallback}
-        <ModelLoadingOverlay loading={false} authored={false} />
-      </>
-    );
-  }
+  if (!asset) return fallback;
 
   return (
+    <ModelErrorBoundary fallback={fallback} onError={() => onLoadingChange(false)}>
+      <Suspense fallback={fallback}>
+        <Float speed={1.05} rotationIntensity={0.025} floatIntensity={0.14}>
+          <ImportedPresentation asset={asset} onReady={ready} />
+        </Float>
+      </Suspense>
+    </ModelErrorBoundary>
+  );
+}
+
+function ModelLoadingOverlay({
+  loading,
+  authored,
+}: {
+  loading: boolean;
+  authored: boolean;
+}) {
+  const { progress, item } = useProgress();
+  const percent = Math.max(0, Math.min(100, Math.round(progress)));
+
+  return (
+    <div
+      className={`arashi-model-loader ${loading ? "is-visible" : "is-complete"}`}
+      aria-hidden={!loading}
+      aria-live="polite"
+    >
+      <div className="arashi-loader-panel">
+        <div className="arashi-loader-top">
+          <span>{authored ? "AUTHORED ASSET" : "NOLINE VISUAL ENGINE"}</span>
+          <b>{authored ? "USDZ" : "FALLBACK"}</b>
+        </div>
+        <div className="arashi-loader-title">
+          {authored ? "Initializing vehicle geometry" : "Preparing presentation"}
+        </div>
+        <div className="arashi-loader-track">
+          <i style={{ width: `\${Math.max(8, percent)}%` }} />
+        </div>
+        <div className="arashi-loader-meta">
+          <span>{item ? `LOADING / ${item.split("/").pop()}` : "STREAMING / MATERIALS / LIGHTING"}</span>
+          <strong>{percent > 0 ? `${percent}%` : "LOADING"}</strong>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Scene({
+  onLoadingChange,
+  onAssetChange,
+}: {
+  onLoadingChange: (loading: boolean) => void;
+  onAssetChange: (asset: ModelAsset | null) => void;
+}) {
+  return (
     <>
-      <ModelErrorBoundary fallback={fallback} onError={() => setLoading(false)}>
-        <Suspense fallback={fallback}>
-          <Float speed={1.05} rotationIntensity={0.025} floatIntensity={0.14}>
-            <ImportedPresentation asset={asset} onReady={ready} />
-          </Float>
-        </Suspense>
-      </ModelErrorBoundary>
-      <ModelLoadingOverlay loading={loading} authored />
+      <ambientLight intensity={1.05} />
+      <directionalLight position={[4, 6, 5]} intensity={3.4} color="#e9efff" castShadow />
+      <directionalLight position={[-5, 2, -3]} intensity={1.65} color="#7395ff" />
+      <pointLight position={[0, 2.6, 0]} intensity={5.2} distance={9} color="#8faeff" />
+      <pointLight position={[-4, 1, 2]} intensity={2.1} distance={7} color="#d8e2ff" />
+      <AssetOrProcedural onLoadingChange={onLoadingChange} onAssetChange={onAssetChange} />
+      <ContactShadows position={[0, -0.02, 0]} opacity={0.52} scale={8} blur={2.8} far={5} />
     </>
+  );
+}
+
+export function Arashi3D() {
+  const [loading, setLoading] = useState(true);
+  const [authored, setAuthored] = useState(false);
+
+  const handleLoadingChange = useCallback((value: boolean) => setLoading(value), []);
+  const handleAssetChange = useCallback((asset: ModelAsset | null) => setAuthored(Boolean(asset)), []);
+
+  return (
+    <div className="arashi-3d-shell" aria-label="Interactive 3D model of the ST-17 Arashi">
+      <Canvas
+        dpr={[1, 1.6]}
+        shadows
+        camera={{ position: [7.5, 4.25, 7.4], fov: 36, near: 0.1, far: 100 }}
+        gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
+      >
+        <Scene onLoadingChange={handleLoadingChange} onAssetChange={handleAssetChange} />
+        <OrbitControls
+          enablePan={false}
+          enableZoom
+          minDistance={6.5}
+          maxDistance={11}
+          minPolarAngle={Math.PI / 3.1}
+          maxPolarAngle={Math.PI / 2.02}
+          autoRotate
+          autoRotateSpeed={0.48}
+          enableDamping
+          dampingFactor={0.07}
+          rotateSpeed={0.42}
+        />
+      </Canvas>
+      <ModelLoadingOverlay loading={loading} authored={authored} />
+      <div className="arashi-3d-hint"><span>3D</span><small>Drag to inspect · scroll to zoom</small></div>
+    </div>
   );
 }
 
