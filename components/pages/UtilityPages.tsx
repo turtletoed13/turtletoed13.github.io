@@ -1,7 +1,7 @@
 "use client";
 
-import { ArrowRight, Bookmark, BookmarkCheck, Clock3, Download, History, Settings, ShieldCheck } from "lucide-react";
-import type { Dispatch, ElementType, ReactNode, SetStateAction } from "react";
+import { ArrowRight, Bookmark, BookmarkCheck, Clock3, Download, History, Settings, ShieldCheck, type LucideIcon } from "lucide-react";
+import type { Dispatch, ReactNode, SetStateAction } from "react";
 
 export function HistoryPage({ items, onOpen }: { items: string[]; onOpen: (url: string) => void }) {
   return <Shell icon={History} kicker="BROWSER" title="History" description="Local browsing history until the game identity layer exists.">{items.length ? items.map((url, i) => <button className="utility-row" key={url+i} onClick={() => onOpen(url)}><Clock3 size={15}/><span><strong>{url}</strong><small>Recent NOLINE visit</small></span><ArrowRight size={13}/></button>) : <Empty icon={History} title="Nothing here yet." body="Visit NOLINE services and they will appear here."/>}</Shell>;
@@ -19,7 +19,7 @@ export function SettingsPage({ settings, setSettings }: { settings: { motion: bo
   return <Shell icon={Settings} kicker="BROWSER" title="Settings" description="Presentation preferences are local today and can become profile-backed later."><div className="settings-card"><Setting title="Motion" detail="Smooth transitions, modal reveals and purchase feedback." enabled={settings.motion} onClick={() => setSettings((s) => ({...s,motion:!s.motion}))}/><Setting title="Liquid glass" detail="Translucent browser chrome and layered panels." enabled={settings.glass} onClick={() => setSettings((s) => ({...s,glass:!s.glass}))}/><Setting title="Compact mode" detail="Tighter spacing for smaller displays." enabled={settings.compact} onClick={() => setSettings((s) => ({...s,compact:!s.compact}))}/><div className="settings-note"><ShieldCheck size={14}/> No account system is connected. Preferences remain local.</div></div></Shell>;
 }
 
-function Shell({ icon: Icon, kicker, title, description, children }: { icon: ElementType; kicker: string; title: string; description: string; children: ReactNode }) {
+function Shell({ icon: Icon, kicker, title, description, children }: { icon: LucideIcon; kicker: string; title: string; description: string; children: ReactNode }) {
   return <div className="page"><div className="page-head"><span className="kicker">{kicker}</span><h1>{title}</h1><p>{description}</p></div><div className="utility-card"><div className="utility-icon"><Icon size={18}/></div>{children}</div></div>;
 }
 
