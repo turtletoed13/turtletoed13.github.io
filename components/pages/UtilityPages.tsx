@@ -30,3 +30,9 @@ function Empty({ icon: Icon = Download, title, body }: { icon?: ElementType; tit
 function Setting({ title, detail, enabled, onClick }: { title: string; detail: string; enabled: boolean; onClick: () => void }) {
   return <div className="setting"><div><strong>{title}</strong><p>{detail}</p></div><button className={`switch ${enabled ? "on" : ""}`} onClick={onClick} aria-label={`${title}: ${enabled ? "on" : "off"}`}><span/></button></div>;
 }
+
+
+export function DiagnosticsPage() {
+  return <div className="page"><div className="page-head"><span className="kicker">NOLINE / INTERNAL</span><h1>Diagnostics</h1><p>Browser-side status before the game integration exists.</p></div><div className="diag-grid"><Diag label="Browser shell" value="Operational"/><Diag label="Local storage" value="Available"/><Diag label="Account service" value="Not connected"/><Diag label="Game bridge" value="Awaiting game"/><Diag label="Catalog" value="5 vehicles / 11 services"/><Diag label="Checkout" value="Adapter ready"/></div><div className="diag-log"><div><span/> UI initialized</div><div><span/> Identity intentionally disabled</div><div><span/> Local persistence enabled</div><div><span/> Purchase boundary active</div></div></div>;
+}
+function Diag({ label, value }: { label: string; value: string }) { return <div className="diag"><span>{label}</span><strong>{value}</strong><small className={value === "Operational" || value === "Available" || value === "Adapter ready" ? "good" : ""}>{value === "Operational" || value === "Available" || value === "Adapter ready" ? "READY" : "STATUS"}</small></div>; }
