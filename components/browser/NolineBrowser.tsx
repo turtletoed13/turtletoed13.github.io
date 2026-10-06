@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
+import type { Vehicle } from "../../types/catalog";
 import { BrowserChrome } from "./BrowserChrome";
 import { CommandCenter } from "./CommandCenter";
 import { BasketDrawer } from "./BasketDrawer";
@@ -104,7 +105,7 @@ export function NolineBrowser() {
 
   const activeVehicle = getVehicleById(vehicleId);
   const activeSite = getSiteById(siteId);
-  const basketItems = basket.map((id) => vehicles.find((vehicle) => vehicle.id === id)).filter((vehicle) => vehicle !== undefined);
+  const basketItems = basket.map((id) => vehicles.find((vehicle) => vehicle.id === id)).filter((vehicle): vehicle is Vehicle => Boolean(vehicle));
 
   function flash(message: string, good = false) {
     setNotice(message);
