@@ -220,7 +220,7 @@ export function VehicleDetail({
 
       <div className="detail-metrics-premium" data-reveal="section">
         {vehicle.stats.map((s, index) => (
-          <div key={s.label} className={index === 0 ? "metric-featured" : ""} style={{ "--metric-index": index } as React.CSSProperties}>
+          <div key={s.label} className={index === 0 ? "metric-featured" : ""} style={{ "--metric-index": index } as CSSProperties}>
             <span>{s.label}</span>
             <strong>{s.value}</strong>
             <i aria-hidden="true"/>
