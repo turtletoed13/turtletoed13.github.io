@@ -22,8 +22,8 @@ export function VehicleCard({
   return (
     <article className="catalog-card">
       <Pressable className="catalog-art-button" onClick={onOpen} aria-label={`Inspect ${vehicle.name}`}>
-        <div className={`catalog-art ${vehicle.specialVehicle ? "special-art" : ""}`}>
-          <div className={`vehicle-ghost ${vehicle.category.toLowerCase()} `}><span>{vehicle.id === "arashi" ? "ST-17" : vehicle.brand}</span></div>
+        <div className={`catalog-art ${vehicle.specialVehicle ? "special-art" : ""}`} style={vehicle.image ? { backgroundImage: `url(${vehicle.image})` } : undefined}>
+          <div className={`vehicle-ghost ${vehicle.category.toLowerCase()}`}><span>{vehicle.id === "arashi" ? "ST-17" : vehicle.brand}</span></div>
         </div>
         <div className="catalog-badges">
           {vehicle.specialVehicle && <span className="badge special"><Zap size={11}/> SPECIAL</span>}
