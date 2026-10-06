@@ -25,6 +25,14 @@ export const nolineConfig = {
     showUnavailableStock: true,
     showSpecialVehicles: true,
   },
+  models: {
+    autoDiscover: true,
+    vehicleRoot: "public/models/vehicles",
+    arashiRoot: "public/models/vehicles/arashi",
+    runtimePriority: ["glb", "gltf", "fbx", "obj", "dae", "usd", "usda", "usdc", "usdz"],
+    sourceDirectory: "source",
+    fallbackToProcedural: true,
+  },
   integration: {
     bridgeKey: "NOLINE_GAME_BRIDGE",
     identity: "future",
