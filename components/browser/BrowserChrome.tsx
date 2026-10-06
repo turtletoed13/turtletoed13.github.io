@@ -1,8 +1,7 @@
 "use client";
 
-import { ChevronDown, Command, Grid2X2, History, Bookmark, Download, Settings, Activity, MoreHorizontal, Plus, RefreshCw, ArrowLeft, ArrowRight, LockKeyhole, ShoppingBag, UserRound, X } from "lucide-react";
+import { ChevronDown, Command, Grid2X2, History, Bookmark, Download, Settings, Activity, MoreHorizontal, Plus, RefreshCw, ArrowLeft, ArrowRight, LockKeyhole, ShoppingBag, UserRound, X, type LucideIcon } from "lucide-react";
 import { sites } from "../../data/sites";
-import type { ElementType } from "react";
 
 export function BrowserChrome({
   title,
@@ -81,6 +80,6 @@ export function BrowserChrome({
   </>;
 }
 
-function MenuRow({ icon: Icon, text, suffix, onClick }: { icon: ElementType; text: string; suffix?: string; onClick: () => void }) {
+function MenuRow({ icon: Icon, text, suffix, onClick }: { icon: LucideIcon; text: string; suffix?: string; onClick: () => void }) {
   return <button className="menu-row" onClick={onClick}><Icon size={15}/><span>{text}</span>{suffix && <small>{suffix}</small>}<ChevronDown size={11} style={{ transform: "rotate(-90deg)" }}/></button>;
 }
