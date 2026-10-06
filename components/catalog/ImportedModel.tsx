@@ -94,6 +94,7 @@ function OBJAsset({ asset }: { asset: ModelAsset }) {
 
 function DAEAsset({ asset }: { asset: ModelAsset }) {
   const loaded = useLoader(ColladaLoader, asset.url);
+  if (!loaded?.scene) return null;
   return <ModelObject object={loaded.scene} />;
 }
 
@@ -159,7 +160,9 @@ function PCDAsset({ asset }: { asset: ModelAsset }) {
 
 function VOXAsset({ asset }: { asset: ModelAsset }) {
   const loaded = useLoader(VOXLoader, asset.url);
-  return <ModelObject object={loaded} />;
+  if (!loaded?.scene) return null;
+  const scene = loaded.scene.children[0] ?? loaded.scene;
+  return <ModelObject object={scene} />;
 }
 
 function LoadedAsset({ asset }: { asset: ModelAsset }) {
