@@ -9,6 +9,7 @@ import type { ModelAsset } from "../../types/model";
 
 function Wheel({ x, z }: { x: number; z: number }) {
   const group = useRef<THREE.Group>(null);
+
   useFrame((_, delta) => {
     if (group.current) group.current.rotation.z += delta * 0.28;
   });
@@ -34,6 +35,7 @@ function Wheel({ x, z }: { x: number; z: number }) {
 function ArashiMachine() {
   const root = useRef<THREE.Group>(null);
   const scanner = useRef<THREE.Mesh>(null);
+  const wheelXs = [-2.15, -0.72, 0.72, 2.15];
 
   useFrame((state) => {
     if (!root.current) return;
@@ -49,8 +51,6 @@ function ArashiMachine() {
       material.opacity = 0.16 + (Math.sin(t * 1.35) + 1) * 0.055;
     }
   });
-
-  const wheelXs = [-2.15, -0.72, 0.72, 2.15];
 
   return (
     <group ref={root} rotation={[0.04, -0.42, 0]} scale={1.02}>
@@ -126,7 +126,13 @@ function ArashiMachine() {
   );
 }
 
-function ImportedPresentation({ asset, onReady }: { asset: ModelAsset; onReady: () => void }) {
+function ImportedPresentation({
+  asset,
+  onReady,
+}: {
+  asset: ModelAsset;
+  onReady: () => void;
+}) {
   const root = useRef<THREE.Group>(null);
 
   useEffect(() => {
@@ -135,6 +141,7 @@ function ImportedPresentation({ asset, onReady }: { asset: ModelAsset; onReady: 
 
   useFrame((state) => {
     if (!root.current) return;
+
     const t = state.clock.getElapsedTime();
     root.current.position.y = Math.sin(t * 0.82) * 0.028;
     root.current.rotation.y = Math.sin(t * 0.28) * 0.035;
@@ -148,7 +155,7 @@ function ImportedPresentation({ asset, onReady }: { asset: ModelAsset; onReady: 
 }
 
 class ModelErrorBoundary extends Component<
-  { fallback: ReactNode; children: ReactNode; onError?: () => void },
+  { fallback: ReactNode; children: ReactNode; onError: () => void },
   { failed: boolean }
 > {
   state = { failed: false };
@@ -158,7 +165,7 @@ class ModelErrorBoundary extends Component<
   }
 
   componentDidCatch() {
-    this.props.onError?.();
+    this.props.onError();
   }
 
   render() {
@@ -166,48 +173,26 @@ class ModelErrorBoundary extends Component<
   }
 }
 
-function ModelLoadingOverlay({
-  loading,
-  authored,
+function AssetOrProcedural({
+  onLoadingChange,
+  onAssetChange,
 }: {
-  loading: boolean;
-  authored: boolean;
-}) {
-  return (
-    <div className={`arashi-model-loader ${loading ? "is-visible" : "is-complete"}`} aria-hidden={!loading}>
-      <div className="arashi-loader-panel">
-        <div className="arashi-loader-top">
-          <span>{authored ? "AUTHORED ASSET" : "NOLINE VISUAL ENGINE"}</span>
-          <b>{authored ? "USDZ" : "FALLBACK"}</b>
-        </div>
-        <div className="arashi-loader-title">{authored ? "Initializing vehicle geometry" : "Preparing presentation"}</div>
-        <div className="arashi-loader-track"><i /></div>
-        <div className="arashi-loader-meta">
-          <span>{loading ? "STREAMING / MATERIALS / LIGHTING" : "READY / INTERACTIVE"}</span>
-          <strong>{loading ? "LOADING" : "READY"}</strong>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function AssetOrProcedural({ onLoadingChange, onAssetChange }: {
   onLoadingChange: (loading: boolean) => void;
   onAssetChange: (asset: ModelAsset | null) => void;
 }) {
   const [asset, setAsset] = useState<ModelAsset | null>(null);
-
   const ready = useCallback(() => onLoadingChange(false), [onLoadingChange]);
 
   useEffect(() => {
     let cancelled = false;
+
     onLoadingChange(true);
 
     const timeout = window.setTimeout(() => {
-      if (!cancelled) {
-        onLoadingChange(false);
-        onAssetChange(null);
-      }
+      if (cancelled) return;
+      setAsset(null);
+      onAssetChange(null);
+      onLoadingChange(false);
     }, 15000);
 
     fetch("/api/models/arashi", { cache: "no-store" })
@@ -226,11 +211,11 @@ function AssetOrProcedural({ onLoadingChange, onAssetChange }: {
         if (!nextAsset) onLoadingChange(false);
       })
       .catch(() => {
-        if (!cancelled) {
-          setAsset(null);
-          onAssetChange(null);
-          onLoadingChange(false);
-        }
+        if (cancelled) return;
+
+        setAsset(null);
+        onAssetChange(null);
+        onLoadingChange(false);
       });
 
     return () => {
@@ -283,7 +268,7 @@ function ModelLoadingOverlay({
           {authored ? "Initializing vehicle geometry" : "Preparing presentation"}
         </div>
         <div className="arashi-loader-track">
-          <i style={{ width: `\${Math.max(8, percent)}%` }} />
+          <i style={{ width: `${Math.max(8, percent)}%` }} />
         </div>
         <div className="arashi-loader-meta">
           <span>{item ? `LOADING / ${item.split("/").pop()}` : "STREAMING / MATERIALS / LIGHTING"}</span>
@@ -308,7 +293,10 @@ function Scene({
       <directionalLight position={[-5, 2, -3]} intensity={1.65} color="#7395ff" />
       <pointLight position={[0, 2.6, 0]} intensity={5.2} distance={9} color="#8faeff" />
       <pointLight position={[-4, 1, 2]} intensity={2.1} distance={7} color="#d8e2ff" />
-      <AssetOrProcedural onLoadingChange={onLoadingChange} onAssetChange={onAssetChange} />
+      <AssetOrProcedural
+        onLoadingChange={onLoadingChange}
+        onAssetChange={onAssetChange}
+      />
       <ContactShadows position={[0, -0.02, 0]} opacity={0.52} scale={8} blur={2.8} far={5} />
     </>
   );
@@ -318,8 +306,13 @@ export function Arashi3D() {
   const [loading, setLoading] = useState(true);
   const [authored, setAuthored] = useState(false);
 
-  const handleLoadingChange = useCallback((value: boolean) => setLoading(value), []);
-  const handleAssetChange = useCallback((asset: ModelAsset | null) => setAuthored(Boolean(asset)), []);
+  const handleLoadingChange = useCallback((value: boolean) => {
+    setLoading(value);
+  }, []);
+
+  const handleAssetChange = useCallback((asset: ModelAsset | null) => {
+    setAuthored(Boolean(asset));
+  }, []);
 
   return (
     <div className="arashi-3d-shell" aria-label="Interactive 3D model of the ST-17 Arashi">
@@ -329,7 +322,10 @@ export function Arashi3D() {
         camera={{ position: [7.5, 4.25, 7.4], fov: 36, near: 0.1, far: 100 }}
         gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
       >
-        <Scene onLoadingChange={handleLoadingChange} onAssetChange={handleAssetChange} />
+        <Scene
+          onLoadingChange={handleLoadingChange}
+          onAssetChange={handleAssetChange}
+        />
         <OrbitControls
           enablePan={false}
           enableZoom
@@ -344,51 +340,13 @@ export function Arashi3D() {
           rotateSpeed={0.42}
         />
       </Canvas>
+
       <ModelLoadingOverlay loading={loading} authored={authored} />
-      <div className="arashi-3d-hint"><span>3D</span><small>Drag to inspect · scroll to zoom</small></div>
-    </div>
-  );
-}
 
-function Scene() {
-  return (
-    <>
-      <ambientLight intensity={1.05} />
-      <directionalLight position={[4, 6, 5]} intensity={3.4} color="#e9efff" castShadow />
-      <directionalLight position={[-5, 2, -3]} intensity={1.65} color="#7395ff" />
-      <pointLight position={[0, 2.6, 0]} intensity={5.2} distance={9} color="#8faeff" />
-      <pointLight position={[-4, 1, 2]} intensity={2.1} distance={7} color="#d8e2ff" />
-      <AssetOrProcedural />
-      <ContactShadows position={[0, -0.02, 0]} opacity={0.52} scale={8} blur={2.8} far={5} />
-    </>
-  );
-}
-
-export function Arashi3D() {
-  return (
-    <div className="arashi-3d-shell" aria-label="Interactive 3D model of the ST-17 Arashi">
-      <Canvas
-        dpr={[1, 1.6]}
-        shadows
-        camera={{ position: [7.5, 4.25, 7.4], fov: 36, near: 0.1, far: 100 }}
-        gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-      >
-        <Scene />
-        <OrbitControls
-          enablePan={false}
-          enableZoom
-          minDistance={6.5}
-          maxDistance={11}
-          minPolarAngle={Math.PI / 3.1}
-          maxPolarAngle={Math.PI / 2.02}
-          autoRotate
-          autoRotateSpeed={0.48}
-          enableDamping
-          dampingFactor={0.07}
-          rotateSpeed={0.42}
-        />
-      </Canvas>
-      <div className="arashi-3d-hint"><span>3D</span><small>Drag to inspect · scroll to zoom</small></div>
+      <div className="arashi-3d-hint">
+        <span>3D</span>
+        <small>Drag to inspect · scroll to zoom</small>
+      </div>
     </div>
   );
 }
