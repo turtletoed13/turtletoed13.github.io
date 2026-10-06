@@ -1,10 +1,32 @@
 "use client";
 
 import { ArrowLeft, ArrowRight, Bookmark, BookmarkCheck, Check, Copy, Heart, Info, ShoppingBag, Sparkles } from "lucide-react";
-import { useRef, useState, type CSSProperties, type MouseEvent } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type MouseEvent } from "react";
 import type { Vehicle } from "../../types/catalog";
 
 const money = (value: number) => "$" + value.toLocaleString("en-US");
+
+function useAnimatedPrice(target: number) {
+  const [value, setValue] = useState(0);
+
+  useEffect(() => {
+    let frame = 0;
+    const started = performance.now();
+    const duration = 850;
+
+    const tick = (now: number) => {
+      const progress = Math.min(1, (now - started) / duration);
+      const eased = 1 - Math.pow(1 - progress, 4);
+      setValue(Math.round(target * eased));
+      if (progress < 1) frame = requestAnimationFrame(tick);
+    };
+
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [target]);
+
+  return value;
+}
 
 export function VehicleDetail({
   vehicle,
@@ -27,23 +49,53 @@ export function VehicleDetail({
   onPurchase: () => void;
   onAdd: () => void;
 }) {
+  const pageRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
+  const animatedPrice = useAnimatedPrice(vehicle.price);
   const [copied, setCopied] = useState(false);
+  const savings = vehicle.originalPrice ? vehicle.originalPrice - vehicle.price : 0;
+  const stockTone = vehicle.stock === "limited" ? "limited" : vehicle.stock === "in-stock" ? "available" : "unavailable";
+
+  useEffect(() => {
+    const root = pageRef.current;
+    if (!root) return;
+    const nodes = Array.from(root.querySelectorAll<HTMLElement>("[data-reveal]"));
+    if (!nodes.length) return;
+
+    if (!("IntersectionObserver" in window)) {
+      nodes.forEach((node) => node.classList.add("is-visible"));
+      return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: "0px 0px -9% 0px", threshold: 0.08 });
+
+    nodes.forEach((node) => observer.observe(node));
+    return () => observer.disconnect();
+  }, [vehicle.id]);
 
   const handleMove = (event: MouseEvent<HTMLDivElement>) => {
     const stage = stageRef.current;
     if (!stage) return;
+
     const rect = stage.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
-    const px = ((x / rect.width) * 100).toFixed(2);
-    const py = ((y / rect.height) * 100).toFixed(2);
-    const parallaxX = ((x / rect.width) - 0.5) * 14;
-    const parallaxY = ((y / rect.height) - 0.5) * 10;
-    stage.style.setProperty("--spot-x", `${px}%`);
-    stage.style.setProperty("--spot-y", `${py}%`);
-    stage.style.setProperty("--parallax-x", `${parallaxX.toFixed(2)}px`);
-    stage.style.setProperty("--parallax-y", `${parallaxY.toFixed(2)}px`);
+    const xRatio = x / rect.width;
+    const yRatio = y / rect.height;
+
+    stage.style.setProperty("--spot-x", `${(xRatio * 100).toFixed(2)}%`);
+    stage.style.setProperty("--spot-y", `${(yRatio * 100).toFixed(2)}%`);
+    stage.style.setProperty("--parallax-x", `${((xRatio - 0.5) * 18).toFixed(2)}px`);
+    stage.style.setProperty("--parallax-y", `${((yRatio - 0.5) * 13).toFixed(2)}px`);
+    stage.style.setProperty("--tilt-x", `${((0.5 - yRatio) * 2.2).toFixed(2)}deg`);
+    stage.style.setProperty("--tilt-y", `${((xRatio - 0.5) * 2.8).toFixed(2)}deg`);
   };
 
   const handleLeave = () => {
@@ -53,6 +105,8 @@ export function VehicleDetail({
     stage.style.setProperty("--spot-y", "45%");
     stage.style.setProperty("--parallax-x", "0px");
     stage.style.setProperty("--parallax-y", "0px");
+    stage.style.setProperty("--tilt-x", "0deg");
+    stage.style.setProperty("--tilt-y", "0deg");
   };
 
   const copyLink = async () => {
@@ -63,12 +117,9 @@ export function VehicleDetail({
     } catch {}
   };
 
-  const savings = vehicle.originalPrice ? vehicle.originalPrice - vehicle.price : 0;
-  const stockTone = vehicle.stock === "limited" ? "limited" : vehicle.stock === "in-stock" ? "available" : "unavailable";
-
   return (
-    <div className="vehicle-detail-page">
-      <div className="detail-top">
+    <div ref={pageRef} className="vehicle-detail-page">
+      <div className="detail-top" data-reveal="top">
         <button className="back-link" onClick={onBack}><ArrowLeft size={14}/> Back to showroom</button>
         <div className="detail-breadcrumb">NOLINE / VEHICLES / {vehicle.catalogId}</div>
         <div className="detail-actions">
@@ -84,10 +135,13 @@ export function VehicleDetail({
           className={`detail-art-premium ${vehicle.id === "arashi" ? "heavy-detail" : vehicle.specialVehicle ? "special-detail" : ""}`}
           onMouseMove={handleMove}
           onMouseLeave={handleLeave}
+          data-reveal="hero"
         >
           <div className="detail-art-noise"/>
           <div className="detail-art-glow"/>
+          <div className="detail-art-halo"/>
           <div className="detail-art-image" style={vehicle.image ? { backgroundImage: `url(${vehicle.image})` } : undefined}/>
+          <div className="detail-art-reflection"/>
           <div className="detail-art-vignette"/>
           <div className="detail-art-topline">
             <span className="detail-art-index">01</span>
@@ -105,34 +159,35 @@ export function VehicleDetail({
             <span>{vehicle.manufacturer}</span>
             <strong>{vehicle.id === "arashi" ? "ST-17" : vehicle.brand}</strong>
           </div>
-          <div className="detail-art-scroll"><span/> Drag to explore</div>
+          <div className="detail-art-scroll"><span/><span>Move to explore</span></div>
+          <div className="detail-art-corners" aria-hidden="true"><i/><i/><i/><i/></div>
         </div>
 
         <div className="detail-copy-premium">
-          <div className="detail-copy-intro">
+          <div className="detail-copy-intro" data-reveal="copy">
             <div className="detail-overline"><span className="pulse"/>{vehicle.manufacturer} / {vehicle.className}</div>
             <h1>{vehicle.name}</h1>
             <p className="detail-lead">{vehicle.tagline}</p>
             <p className="detail-description">{vehicle.description}</p>
           </div>
 
-          <div className="detail-price-card">
+          <div className="detail-price-card" data-reveal="copy">
             <div>
               <span className="price-label">{vehicle.originalPrice ? "CURRENT OFFER" : vehicle.specialVehicle ? "PRIVATE CATALOG" : "CATALOG PRICE"}</span>
               <div className="detail-pricing-premium">
                 {vehicle.originalPrice && <del>{money(vehicle.originalPrice)}</del>}
-                <strong>{money(vehicle.price)}</strong>
+                <strong aria-label={`Price ${money(vehicle.price)}`}>{money(animatedPrice)}</strong>
               </div>
             </div>
             {vehicle.saleLabel && <div className="price-badge"><span>{vehicle.saleLabel}</span>{savings > 0 && <small>Save {money(savings)}</small>}</div>}
           </div>
 
-          <div className="detail-stock-line">
+          <div className="detail-stock-line" data-reveal="copy">
             <div><span className={`stock-beacon ${stockTone}`}/><strong>{vehicle.stockLabel}</strong></div>
             <span>{vehicle.delivery}</span>
           </div>
 
-          <div className="detail-ctas-premium">
+          <div className="detail-ctas-premium" data-reveal="copy">
             <button className="button blue large purchase-primary" onClick={onPurchase}>
               <span><Sparkles size={14}/> Acquire {vehicle.name}</span>
               <ArrowRight size={15}/>
@@ -140,12 +195,12 @@ export function VehicleDetail({
             <button className="button secondary large" onClick={onAdd}><ShoppingBag size={14}/> Add to basket</button>
           </div>
 
-          <button className="inspect-link-premium" onClick={onInspect}>
+          <button className="inspect-link-premium" onClick={onInspect} data-reveal="copy">
             <span><Info size={14}/><b>Explore every detail</b><small>Digital inspection · finishes · specifications</small></span>
             <ArrowRight size={14}/>
           </button>
 
-          <div className="detail-trust">
+          <div className="detail-trust" data-reveal="copy">
             <span>SECURE GAME-SERVER HANDOFF</span>
             <i/>
             <span>NO ACCOUNT REQUIRED TO BROWSE</span>
@@ -153,16 +208,54 @@ export function VehicleDetail({
         </div>
       </section>
 
-      <div className="detail-metrics-premium">
+      <div className="detail-buy-dock" data-reveal="dock">
+        <div className="buy-dock-copy">
+          <span className={`stock-beacon ${stockTone}`}/>
+          <div><strong>{vehicle.name}</strong><small>{vehicle.stockLabel} · {vehicle.delivery}</small></div>
+        </div>
+        <div className="buy-dock-price">{money(vehicle.price)}</div>
+        <button className="button blue dock-buy" onClick={onPurchase}><span>Acquire</span><ArrowRight size={14}/></button>
+      </div>
+
+      <div className="detail-metrics-premium" data-reveal="section">
         {vehicle.stats.map((s, index) => (
-          <div key={s.label} className={index === 0 ? "metric-featured" : ""}>
+          <div key={s.label} className={index === 0 ? "metric-featured" : ""} style={{ "--metric-index": index } as React.CSSProperties}>
             <span>{s.label}</span>
             <strong>{s.value}</strong>
+            <i aria-hidden="true"/>
           </div>
         ))}
       </div>
 
-      <section className="detail-editorial">
+      <section className="detail-story" data-reveal="section">
+        <div className="detail-story-heading">
+          <span className="kicker">THE EXPERIENCE</span>
+          <h2>It should feel exceptional<br/><em>before you own it.</em></h2>
+          <p>Every part of this page is designed around the same idea as the machine itself: restraint, precision and a sense that nothing was placed here by accident.</p>
+        </div>
+        <div className="experience-rail">
+          <article className="experience-card experience-card-large">
+            <span className="experience-number">A</span>
+            <div className="experience-icon"><Sparkles size={16}/></div>
+            <strong>Presence</strong>
+            <p>The visual system lets the vehicle stay quiet while the details do the convincing.</p>
+          </article>
+          <article className="experience-card">
+            <span className="experience-number">B</span>
+            <div className="experience-icon"><ArrowRight size={16}/></div>
+            <strong>Response</strong>
+            <p>Every primary action moves, answers and settles back into place.</p>
+          </article>
+          <article className="experience-card">
+            <span className="experience-number">C</span>
+            <div className="experience-icon"><Check size={16}/></div>
+            <strong>Confidence</strong>
+            <p>Price, availability and delivery stay visible so the decision feels effortless.</p>
+          </article>
+        </div>
+      </section>
+
+      <section className="detail-editorial" data-reveal="section">
         <div className="detail-editorial-head">
           <div><span className="kicker">THE MACHINE</span><h2>Every number has a purpose.</h2></div>
           <p>Designed as a complete object—not a pile of features. The details below are the reasons this vehicle feels different when you actually live with it.</p>
@@ -194,10 +287,10 @@ export function VehicleDetail({
         </div>
       </section>
 
-      <div className="detail-bottom-cta">
+      <section className="detail-bottom-cta" data-reveal="section">
         <div><span className="kicker">NOLINE CATALOG</span><strong>Make this the next vehicle in your world.</strong></div>
         <div><span>{money(vehicle.price)}</span><button className="button blue" onClick={onPurchase}>Purchase <ArrowRight size={14}/></button></div>
-      </div>
+      </section>
 
       <div className="detail-footer-line"><span>{vehicle.catalogId}</span><span>© NOLINE / 2026</span></div>
     </div>
