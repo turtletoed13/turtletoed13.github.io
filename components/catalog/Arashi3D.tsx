@@ -194,6 +194,8 @@ function AssetOrProcedural({
     onLoadingChange(true);
     onAssetChange(ARASHI_ASSET);
   }, [onAssetChange, onLoadingChange]);
+  const asset = ARASHI_ASSET;
+
   const fallback = (
     <Float speed={1.15} rotationIntensity={0.045} floatIntensity={0.18}>
       <ArashiMachine />
