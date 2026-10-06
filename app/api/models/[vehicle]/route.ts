@@ -36,8 +36,9 @@ export async function GET(
   const vehicleRoot = path.join(ROOT, vehicleId);
   const files = await collectFiles(vehicleRoot);
   const objMaterials = new Map<string, string>();
+  const allMaterials = files.filter((filePath) => path.extname(filePath).toLowerCase() === ".mtl");
 
-  for (const filePath of files) {
+  for (const filePath of allMaterials) {
     if (path.extname(filePath).toLowerCase() !== ".mtl") continue;
     objMaterials.set(path.basename(filePath, path.extname(filePath)).toLowerCase(), filePath);
   }
