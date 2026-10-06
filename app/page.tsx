@@ -314,7 +314,7 @@ export default function Noline() {
       </section>
 
       <section className="browser-body">
-        {page === "home" && <Home onMarket={() => go("market")} onSites={() => go("sites")} onVehicle={openVehicle} onSite={openSite}/>}
+        {page === "home" && <HomePage onMarket={() => go("market")} onSites={() => go("sites")} onVehicle={openVehicle} onSite={openSite}/>}
         {page === "sites" && <Directory onOpen={openSite}/>}
         {page === "market" && <Market onOpen={openVehicle} favorites={favorites} onFavorite={toggleFavorite} onAdd={addBasket}/>}
         {page === "showroom" && <Showroom site={getSite(site)} onOpen={openVehicle} favorites={favorites} onFavorite={toggleFavorite} onAdd={addBasket}/>}
@@ -335,7 +335,7 @@ export default function Noline() {
   );
 }
 
-function Home({ onMarket, onSites, onVehicle, onSite }: { onMarket: () => void; onSites: () => void; onVehicle: (id: string) => void; onSite: (id: string) => void }) {
+function HomePage({ onMarket, onSites, onVehicle, onSite }: { onMarket: () => void; onSites: () => void; onVehicle: (id: string) => void; onSite: (id: string) => void }) {
   return <div className="page home-page">
     <div className="hero">
       <div className="eyebrow"><span className="pulse"/> NOLINE NETWORK / ONLINE</div>
