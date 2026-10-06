@@ -173,6 +173,14 @@ class ModelErrorBoundary extends Component<
   }
 }
 
+const ARASHI_ASSET: ModelAsset = {
+  vehicleId: "arashi",
+  url: "/models/vehicles/arashi/Armored_car_death_race.usdz",
+  filename: "Armored_car_death_race.usdz",
+  extension: "usdz",
+  format: "usdz",
+};
+
 function AssetOrProcedural({
   onLoadingChange,
   onAssetChange,
@@ -180,50 +188,12 @@ function AssetOrProcedural({
   onLoadingChange: (loading: boolean) => void;
   onAssetChange: (asset: ModelAsset | null) => void;
 }) {
-  const [asset, setAsset] = useState<ModelAsset | null>(null);
   const ready = useCallback(() => onLoadingChange(false), [onLoadingChange]);
 
   useEffect(() => {
-    let cancelled = false;
-
     onLoadingChange(true);
-
-    const timeout = window.setTimeout(() => {
-      if (cancelled) return;
-      setAsset(null);
-      onAssetChange(null);
-      onLoadingChange(false);
-    }, 15000);
-
-    fetch("/api/models/arashi", { cache: "no-store" })
-      .then((response) =>
-        response.ok
-          ? response.json() as Promise<{ assets?: ModelAsset[] }>
-          : { assets: [] },
-      )
-      .then((result) => {
-        if (cancelled) return;
-
-        const nextAsset = result.assets?.[0] ?? null;
-        setAsset(nextAsset);
-        onAssetChange(nextAsset);
-
-        if (!nextAsset) onLoadingChange(false);
-      })
-      .catch(() => {
-        if (cancelled) return;
-
-        setAsset(null);
-        onAssetChange(null);
-        onLoadingChange(false);
-      });
-
-    return () => {
-      cancelled = true;
-      window.clearTimeout(timeout);
-    };
+    onAssetChange(ARASHI_ASSET);
   }, [onAssetChange, onLoadingChange]);
-
   const fallback = (
     <Float speed={1.15} rotationIntensity={0.045} floatIntensity={0.18}>
       <ArashiMachine />
