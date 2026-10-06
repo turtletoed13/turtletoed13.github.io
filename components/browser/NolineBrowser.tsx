@@ -26,6 +26,8 @@ export type BrowserPage =
   | "showroom" | "site" | "vehicle" | "history" | "bookmarks" | "downloads"
   | "settings" | "config" | "diagnostics";
 
+type InternalBrowserPage = Exclude<BrowserPage, "site" | "vehicle">;
+
 const internalByAddress: Record<string, BrowserPage> = {
   "noline://home": "home",
   "noline://services": "services",
@@ -49,8 +51,8 @@ export function NolineBrowser() {
   const [page, setPage] = useState<BrowserPage>("home");
   const [siteId, setSiteId] = useState("aurelion");
   const [vehicleId, setVehicleId] = useState("arashi");
-  const [address, setAddress] = useState(browserRoutes.home);
-  const [draft, setDraft] = useState(browserRoutes.home);
+  const [address, setAddress] = useState<string>(browserRoutes.home);
+  const [draft, setDraft] = useState<string>(browserRoutes.home);
   const [commandOpen, setCommandOpen] = useState(false);
   const [appsOpen, setAppsOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -151,8 +153,8 @@ export function NolineBrowser() {
     setAppsOpen(false);
   }
 
-  function navigateInternal(next: BrowserPage) {
-    const map: Record<Exclude<BrowserPage, "vehicle" | "site">, string> = {
+  function navigateInternal(next: InternalBrowserPage) {
+    const map: Record<InternalBrowserPage, string> = {
       home: browserRoutes.home,
       services: browserRoutes.services,
       market: browserRoutes.market,
