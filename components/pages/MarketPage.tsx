@@ -1,7 +1,7 @@
 "use client";
 
 import { Check } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { saleVehicles, regularVehicles, specialVehicles, vehicles } from "../../data/vehicles";
 import { products } from "../../data/products";
 import type { Vehicle } from "../../types/catalog";
@@ -11,6 +11,7 @@ type Filter = "all" | "sale" | "full" | "special";
 
 export function MarketPage({ favorites, onFavorite, onOpenVehicle, onAdd, onService, initialFilter = "all" }: { favorites: string[]; onFavorite: (id: string) => void; onOpenVehicle: (id: string) => void; onAdd: (id: string) => void; onService?: (id: string) => void; initialFilter?: Filter }) {
   const [filter, setFilter] = useState<Filter>(initialFilter);
+  useEffect(() => setFilter(initialFilter), [initialFilter]);
   const [query, setQuery] = useState("");
   const shown: Vehicle[] = useMemo(() => {
     const source = filter === "sale" ? saleVehicles : filter === "full" ? regularVehicles : filter === "special" ? specialVehicles : vehicles;
