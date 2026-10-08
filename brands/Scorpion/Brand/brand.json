@@ -1,0 +1,10 @@
+{
+  "id": "scorpion",
+  "displayName": "Scorpion",
+  "legalName": "Scorpion Automotive Dealership & Performance",
+  "domain": "scorpion.eyefind",
+  "category": "Automotive",
+  "logo": "logo.svg",
+  "visualAssetsDirectory": "images/",
+  "notes": "Brand-level artwork, logos, photography, dealership identity and approved visual assets live in this folder."
+}

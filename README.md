@@ -1,142 +1,103 @@
-# NOLINE
+# EYEFIND
 
-Premium in-world browser client for the future game.
+EYEFIND is a dark, premium, responsive in-world directory for fictional city destinations — inspired by the usefulness of a game-world web portal, with a calmer editorial interface.
 
-## Repository layout
+The published site is a static app and runs directly on GitHub Pages. There is no package install or build step.
 
-```
-app/
-  page.tsx                 # browser entry
-  config/page.tsx          # standalone configuration view
+## Current destinations
 
-components/
-  animations/              # reusable motion primitives
-    FadeScale.tsx
-    Pressable.tsx
-  browser/                 # browser chrome + orchestration
-    BrowserChrome.tsx
-    BasketDrawer.tsx
-    CheckoutModal.tsx
-    CommandCenter.tsx
-    NolineBrowser.tsx
-  catalog/                 # vehicle commerce UI
-    VehicleCard.tsx
-    VehicleDetail.tsx
-    VehicleInspector.tsx
-  pages/                   # product/site/browser pages
-    HomePage.tsx
-    ServicesPage.tsx
-    MarketPage.tsx
-    ShowroomPage.tsx
-    SitePage.tsx
-    UtilityPages.tsx
-    ConfigBrowserPage.tsx
+Only these two destinations are registered:
 
-config/
-  noline.config.ts         # central behavior/integration config
+- **MORSA** — Military Ordnance, Restricted Stock & Acquisition
+- **Scorpion** — Scorpion Automotive Dealership & Performance
 
-data/
-  navigation.ts             # browser route registry
-  sites.ts                  # in-world website registry
-  site-queries.ts           # website lookup helpers
-  vehicles.ts               # vehicle catalog
-  vehicle-queries.ts        # vehicle lookup/search helpers
-  sales.ts                  # on-sale/full-price/special groupings
-  products.ts               # non-vehicle commerce
+Their catalogues intentionally start empty. No extra brands or placeholder vehicles are shown as real listings. New listings appear when their asset folders are registered in the relevant brand config.
 
-public/images/vehicles/     # catalog artwork assets
+## Project layout
 
-types/
-  catalog.ts                # shared catalog/site types
+    index.html                  EYEFIND app entry
+    styles.css                  responsive visual system, motion and browser styles
+    app.js                      search, routes, saved destinations and catalogue renderer
+    favicon.svg                 site icon
+    404.html                    branded not-found page
+    brands/
+      registry.js               registered destinations
+      resolve-config.js         shared brand/generated listing config resolver
+      MORSA/
+        config.js               MORSA identity + catalog defaults
+        Brand/
+          brand.json            identity metadata
+          logo.svg              brand mark
+          images/               brand-level artwork and identity images
+        Assets/
+          _TEMPLATE/
+            config.js           copy this for each listing
+            model/              3D model slot
+            images/             listing previews and gallery
+          <listing-id>/         one folder per real listing
+            config.js
+            model/
+            images/
+      Scorpion/
+        config.js
+        Brand/
+        Assets/
+          _TEMPLATE/
+          <listing-id>/
 
-lib/
-  store.ts                  # purchase + future game bridge
-```
+## Add a listing
 
-## Browser features
+1. Copy the relevant brand's Assets/_TEMPLATE directory to a new folder. Use a lowercase URL-safe ID, for example sport-coupe-01.
+2. Edit the new folder's config.js. Set its id, name, catalogue ID, description, price, sale flags, stock status and model path.
+3. Put a browser-ready GLB/glTF file in that listing's model/ folder. The default model path is model/model.glb. Place the preview image at images/preview.webp, or change poster and images in the config.
+4. Add the folder ID to the assets array in the parent brand's config.js.
 
-NOLINE currently includes browser chrome, tabs, address/search behavior, services, command center, history, bookmarks, downloads, settings, diagnostics, local persistence, catalog filters, full vehicle inspection and checkout.
+The app imports configured listing files, resolves their settings, and builds the catalogue automatically. Unregistered folders — including _TEMPLATE — are not treated as live inventory.
 
-### Command trigger
+## Brand config vs. generated config
 
-Type:
+Each brand's config.js exposes a single catalog mode switch:
 
-`cmdrun5`
+    catalog: {
+      configSource: "generated",
+      generatedConfig: {
+        descriptionTemplate: "{name} is part of the {brandName} catalogue.",
+        visible: true,
+        onSale: false,
+        salePercent: 0,
+        price: null,
+        stockStatus: "Available"
+      }
+    }
 
-into the NOLINE address bar.
+Set catalog.configSource to:
 
-It opens the command interface. `⌘K` / `Ctrl+K` is also supported.
+- **brand** — a listing's own Assets/<id>/config.js controls its description, visibility, sale state, pricing overrides, stock status and badge.
+- **generated** — the brand's generatedConfig controls shared defaults including generated descriptions, visibility, on-sale state and sale percentage.
 
-### Catalog states
+Each listing can override the brand-wide switch using configSource: "inherit", "brand" or "generated". Inherit is the normal choice. In generated mode, a null generated price falls back to the listing's configured price; generated sale and visibility settings remain authoritative. This is what makes the on-sale controls predictable across an entire brand.
 
-Mercury Market has explicit sections for:
+The shared resolver is brands/resolve-config.js. Keep brand-specific identity and defaults in the brand config, and item-specific model paths and metadata in the item's own config.
 
-- **On sale**
-- **Full price**
-- **Special vehicles**
+## Brand files vs. listing assets
 
-Every vehicle carries a stable catalog ID, manufacturer, class, stock state, price, optional original price, sale metadata, tags, specs, features, factory finishes and artwork.
+- Brand/ holds a destination's identity: logos, campaign imagery, wordmarks, textures and reference artwork.
+- Assets/<listing-id>/ holds one vehicle or stock listing: its config, 3D model, preview poster and product images.
+- Assets/_TEMPLATE/ is a starter folder, not a published product.
 
-Featured special vehicle:
+For interactive 3D previews, the site lazy-loads Google's model-viewer component only when a listing includes a model. GLB is the simplest portable format; use compatible glTF files when their referenced resources are available at their configured paths.
 
-**Heavy, *ST-17* Arashi**
+## Add another brand later
 
-Manufacturer:
+Create its own config.js, Brand/ and Assets/ tree following either existing destination as the template. Then import the new config and add it to the brands array in brands/registry.js. Do not place listing configuration in the registry; the registry only discovers destinations.
 
-**Kuroda Heavy Industries**
+## UX features
 
-### Purchase architecture
+- Responsive directory, search and category filtering
+- Search by destination name, official name, category, domain and description
+- Direct shareable routes using hash URLs
+- Local Saved destinations, stored only in the current browser
+- Accessible focus states, reduced-motion support, responsive layouts and no-build static deployment
+- Brand-specific pages with generated catalogue entries and interactive 3D viewer support
 
-The UI never becomes the authority for currency, inventory or ownership.
-
-`lib/store.ts` is the handoff boundary. The future game can install:
-
-```ts
-window.NOLINE_GAME_BRIDGE = {
-  purchase: async (context) => gamePurchase(context),
-  navigate: (url) => gameNavigate(url),
-  getState: () => gameState,
-};
-```
-
-That lets the game provide identity, wallet, inventory, ownership, delivery and server-authoritative purchasing later without rebuilding the browser.
-
-## Configuration
-
-Central browser behavior lives in:
-
-`config/noline.config.ts`
-
-The dedicated configuration view is available at:
-
-`/config`
-
-The in-browser route is:
-
-`noline://config`
-
-## Design system
-
-NOLINE is intentionally dark, restrained and spatial:
-
-- obsidian/graphite surfaces instead of flat gray
-- layered liquid glass browser chrome
-- subtle blur and saturation
-- restrained edge lighting
-- blue interaction states for actionable controls
-- dimmed unavailable states
-- press feedback
-- pop/slide/reveal motion
-- reduced-motion support
-- responsive layouts
-
-The animation primitives are isolated under `components/animations`, so additional motion can be added without scattering animation logic throughout the catalog.
-
-## Development
-
-```bash
-npm install
-npm run dev
-```
-
-NOLINE has no account system yet. Browser preferences and lightweight browsing state are local until the future game identity layer is connected.
+Purchases, inventory ownership and in-game delivery are not simulated by EYEFIND. Those require a future game/server integration.

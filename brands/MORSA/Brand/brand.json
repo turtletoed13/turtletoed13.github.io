@@ -1,0 +1,10 @@
+{
+  "id": "morsa",
+  "displayName": "MORSA",
+  "legalName": "MORSA — Military Ordnance, Restricted Stock & Acquisition",
+  "domain": "morsa.eyefind",
+  "category": "Specialist supply",
+  "logo": "logo.svg",
+  "visualAssetsDirectory": "images/",
+  "notes": "Brand-level artwork, logos, identity references and approved visual assets live in this folder."
+}
