@@ -1,0 +1,12 @@
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+  background: #08090b;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", sans-serif;
+}
+* {
+  box-sizing: border-box;
+}

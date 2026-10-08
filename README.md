@@ -2,7 +2,7 @@
 
 EYEFIND is a dark, premium, responsive in-world directory for fictional city destinations — inspired by the usefulness of a game-world web portal, with a calmer editorial interface.
 
-The published site is a static app and runs directly on GitHub Pages. There is no package install or build step.
+The GitHub Pages entry is a static app served directly from the repository root; it has no client build requirement. The companion Vercel deployment uses a thin Next.js shell and copies the same root assets into public/ at build time, so both hosts serve the same EYEFIND experience.
 
 ## Current destinations
 
