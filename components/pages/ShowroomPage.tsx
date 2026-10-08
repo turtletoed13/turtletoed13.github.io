@@ -27,7 +27,7 @@ export function ShowroomPage({
       <header className="apple-page-hero">
         <div>
           <span className="apple-eyebrow">{special ? "Special collection" : heavy ? "Ironclad" : "Aurelion Motors"}</span>
-          <h1>{special ? <>Rare by<br /><em>nature.</em></> : heavy ? <>Built to<br /><em>keep going.</em></> : <>Beautifully<br /><em>made.</em>}</h1>
+          <h1>{special ? <>Rare by<br /><em>nature.</em></> : heavy ? <>Built to<br /><em>keep going.</em></> : <>Beautifully<br /><em>made.</em></>}</h1>
           <p>{special ? "A small collection for the moments when ordinary isn't enough." : heavy ? "Heavy mobility with a quiet confidence and a sense of purpose." : "Luxury and performance, presented as complete objects."}</p>
         </div>
         <div className="apple-page-hero-icon">{special ? <Zap size={28} /> : <Car size={28} />}</div>
