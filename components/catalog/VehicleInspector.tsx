@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  ArrowLeft,
   ArrowRight,
   Check,
   ChevronLeft,
@@ -14,21 +15,21 @@ import {
   Sparkles,
   X,
 } from "lucide-react";
-import { useEffect, useState, type CSSProperties, type MouseEvent } from "react";
+import { useEffect, useMemo, useState, type CSSProperties, type PointerEvent } from "react";
 import type { Vehicle } from "../../types/catalog";
 import { Arashi3D } from "./Arashi3D";
 
 type InspectTab = "overview" | "finish" | "performance" | "equipment" | "specifications";
 
-const money = (value: number) => "$" + value.toLocaleString("en-US");
-
-const tabMeta: Array<{ id: InspectTab; label: string; short: string }> = [
-  { id: "overview", label: "Overview", short: "01" },
-  { id: "finish", label: "Finish", short: "02" },
-  { id: "performance", label: "Performance", short: "03" },
-  { id: "equipment", label: "Equipment", short: "04" },
-  { id: "specifications", label: "Specifications", short: "05" },
+const tabs: Array<{ id: InspectTab; label: string; number: string }> = [
+  { id: "overview", label: "Overview", number: "01" },
+  { id: "finish", label: "Finish", number: "02" },
+  { id: "performance", label: "Performance", number: "03" },
+  { id: "equipment", label: "Equipment", number: "04" },
+  { id: "specifications", label: "Specifications", number: "05" },
 ];
+
+const money = (value: number) => "$" + value.toLocaleString("en-US");
 
 export function VehicleInspector({
   vehicle,
@@ -41,16 +42,23 @@ export function VehicleInspector({
 }) {
   const [tab, setTab] = useState<InspectTab>("overview");
   const [finish, setFinish] = useState(vehicle.colors[0] ?? "#17191d");
-  const [cursor, setCursor] = useState({ x: 50, y: 48 });
-  const [focusStage, setFocusStage] = useState(false);
+  const [stageFocus, setStageFocus] = useState(false);
+  const [pointer, setPointer] = useState({ x: 50, y: 48 });
 
+  const index = tabs.findIndex((item) => item.id === tab);
+  const activeIndex = Math.max(0, index);
+  const activeTab = tabs[activeIndex];
   const savings = vehicle.originalPrice ? vehicle.originalPrice - vehicle.price : 0;
-  const activeIndex = Math.max(0, tabMeta.findIndex((item) => item.id === tab));
-  const activeMeta = tabMeta[activeIndex];
-  const isArashi = vehicle.id === "arashi";
   const finishCode = finish.replace("#", "").toUpperCase();
+  const isArashi = vehicle.id === "arashi";
+
+  const statSummary = useMemo(() => vehicle.stats.slice(0, 4), [vehicle.stats]);
+  const features = useMemo(() => vehicle.features.slice(0, 8), [vehicle.features]);
 
   useEffect(() => {
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         onClose();
@@ -59,250 +67,258 @@ export function VehicleInspector({
 
       if (event.key === "ArrowRight" || event.key === "ArrowDown") {
         event.preventDefault();
-        setTab(tabMeta[Math.min(tabMeta.length - 1, activeIndex + 1)].id);
+        setTab(tabs[Math.min(tabs.length - 1, activeIndex + 1)].id);
+        return;
       }
 
       if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
         event.preventDefault();
-        setTab(tabMeta[Math.max(0, activeIndex - 1)].id);
+        setTab(tabs[Math.max(0, activeIndex - 1)].id);
+        return;
       }
 
-      const numeric = Number(event.key);
-      if (numeric >= 1 && numeric <= tabMeta.length) {
-        setTab(tabMeta[numeric - 1].id);
+      const number = Number(event.key);
+      if (number >= 1 && number <= tabs.length) {
+        setTab(tabs[number - 1].id);
       }
     };
 
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = previous;
+      window.removeEventListener("keydown", onKey);
+    };
   }, [activeIndex, onClose]);
 
-  const moveStage = (event: MouseEvent<HTMLDivElement>) => {
+  const moveStage = (event: PointerEvent<HTMLDivElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
-    const x = ((event.clientX - rect.left) / rect.width) * 100;
-    const y = ((event.clientY - rect.top) / rect.height) * 100;
-    setCursor({ x, y });
+    setPointer({
+      x: Math.max(0, Math.min(100, ((event.clientX - rect.left) / rect.width) * 100)),
+      y: Math.max(0, Math.min(100, ((event.clientY - rect.top) / rect.height) * 100)),
+    });
   };
 
-  const resetStage = () => setCursor({ x: 50, y: 48 });
+  const resetStage = () => setPointer({ x: 50, y: 48 });
 
-  const goTab = (index: number) => {
-    setTab(tabMeta[Math.max(0, Math.min(tabMeta.length - 1, index))].id);
+  const changeTab = (nextIndex: number) => {
+    setTab(tabs[Math.max(0, Math.min(tabs.length - 1, nextIndex))].id);
   };
 
   return (
     <div
-      className="inspection-studio-backdrop"
+      className="noline-inspect-backdrop"
       role="dialog"
       aria-modal="true"
       aria-label={"Inspect " + vehicle.name}
-      onMouseDown={(event) => {
+      onPointerDown={(event) => {
         if (event.currentTarget === event.target) onClose();
       }}
     >
-      <div className="inspect-v4">
-        <header className="inspect-v4-header">
-          <div className="inspect-v4-brand">
-            <div className="inspect-v4-mark">N</div>
-            <div className="inspect-v4-breadcrumb">
-              <span>NOLINE</span>
-              <i />
-              <span>VEHICLES</span>
-              <i />
+      <div className="noline-inspect">
+        <header className="noline-inspect-topbar">
+          <div className="noline-inspect-brand">
+            <button className="noline-inspect-back" onClick={onClose} aria-label="Close inspection">
+              <ArrowLeft size={15} />
+            </button>
+            <div>
+              <span>NOLINE / VEHICLES</span>
               <strong>{vehicle.catalogId}</strong>
             </div>
           </div>
 
-          <div className="inspect-v4-header-center">
+          <div className="noline-inspect-top-title">
             <span>VEHICLE INSPECTION</span>
-            <b>{activeMeta.short} / 05</b>
+            <strong>{activeTab.number} / {String(tabs.length).padStart(2, "0")}</strong>
           </div>
 
-          <div className="inspect-v4-header-actions">
-            <span className="inspect-v4-live"><i /> LIVE MODEL</span>
-            <button className="inspect-v4-close" onClick={onClose} aria-label="Close inspection">
+          <div className="noline-inspect-top-actions">
+            <span className="noline-inspect-status"><i /> LIVE</span>
+            <button className="noline-inspect-close" onClick={onClose} aria-label="Close inspection">
               <X size={16} />
             </button>
           </div>
         </header>
 
-        <section className="inspect-v4-hero">
-          <div
-            className={"inspect-v4-stage" + (isArashi ? " is-heavy" : "") + (focusStage ? " is-focused" : "")}
+        <div className="noline-inspect-main">
+          <section
+            className={"noline-inspect-stage" + (stageFocus ? " is-focused" : "")}
             style={{
-              "--pointer-x": cursor.x + "%",
-              "--pointer-y": cursor.y + "%",
-              "--finish": finish,
+              "--inspect-x": pointer.x + "%",
+              "--inspect-y": pointer.y + "%",
+              "--inspect-finish": finish,
             } as CSSProperties}
-            onMouseMove={moveStage}
-            onMouseLeave={resetStage}
+            onPointerMove={moveStage}
+            onPointerLeave={resetStage}
           >
-            <div className="inspect-v4-stage-light" />
-            <div className="inspect-v4-stage-grid" />
-            <div className="inspect-v4-stage-ring ring-one" />
-            <div className="inspect-v4-stage-ring ring-two" />
+            <div className="noline-inspect-stage-backdrop" />
+            <div className="noline-inspect-stage-grid" />
+            <div className="noline-inspect-stage-plane" />
+            <div className="noline-inspect-stage-vignette" />
 
-            <div className="inspect-v4-stage-top">
-              <div>
-                <span className="inspect-v4-index">01</span>
-                <span>{vehicle.category.toUpperCase()}</span>
+            <div className="noline-inspect-stage-head">
+              <div className="noline-inspect-stage-marker">
+                <span>01</span>
+                <div>
+                  <strong>{vehicle.manufacturer}</strong>
+                  <small>{vehicle.category}</small>
+                </div>
               </div>
               <button
-                className={focusStage ? "active" : ""}
-                onClick={() => setFocusStage((current) => !current)}
-                aria-label={focusStage ? "Exit focused model view" : "Focus model view"}
+                className={stageFocus ? "is-active" : ""}
+                onClick={() => setStageFocus((value) => !value)}
+                aria-label={stageFocus ? "Exit focused view" : "Focus vehicle"}
               >
-                <Maximize2 size={13} />
+                <Maximize2 size={14} />
               </button>
             </div>
 
-            <div className="inspect-v4-model">
+            <div className="noline-inspect-model">
               {isArashi ? (
                 <Arashi3D />
               ) : (
                 <div
-                  className="inspect-v4-flat-image"
-                  style={vehicle.image ? { backgroundImage: "url(" + vehicle.image + ")" } : undefined}
+                  className="noline-inspect-image"
+                  style={vehicle.image ? { backgroundImage: `url(${vehicle.image})` } : undefined}
                 />
               )}
             </div>
 
-            {!isArashi && <div className="inspect-v4-finish-cast" />}
-
-            <div className="inspect-v4-stage-bottom">
+            <div className="noline-inspect-stage-caption">
               <div>
-                <span>INTERACTIVE VIEW</span>
-                <strong>{isArashi ? "DRAG TO ROTATE · SCROLL TO ZOOM" : "MOVE TO EXPLORE"}</strong>
+                <span>{isArashi ? "INTERACTIVE 3D MODEL" : "VEHICLE PRESENTATION"}</span>
+                <strong>{isArashi ? "Drag to rotate · wheel to zoom" : "Move across the stage to shift the light"}</strong>
               </div>
-              <div className="inspect-v4-stage-coordinates">
-                <span>X {String(Math.round(cursor.x)).padStart(3, "0")}</span>
-                <span>Y {String(Math.round(cursor.y)).padStart(3, "0")}</span>
+              <div className="noline-inspect-coordinates">
+                <span>X {String(Math.round(pointer.x)).padStart(3, "0")}</span>
+                <span>Y {String(Math.round(pointer.y)).padStart(3, "0")}</span>
               </div>
             </div>
 
-            <div className="inspect-v4-corner corner-tl" />
-            <div className="inspect-v4-corner corner-tr" />
-            <div className="inspect-v4-corner corner-bl" />
-            <div className="inspect-v4-corner corner-br" />
-          </div>
+            <div className="noline-inspect-stage-corner top-left" />
+            <div className="noline-inspect-stage-corner top-right" />
+            <div className="noline-inspect-stage-corner bottom-left" />
+            <div className="noline-inspect-stage-corner bottom-right" />
+          </section>
 
-          <aside className="inspect-v4-summary">
-            <div className="inspect-v4-summary-top">
-              <span className="inspect-v4-eyebrow">{vehicle.manufacturer}</span>
-              <span className={"inspect-v4-stock-pill " + vehicle.stock}>
-                <i />
-                {vehicle.stockLabel}
-              </span>
+          <aside className="noline-inspect-panel">
+            <div className="noline-inspect-panel-top">
+              <div>
+                <span className="noline-inspect-kicker">{vehicle.manufacturer}</span>
+                <div className="noline-inspect-stock"><i /> {vehicle.stockLabel}</div>
+              </div>
             </div>
 
-            <div className="inspect-v4-title-block">
+            <div className="noline-inspect-identity">
               <span>{vehicle.className}</span>
               <h1>{vehicle.name}</h1>
               <p>{vehicle.tagline}</p>
             </div>
 
-            <div className="inspect-v4-price">
+            <div className="noline-inspect-price">
               <div>
                 <span>{vehicle.originalPrice ? "CURRENT OFFER" : "CATALOG PRICE"}</span>
                 {vehicle.originalPrice && <del>{money(vehicle.originalPrice)}</del>}
                 <strong>{money(vehicle.price)}</strong>
               </div>
               {vehicle.saleLabel && (
-                <div className="inspect-v4-price-badge">
-                  <span>{vehicle.saleLabel}</span>
-                  {savings > 0 && <small>Save {money(savings)}</small>}
+                <div className="noline-inspect-sale">
+                  <strong>{vehicle.saleLabel}</strong>
+                  {savings > 0 && <span>Save {money(savings)}</span>}
                 </div>
               )}
             </div>
 
-            <div className="inspect-v4-stat-strip">
-              {vehicle.stats.slice(0, 3).map((stat) => (
+            <div className="noline-inspect-quick-stats">
+              {statSummary.map((stat, statIndex) => (
                 <div key={stat.label}>
                   <span>{stat.label}</span>
                   <strong>{stat.value}</strong>
+                  <i style={{ "--stat-fill": (54 + statIndex * 11) + "%" } as CSSProperties} />
                 </div>
               ))}
             </div>
 
-            <div className="inspect-v4-summary-copy">
-              <p>{vehicle.description}</p>
-            </div>
+            <p className="noline-inspect-description">{vehicle.description}</p>
 
-            <div className="inspect-v4-acquire">
+            <div className="noline-inspect-panel-action">
               <button onClick={onPurchase}>
                 <span>Acquire {vehicle.name}</span>
                 <ArrowRight size={15} />
               </button>
               <div>
                 <span><ShieldCheck size={12} /> Secure handoff</span>
-                <span>{vehicle.delivery}</span>
+                <strong>{vehicle.delivery}</strong>
               </div>
             </div>
-          </aside>
-        </section>
 
-        <nav className="inspect-v4-nav" aria-label="Vehicle inspection sections">
-          <div className="inspect-v4-nav-scroll">
-            {tabMeta.map((item) => (
+            <div className="noline-inspect-panel-note">
+              <Sparkles size={14} />
+              <span>Explore every section before you commit.</span>
+            </div>
+          </aside>
+        </div>
+
+        <nav className="noline-inspect-tabs" aria-label="Vehicle inspection sections">
+          <div className="noline-inspect-tabs-scroll">
+            {tabs.map((item) => (
               <button
                 key={item.id}
-                className={tab === item.id ? "active" : ""}
+                className={tab === item.id ? "is-active" : ""}
                 onClick={() => setTab(item.id)}
                 aria-current={tab === item.id ? "page" : undefined}
               >
-                <span>{item.short}</span>
-                {item.label}
+                <span>{item.number}</span>
+                <strong>{item.label}</strong>
               </button>
             ))}
           </div>
-
-          <div className="inspect-v4-nav-hint">
-            <kbd>←</kbd><kbd>→</kbd>
-            <span>Navigate</span>
+          <div className="noline-inspect-key-hint">
+            <kbd>1—5</kbd>
+            <span>Sections</span>
           </div>
         </nav>
 
-        <section className="inspect-v4-content">
-          <div className="inspect-v4-content-head">
+        <section className="noline-inspect-content">
+          <div className="noline-inspect-content-heading">
             <div>
-              <span className="inspect-v4-eyebrow">{activeMeta.short} / 05</span>
+              <span className="noline-inspect-kicker">{activeTab.number} / {String(tabs.length).padStart(2, "0")}</span>
               <h2>
-                {tab === "overview" && <>A closer look.</>}
-                {tab === "finish" && <>Make the surface yours.</>}
-                {tab === "performance" && <>Numbers with purpose.</>}
-                {tab === "equipment" && <>The details that matter.</>}
-                {tab === "specifications" && <>Everything, in context.</>}
+                {tab === "overview" && "A closer look."}
+                {tab === "finish" && "Make the surface yours."}
+                {tab === "performance" && "Numbers with purpose."}
+                {tab === "equipment" && "The details that matter."}
+                {tab === "specifications" && "Everything in one place."}
               </h2>
             </div>
-            <div className="inspect-v4-content-progress">
-              <span>{activeIndex + 1}</span>
-              <i><b style={{ width: (((activeIndex + 1) / tabMeta.length) * 100) + "%" }} /></i>
-              <span>{tabMeta.length}</span>
+            <div className="noline-inspect-progress">
+              <span>{String(activeIndex + 1).padStart(2, "0")}</span>
+              <i><b style={{ width: (((activeIndex + 1) / tabs.length) * 100) + "%" }} /></i>
+              <span>{String(tabs.length).padStart(2, "0")}</span>
             </div>
           </div>
 
           {tab === "overview" && (
-            <div className="inspect-v4-overview">
-              <article className="inspect-v4-story-card story-main">
+            <div className="noline-inspect-overview">
+              <article className="noline-inspect-editorial">
                 <span>THE MACHINE</span>
                 <h3>{vehicle.tagline}</h3>
                 <p>{vehicle.description}</p>
-                <div className="inspect-v4-story-meta">
+                <div>
                   <span>{vehicle.brand}</span>
                   <i />
                   <span>{vehicle.catalogId}</span>
                 </div>
               </article>
 
-              <article className="inspect-v4-info-card">
-                <div className="inspect-v4-info-icon"><Sparkles size={15} /></div>
+              <article className="noline-inspect-mini">
+                <div><Sparkles size={15} /></div>
                 <span>CHARACTER</span>
                 <strong>{vehicle.className}</strong>
-                <p>Designed as a complete object, with the details considered from the first interaction to the last.</p>
+                <p>Designed as a complete object, from the first glance to the moment it leaves the showroom.</p>
               </article>
 
-              <article className="inspect-v4-info-card">
-                <div className="inspect-v4-info-icon"><CircleDot size={15} /></div>
+              <article className="noline-inspect-mini">
+                <div><CircleDot size={15} /></div>
                 <span>AVAILABILITY</span>
                 <strong>{vehicle.stockLabel}</strong>
                 <p>{vehicle.delivery}</p>
@@ -311,27 +327,27 @@ export function VehicleInspector({
           )}
 
           {tab === "finish" && (
-            <div className="inspect-v4-finish-view">
-              <div className="inspect-v4-finish-intro">
+            <div className="noline-inspect-finish">
+              <div className="noline-inspect-finish-lead">
                 <div>
-                  <span className="inspect-v4-eyebrow">CURRENT FINISH</span>
-                  <h3>{finishCode}</h3>
+                  <span className="noline-inspect-kicker">CURRENT FINISH</span>
+                  <strong>{finishCode}</strong>
                 </div>
-                <p>Select a finish to change the light around the vehicle before you continue.</p>
+                <p>Choose a finish and see the stage respond. Your selection stays with this inspection session.</p>
               </div>
 
-              <div className="inspect-v4-finish-grid">
-                {vehicle.colors.map((color, index) => (
+              <div className="noline-inspect-swatches">
+                {vehicle.colors.map((color, colorIndex) => (
                   <button
                     key={color}
-                    className={finish === color ? "selected" : ""}
-                    onClick={() => setFinish(color)}
+                    className={finish === color ? "is-active" : ""}
                     style={{ "--swatch": color } as CSSProperties}
-                    aria-label={"Finish " + (index + 1) + ", " + color}
+                    onClick={() => setFinish(color)}
+                    aria-label={"Finish " + (colorIndex + 1) + ", " + color}
                   >
-                    <span className="inspect-v4-swatch" />
+                    <span />
                     <div>
-                      <small>FINISH {String(index + 1).padStart(2, "0")}</small>
+                      <small>FINISH {String(colorIndex + 1).padStart(2, "0")}</small>
                       <strong>{color.toUpperCase()}</strong>
                     </div>
                     {finish === color && <Check size={14} />}
@@ -339,28 +355,28 @@ export function VehicleInspector({
                 ))}
               </div>
 
-              <div className="inspect-v4-finish-note">
+              <div className="noline-inspect-finish-note">
                 <Palette size={14} />
-                <span>Finish preferences are retained while this inspection is open.</span>
+                <span>Finish selection changes the inspection environment. Vehicle paint integration can be connected to the 3D asset later.</span>
               </div>
             </div>
           )}
 
           {tab === "performance" && (
-            <div className="inspect-v4-performance-view">
-              <div className="inspect-v4-performance-lead">
+            <div className="noline-inspect-performance">
+              <div className="noline-inspect-performance-lead">
                 <Gauge size={17} />
                 <div>
                   <span>PERFORMANCE PROFILE</span>
                   <strong>{vehicle.className}</strong>
                 </div>
               </div>
-              <div className="inspect-v4-performance-grid">
-                {vehicle.stats.map((stat, index) => (
-                  <article key={stat.label} style={{ "--delay": (index * 45) + "ms" } as CSSProperties}>
+              <div className="noline-inspect-performance-grid">
+                {vehicle.stats.map((stat, statIndex) => (
+                  <article key={stat.label} style={{ "--bar-delay": (statIndex * 60) + "ms", "--bar-fill": Math.min(94, 48 + statIndex * 9) + "%" } as CSSProperties}>
                     <span>{stat.label}</span>
                     <strong>{stat.value}</strong>
-                    <div><i style={{ width: Math.min(94, 46 + index * 8) + "%" }} /></div>
+                    <div><i /></div>
                   </article>
                 ))}
               </div>
@@ -368,17 +384,17 @@ export function VehicleInspector({
           )}
 
           {tab === "equipment" && (
-            <div className="inspect-v4-equipment-view">
-              <div className="inspect-v4-equipment-intro">
-                <span className="inspect-v4-eyebrow">{vehicle.features.length} INCLUDED SYSTEMS</span>
+            <div className="noline-inspect-equipment">
+              <div className="noline-inspect-equipment-lead">
+                <span className="noline-inspect-kicker">{features.length} INCLUDED SYSTEMS</span>
                 <h3>Nothing extra to explain.</h3>
-                <p>Everything below is part of the vehicle as presented in this catalog.</p>
+                <p>Everything listed here is part of the vehicle as it is presented in this catalog.</p>
               </div>
-              <div className="inspect-v4-equipment-grid">
-                {vehicle.features.map((feature, index) => (
+              <div className="noline-inspect-equipment-grid">
+                {features.map((feature, featureIndex) => (
                   <article key={feature}>
-                    <span>{String(index + 1).padStart(2, "0")}</span>
-                    <div className="inspect-v4-check"><Check size={12} /></div>
+                    <span>{String(featureIndex + 1).padStart(2, "0")}</span>
+                    <div><Check size={11} /></div>
                     <strong>{feature}</strong>
                     <ArrowRight size={13} />
                   </article>
@@ -388,55 +404,63 @@ export function VehicleInspector({
           )}
 
           {tab === "specifications" && (
-            <div className="inspect-v4-spec-view">
-              <div className="inspect-v4-spec-sidebar">
-                <span className="inspect-v4-eyebrow">TECHNICAL RECORD</span>
+            <div className="noline-inspect-specifications">
+              <aside>
+                <span className="noline-inspect-kicker">TECHNICAL RECORD</span>
                 <h3>{vehicle.catalogId}</h3>
-                <p>Published vehicle data, kept in one calm view.</p>
-                <div className="inspect-v4-spec-sidebar-meta">
+                <p>Published vehicle data, arranged without the noise.</p>
+                <div>
                   <span>MANUFACTURER</span>
                   <strong>{vehicle.manufacturer}</strong>
                   <span>CLASS</span>
                   <strong>{vehicle.className}</strong>
+                  <span>STOCK</span>
+                  <strong>{vehicle.stockLabel}</strong>
                 </div>
-              </div>
-              <div className="inspect-v4-spec-table">
-                {vehicle.stats.map((stat, index) => (
+              </aside>
+              <div className="noline-inspect-spec-grid">
+                {vehicle.stats.map((stat, statIndex) => (
                   <div key={stat.label}>
-                    <span>{String(index + 1).padStart(2, "0")} / {stat.label}</span>
+                    <span>{String(statIndex + 1).padStart(2, "0")} / {stat.label}</span>
                     <strong>{stat.value}</strong>
                   </div>
                 ))}
-                <div><span>07 / DELIVERY</span><strong>{vehicle.delivery}</strong></div>
-                <div><span>08 / STOCK</span><strong>{vehicle.stockLabel}</strong></div>
+                <div>
+                  <span>07 / DELIVERY</span>
+                  <strong>{vehicle.delivery}</strong>
+                </div>
+                <div>
+                  <span>08 / PRICE</span>
+                  <strong>{money(vehicle.price)}</strong>
+                </div>
               </div>
             </div>
           )}
         </section>
 
-        <footer className="inspect-v4-footer">
-          <div className="inspect-v4-footer-title">
-            <div className="inspect-v4-footer-dot" />
+        <footer className="noline-inspect-footer">
+          <div className="noline-inspect-footer-identity">
+            <div className="noline-inspect-footer-mark">N</div>
             <div>
-              <span>{vehicle.name}</span>
-              <small>{vehicle.catalogId} · {vehicle.delivery}</small>
+              <strong>{vehicle.name}</strong>
+              <span>{vehicle.catalogId} · {vehicle.delivery}</span>
             </div>
           </div>
 
-          <div className="inspect-v4-footer-center">
-            <span>{tabMeta[activeIndex].label}</span>
+          <div className="noline-inspect-footer-middle">
+            <span>{activeTab.label}</span>
             <i />
-            <span>Session-only inspection</span>
+            <span>Inspection session</span>
           </div>
 
-          <div className="inspect-v4-footer-actions">
-            <button onClick={() => goTab(activeIndex - 1)} disabled={activeIndex === 0} aria-label="Previous section">
+          <div className="noline-inspect-footer-actions">
+            <button onClick={() => changeTab(activeIndex - 1)} disabled={activeIndex === 0} aria-label="Previous section">
               <ChevronLeft size={14} />
             </button>
-            <button onClick={() => goTab(activeIndex + 1)} disabled={activeIndex === tabMeta.length - 1} aria-label="Next section">
+            <button onClick={() => changeTab(activeIndex + 1)} disabled={activeIndex === tabs.length - 1} aria-label="Next section">
               <ChevronRight size={14} />
             </button>
-            <button className="inspect-v4-footer-acquire" onClick={onPurchase}>
+            <button className="noline-inspect-footer-cta" onClick={onPurchase}>
               <Heart size={13} />
               Continue
               <ArrowRight size={13} />
