@@ -8,49 +8,35 @@ export function ServicesPage({ onOpen }: { onOpen: (id: string) => void }) {
   const [query, setQuery] = useState("");
   const shown = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return q ? sites.filter((site) => [site.name, site.domain, site.category, site.tagline].join(" ").toLowerCase().includes(q)) : sites;
+    return q ? sites.filter(site => [site.name, site.domain, site.category, site.tagline].join(" ").toLowerCase().includes(q)) : sites;
   }, [query]);
 
   return (
-    <div className="premium-page premium-services">
-      <header className="premium-page-intro premium-services-intro">
+    <div className="apple-page apple-services">
+      <header className="apple-page-hero">
         <div>
-          <span className="premium-kicker">NOLINE / NETWORK</span>
-          <h1>Your city.<br /><em>One surface.</em></h1>
-          <p>Every registered service is a door into the world. Live systems answer immediately; reserved systems are already mapped for the game.</p>
+          <span className="apple-eyebrow">NOLINE</span>
+          <h1>Your city.<br /><em>at a glance.</em></h1>
+          <p>Every service, one clean surface. Open what you need and move on.</p>
         </div>
-        <div className="premium-network-summary">
-          <strong>{sites.length.toString().padStart(2, "0")}</strong>
-          <span>REGISTERED</span>
-          <small>{sites.filter((s) => s.serviceStatus === "live").length.toString().padStart(2, "0")} LIVE NOW</small>
-        </div>
+        <div className="apple-page-hero-number"><span>{shown.length}</span><small>services</small></div>
       </header>
 
-      <div className="premium-directory-toolbar">
-        <div className="premium-search">
-          <Search size={15} />
-          <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search the network…" />
-        </div>
-        <span>{shown.length} SERVICES</span>
-      </div>
+      <div className="apple-services-search"><Search size={15} /><input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search services…" /></div>
 
-      <div className="premium-service-directory">
+      <section className="apple-services-list">
         {shown.map((site, index) => (
-          <button className="premium-service-row" key={site.id} onClick={() => onOpen(site.id)}>
-            <span className="premium-service-index">{String(index + 1).padStart(2, "0")}</span>
-            <span className="premium-service-mark">{site.glyph}</span>
-            <span className="premium-service-main">
-              <small>{site.category} / {site.domain}</small>
-              <strong>{site.name}</strong>
-              <span>{site.tagline}</span>
-            </span>
-            <span className={`premium-service-state ${site.serviceStatus}`}><i />{site.serviceStatus === "live" ? "LIVE" : "RESERVED"}</span>
+          <button className="apple-service-row" key={site.id} onClick={() => onOpen(site.id)}>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <span className="apple-row-symbol">{site.glyph}</span>
+            <span className="apple-row-copy"><strong>{site.name}</strong><small>{site.category} · {site.tagline}</small></span>
+            <span className={site.serviceStatus === "live" ? "apple-row-status live" : "apple-row-status"}>{site.serviceStatus === "live" ? "Available" : "Coming soon"}</span>
             <ArrowRight size={15} />
           </button>
         ))}
-      </div>
+      </section>
 
-      <footer className="premium-footer"><span>NETWORK DIRECTORY</span><span>NOLINE / 2026</span></footer>
+      <footer className="apple-footer"><span>NETWORK</span><span>NOLINE</span><span>© 2026</span></footer>
     </div>
   );
 }

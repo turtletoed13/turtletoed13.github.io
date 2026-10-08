@@ -1,41 +1,15 @@
 "use client";
 
 import {
-  Activity,
-  ArrowLeft,
-  ArrowRight,
-  Bookmark,
-  ChevronDown,
-  Command,
-  Download,
-  Grid2X2,
-  History,
-  LockKeyhole,
-  MoreHorizontal,
-  Plus,
-  RefreshCw,
-  Settings,
-  ShoppingBag,
-  UserRound,
-  X,
-  type LucideIcon,
+  Activity, ArrowLeft, ArrowRight, Bookmark, ChevronDown, Command, Download,
+  Grid2X2, History, LockKeyhole, MoreHorizontal, Plus, RefreshCw,
+  Settings, ShoppingBag, UserRound, X, type LucideIcon
 } from "lucide-react";
 import { sites } from "../../data/sites";
 
 export function BrowserChrome({
-  title,
-  address,
-  onAddressChange,
-  onSubmit,
-  appsOpen,
-  setAppsOpen,
-  menuOpen,
-  setMenuOpen,
-  basketCount,
-  onBasket,
-  onCommand,
-  onRoute,
-  onRefresh,
+  title, address, onAddressChange, onSubmit, appsOpen, setAppsOpen, menuOpen,
+  setMenuOpen, basketCount, onBasket, onCommand, onRoute, onRefresh,
 }: {
   title: string;
   address: string;
@@ -52,85 +26,68 @@ export function BrowserChrome({
   onRefresh: () => void;
 }) {
   return (
-    <div className="premium-browser-chrome">
-      <header className="browser-top premium-topbar">
-        <div className="premium-window-controls" aria-hidden="true">
-          <span />
-          <span />
-          <span />
+    <div className="apple-chrome">
+      <header className="apple-topbar">
+        <div className="apple-window">
+          <span /><span /><span />
         </div>
+        <button className="apple-logo" aria-label="NOLINE"><span>N</span></button>
+        <div className="apple-wordmark">NOLINE</div>
 
-        <button className="premium-brand" aria-label="NOLINE">
-          <span>N</span>
-        </button>
-
-        <div className="premium-identity">
-          <strong>NOLINE</strong>
-          <span>IN-WORLD CLIENT</span>
-        </div>
-
-        <div className="tab-strip premium-tabs">
-          <button className="tab active premium-tab">
-            <span className="tab-site-dot" />
+        <div className="apple-tabs">
+          <button className="apple-tab">
+            <span className="apple-tab-dot" />
             <span>{title}</span>
             <X size={12} />
           </button>
-          <button className="new-tab premium-new-tab" aria-label="New tab">
-            <Plus size={15} />
-          </button>
+          <button className="apple-new-tab" aria-label="New tab"><Plus size={15} /></button>
         </div>
 
-        <div className="premium-session">
-          <span><i /> CONNECTION SECURE</span>
-          <strong>NODE 07</strong>
-        </div>
-
-        <div className="top-tools premium-top-tools">
-          <button className="premium-icon" onClick={onBasket} aria-label="Basket">
+        <div className="apple-top-actions">
+          <button className="apple-icon-button" onClick={onBasket} aria-label="Basket">
             <ShoppingBag size={16} />
             {basketCount > 0 && <b>{basketCount}</b>}
           </button>
-          <button className="premium-icon" onClick={() => setMenuOpen(!menuOpen)} aria-label="Browser menu">
+          <button className="apple-icon-button" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
             <MoreHorizontal size={17} />
           </button>
         </div>
       </header>
 
-      <section className="browser-toolbar premium-toolbar">
-        <div className="nav-tools premium-nav">
-          <button className="premium-icon" aria-label="Back"><ArrowLeft size={16} /></button>
-          <button className="premium-icon" aria-label="Forward"><ArrowRight size={16} /></button>
-          <button className="premium-icon" onClick={onRefresh} aria-label="Refresh"><RefreshCw size={15} /></button>
+      <div className="apple-toolbar">
+        <div className="apple-nav">
+          <button className="apple-icon-button" aria-label="Back"><ArrowLeft size={15} /></button>
+          <button className="apple-icon-button" aria-label="Forward"><ArrowRight size={15} /></button>
+          <button className="apple-icon-button" onClick={onRefresh} aria-label="Refresh"><RefreshCw size={14} /></button>
         </div>
 
-        <form className="address-bar premium-address" onSubmit={(event) => { event.preventDefault(); onSubmit(); }}>
-          <span className="premium-address-lock"><LockKeyhole size={12} /></span>
-          <input value={address} onChange={(event) => onAddressChange(event.target.value)} spellCheck={false} aria-label="Address bar" />
-          {address && <button type="button" onClick={() => onAddressChange("")} aria-label="Clear"><X size={13} /></button>}
+        <form className="apple-address" onSubmit={(event) => { event.preventDefault(); onSubmit(); }}>
+          <LockKeyhole size={12} />
+          <input value={address} onChange={(event) => onAddressChange(event.target.value)} spellCheck={false} aria-label="Address" />
+          {address && <button type="button" onClick={() => onAddressChange("")} aria-label="Clear address"><X size={12} /></button>}
         </form>
 
-        <div className="toolbar-actions premium-toolbar-actions">
-          <button className={`toolbar-pill premium-toolbar-pill ${appsOpen ? "selected" : ""}`} onClick={() => setAppsOpen(!appsOpen)}>
-            <Grid2X2 size={14} /><span>Network</span><ChevronDown size={11} />
+        <div className="apple-toolbar-actions">
+          <button className={`apple-toolbar-button ${appsOpen ? "active" : ""}`} onClick={() => setAppsOpen(!appsOpen)}>
+            <Grid2X2 size={14} /><span>Browse</span><ChevronDown size={10} />
           </button>
-          <button className="toolbar-pill premium-toolbar-pill premium-cmd" onClick={onCommand}>
-            <Command size={14} /><span>CMD</span><kbd>⌘K</kbd>
+          <button className="apple-toolbar-button command" onClick={onCommand}>
+            <Command size={14} /><span>Search</span><kbd>⌘K</kbd>
           </button>
         </div>
 
         {appsOpen && (
-          <div className="popover premium-popover premium-network-popover">
-            <div className="premium-popover-head">
-              <div><span>NETWORK</span><strong>Connected services</strong></div>
-              <button onClick={() => setAppsOpen(false)} aria-label="Close"><X size={14} /></button>
+          <div className="popover apple-popover apple-network-popover">
+            <div className="apple-popover-title">
+              <span>Network</span>
+              <button onClick={() => setAppsOpen(false)} aria-label="Close"><X size={13} /></button>
             </div>
-            <div className="premium-network-grid">
-              {sites.map((site, index) => (
+            <div className="apple-network-list">
+              {sites.map((site) => (
                 <button key={site.id} onClick={() => { setAppsOpen(false); onAddressChange(site.domain); onSubmit(site.domain); }}>
-                  <span className="premium-network-index">{String(index + 1).padStart(2, "0")}</span>
-                  <span className="premium-network-glyph">{site.glyph}</span>
+                  <span className="apple-site-symbol">{site.glyph}</span>
                   <span><strong>{site.name}</strong><small>{site.category}</small></span>
-                  <span className={`premium-network-state ${site.serviceStatus}`}>{site.serviceStatus === "live" ? "LIVE" : "SOON"}</span>
+                  <span className={site.serviceStatus === "live" ? "available" : ""}>{site.serviceStatus === "live" ? "Available" : "Coming soon"}</span>
                 </button>
               ))}
             </div>
@@ -138,31 +95,29 @@ export function BrowserChrome({
         )}
 
         {menuOpen && (
-          <div className="popover premium-popover premium-menu-popover">
-            <div className="premium-popover-head">
-              <div><span>NOLINE</span><strong>Client controls</strong></div>
-              <button onClick={() => setMenuOpen(false)} aria-label="Close"><X size={14} /></button>
+          <div className="popover apple-popover apple-menu-popover">
+            <div className="apple-popover-title">
+              <span>NOLINE</span>
+              <button onClick={() => setMenuOpen(false)} aria-label="Close"><X size={13} /></button>
             </div>
-            <div className="premium-menu-list">
-              <PremiumMenuRow icon={History} text="History" suffix="Local" onClick={() => { setMenuOpen(false); onRoute("history"); }} />
-              <PremiumMenuRow icon={Bookmark} text="Bookmarks" suffix="Local" onClick={() => { setMenuOpen(false); onRoute("bookmarks"); }} />
-              <PremiumMenuRow icon={Download} text="Downloads" suffix="0" onClick={() => { setMenuOpen(false); onRoute("downloads"); }} />
-              <PremiumMenuRow icon={Settings} text="Settings" onClick={() => { setMenuOpen(false); onRoute("settings"); }} />
-              <PremiumMenuRow icon={Activity} text="Diagnostics" suffix="Ready" onClick={() => { setMenuOpen(false); onRoute("diagnostics"); }} />
-              <div className="premium-menu-rule" />
-              <PremiumMenuRow icon={UserRound} text="Account" suffix="Guest" onClick={() => setMenuOpen(false)} />
-            </div>
+            <AppleMenuRow icon={History} text="History" suffix="Local" onClick={() => { setMenuOpen(false); onRoute("history"); }} />
+            <AppleMenuRow icon={Bookmark} text="Bookmarks" suffix="Local" onClick={() => { setMenuOpen(false); onRoute("bookmarks"); }} />
+            <AppleMenuRow icon={Download} text="Downloads" suffix="0" onClick={() => { setMenuOpen(false); onRoute("downloads"); }} />
+            <AppleMenuRow icon={Settings} text="Settings" onClick={() => { setMenuOpen(false); onRoute("settings"); }} />
+            <AppleMenuRow icon={Activity} text="Diagnostics" suffix="Ready" onClick={() => { setMenuOpen(false); onRoute("diagnostics"); }} />
+            <div className="apple-menu-divider" />
+            <AppleMenuRow icon={UserRound} text="Account" suffix="Guest" onClick={() => setMenuOpen(false)} />
           </div>
         )}
-      </section>
+      </div>
     </div>
   );
 }
 
-function PremiumMenuRow({ icon: Icon, text, suffix, onClick }: { icon: LucideIcon; text: string; suffix?: string; onClick: () => void }) {
+function AppleMenuRow({ icon: Icon, text, suffix, onClick }: { icon: LucideIcon; text: string; suffix?: string; onClick: () => void }) {
   return (
-    <button className="premium-menu-row" onClick={onClick}>
-      <span className="premium-menu-icon"><Icon size={14} /></span>
+    <button className="apple-menu-row" onClick={onClick}>
+      <span className="apple-menu-row-icon"><Icon size={14} /></span>
       <span><strong>{text}</strong>{suffix && <small>{suffix}</small>}</span>
       <ArrowRight size={13} />
     </button>
