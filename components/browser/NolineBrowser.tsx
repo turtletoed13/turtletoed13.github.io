@@ -224,19 +224,19 @@ export function NolineBrowser() {
   }
 
   const title =
-    page === "home" ? "The world, connected." :
-    page === "services" ? "NOLINE Services" :
+    page === "home" ? "Everything starts here." :
+    page === "services" ? "NOLINE Network" :
     page === "market" ? "Mercury Market" :
     page === "sale" ? "On sale" :
     page === "full-price" ? "Full price" :
-    page === "special" ? "Special vehicles" :
+    page === "special" ? "Special stock" :
     page === "showroom" ? activeSite.name :
     page === "site" ? activeSite.name :
     page === "vehicle" ? activeVehicle.name :
     page === "config" ? "NOLINE Configuration" :
     page[0].toUpperCase() + page.slice(1);
 
-  return <main data-client="unreal" className={`browser ${settings.glass ? "" : "no-glass"} ${settings.compact ? "compact" : ""} ${settings.motion ? "" : "no-motion"}`}>
+  return <main data-client="unreal" className={`browser noline-premium ${settings.glass ? "" : "no-glass"} ${settings.compact ? "compact" : ""} ${settings.motion ? "" : "no-motion"}`}>
     <div className="ambient ambient-one"/><div className="ambient ambient-two"/>
     <BrowserChrome title={title} address={draft} onAddressChange={(value) => { setDraft(value); setAddressSearch(value); }} onSubmit={(value) => submitAddress(value)} appsOpen={appsOpen} setAppsOpen={setAppsOpen} menuOpen={menuOpen} setMenuOpen={setMenuOpen} basketCount={basket.length} onBasket={() => setBasketOpen(true)} onCommand={() => setCommandOpen(true)} onRoute={navigateInternal} onRefresh={() => flash("Page refreshed", true)}/>
 

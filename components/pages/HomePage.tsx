@@ -1,27 +1,24 @@
 "use client";
 
 import {
-  Activity,
   ArrowRight,
   Car,
   Command,
-  Cpu,
   Grid2X2,
   Radio,
   ShieldCheck,
   ShoppingBag,
   Signal,
-  Terminal,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { featuredVehicle } from "../../data/vehicles";
 import { liveSites, sites } from "../../data/sites";
 
-const feed = [
-  { channel: "MERCURY", text: "Vehicle inventory synchronized", tone: "blue" },
-  { channel: "SIGNAL", text: "City network reporting nominal", tone: "green" },
-  { channel: "IRONCLAD", text: "Special mobility node online", tone: "amber" },
-];
+const pulses = [
+  ["MERCURY", "Inventory index synchronized", "blue"],
+  ["SIGNAL", "City feed nominal", "green"],
+  ["IRONCLAD", "Special mobility node online", "neutral"],
+] as const;
 
 export function HomePage({
   onMarket,
@@ -41,134 +38,146 @@ export function HomePage({
     return () => window.clearInterval(timer);
   }, []);
 
-  const sync = 97 + ((seconds * 7) % 3) / 10;
-  const signal = 4 + (seconds % 2);
+  const sync = 97.2 + ((seconds * 3) % 4) / 10;
+  const signal = seconds % 3 === 0 ? "EXCELLENT" : "STABLE";
 
   return (
-    <div className="page home-page game-home-page">
-      <section className="game-command-deck">
-        <div className="game-deck-grid" aria-hidden="true" />
-        <div className="game-deck-main">
-          <div className="game-overline">
-            <span className="live-indicator"><i /></span>
-            NOLINE NETWORK / WORLD LINK ACTIVE
+    <div className="premium-page premium-home">
+      <section className="premium-home-hero">
+        <div className="premium-hero-main">
+          <div className="premium-hero-topline">
+            <span><i /> NOLINE NETWORK</span>
+            <span>SESSION 07 / LOCAL</span>
           </div>
-          <div className="game-hero-kicker">
-            <span>CLIENT / IN-WORLD</span>
-            <span>NODE 07</span>
-            <span>SECURE LINK</span>
+
+          <div className="premium-hero-copy">
+            <p className="premium-kicker">THE WORLD, CONNECTED.</p>
+            <h1>Everything<br /><em>starts here.</em></h1>
+            <p className="premium-hero-lead">
+              The in-world network for movement, commerce, property, finance, travel and every service between them.
+            </p>
           </div>
-          <h1>Access the<br/><em>world behind the world.</em></h1>
-          <p>NOLINE is the in-world network layer for commerce, mobility, property, finance, travel and the systems that make your city move.</p>
-          <div className="game-hero-actions">
-            <button className="button blue game-primary-button" onClick={onMarket}>
-              <ShoppingBag size={15}/>Open Mercury Market<ArrowRight size={15}/>
+
+          <div className="premium-hero-actions">
+            <button className="premium-action primary" onClick={onMarket}>
+              <span><ShoppingBag size={15} /> Mercury Market</span>
+              <ArrowRight size={15} />
             </button>
-            <button className="button secondary game-secondary-button" onClick={onServices}>
-              <Grid2X2 size={14}/>Browse network
+            <button className="premium-action secondary" onClick={onServices}>
+              <span><Grid2X2 size={15} /> Explore the network</span>
+              <ArrowRight size={15} />
             </button>
-            <button className="game-command-button" onClick={() => onSite("signal")}>
-              <Signal size={14}/>
-              <span><small>LIVE CHANNEL</small><strong>SIGNAL CURRENT</strong></span>
-              <ArrowRight size={13}/>
-            </button>
+          </div>
+
+          <div className="premium-hero-foot">
+            <span>PRESS <kbd>⌘K</kbd> TO SEARCH</span>
+            <span>OR ENTER <strong>cmdrun5</strong></span>
           </div>
         </div>
-        <aside className="game-deck-side">
-          <div className="game-node-card">
-            <div className="game-node-header"><span>LOCAL NODE</span><b>ONLINE</b></div>
-            <div className="game-node-ring">
-              <div className="game-node-ring-inner"><strong>{sync.toFixed(1)}%</strong><span>SYNC</span></div>
+
+        <aside className="premium-home-telemetry">
+          <div className="premium-telemetry-card premium-telemetry-primary">
+            <div className="premium-card-topline"><span>LOCAL NODE</span><b>ONLINE</b></div>
+            <div className="premium-sync">
+              <div className="premium-sync-ring"><span>{sync.toFixed(1)}%</span><small>SYNC</small></div>
+              <div className="premium-sync-copy">
+                <strong>World link healthy.</strong>
+                <span>Node response within normal parameters.</span>
+              </div>
             </div>
-            <div className="game-node-metrics">
-              <div><span>LINK</span><strong>{signal}/5</strong></div>
+            <div className="premium-stat-row">
+              <div><span>SIGNAL</span><strong>{signal}</strong></div>
               <div><span>LIVE NODES</span><strong>{liveSites.length}</strong></div>
-              <div><span>CATALOG</span><strong>{String(5).padStart(2, "0")}</strong></div>
+              <div><span>CATALOG</span><strong>05</strong></div>
             </div>
           </div>
-          <div className="game-secure-card">
-            <div className="game-secure-icon"><ShieldCheck size={16}/></div>
-            <div><span>SESSION SECURITY</span><strong>ENCRYPTED LOCAL CLIENT</strong></div>
-            <i className="game-secure-pulse"/>
+
+          <div className="premium-telemetry-card premium-telemetry-status">
+            <div className="premium-status-icon"><ShieldCheck size={16} /></div>
+            <div><span>CLIENT SECURITY</span><strong>ENCRYPTED LOCAL SESSION</strong></div>
+            <i />
           </div>
+
+          <button className="premium-channel-card" onClick={() => onSite("signal")}>
+            <div><span>LIVE CHANNEL</span><strong>SIGNAL CURRENT</strong><small>City reports and live movement</small></div>
+            <span className="premium-channel-arrow"><Signal size={15} /><ArrowRight size={13} /></span>
+          </button>
         </aside>
       </section>
 
-      <section className="game-feed-strip">
-        <div className="game-feed-label"><Terminal size={13}/>NETWORK FEED</div>
-        {feed.map((item) => (
-          <div key={item.channel} className={"game-feed-item " + item.tone}>
-            <span>{item.channel}</span><strong>{item.text}</strong>
+      <section className="premium-pulse-bar">
+        <div className="premium-pulse-label"><Radio size={13} /> LIVE NETWORK</div>
+        {pulses.map(([channel, text, tone]) => (
+          <div key={channel} className={`premium-pulse-item ${tone}`}>
+            <span>{channel}</span><strong>{text}</strong>
           </div>
         ))}
       </section>
 
-      <section className="section game-section">
-        <div className="section-head game-section-head">
-          <div><span className="kicker">SYSTEM MODULES</span><h2>Your city, indexed.</h2></div>
-          <button className="text-link game-text-link" onClick={onServices}>ALL MODULES <ArrowRight size={13}/></button>
+      <section className="premium-section">
+        <div className="premium-section-head">
+          <div><span className="premium-kicker">SERVICES</span><h2>The useful parts of your city.</h2></div>
+          <button className="premium-link" onClick={onServices}>View all <ArrowRight size={13} /></button>
         </div>
-        <div className="service-grid game-service-grid">
+        <div className="premium-module-grid">
           {sites.slice(0, 8).map((site, index) => (
-            <button className="service-card game-service-card" key={site.id} onClick={() => onSite(site.id)}>
-              <span className="game-service-index">0{index + 1}</span>
-              <span className="game-service-glyph">{site.glyph}</span>
-              <div><strong>{site.name}</strong><small>{site.category} / {site.domain}</small></div>
-              <span className={"game-service-status " + site.serviceStatus}>{site.serviceStatus}</span>
-              <ArrowRight size={13}/>
+            <button className="premium-module" key={site.id} onClick={() => onSite(site.id)}>
+              <div className="premium-module-top"><span>{String(index + 1).padStart(2, "0")}</span><i className={site.serviceStatus === "live" ? "online" : ""} /></div>
+              <div className="premium-module-glyph">{site.glyph}</div>
+              <div className="premium-module-copy"><strong>{site.name}</strong><span>{site.category}</span><small>{site.tagline}</small></div>
+              <ArrowRight size={14} />
             </button>
           ))}
         </div>
       </section>
 
-      <section className="section game-section">
-        <div className="section-head game-section-head">
-          <div><span className="kicker">NETWORK HIGHLIGHTS</span><h2>Systems worth opening.</h2></div>
+      <section className="premium-section">
+        <div className="premium-section-head">
+          <div><span className="premium-kicker">FEATURED</span><h2>Open something worth having.</h2></div>
         </div>
-        <div className="game-feature-grid">
-          <button className="game-feature-card game-feature-arashi" onClick={onVehicle}>
-            <div className="game-feature-noise"/>
-            <div className="game-feature-copy">
-              <span className="kicker">IRONCLAD / SPECIAL MOBILITY</span>
-              <strong>{featuredVehicle.name}</strong>
-              <p>Heavy-duty mobility engineered for the city’s worst routes.</p>
-              <span className="game-feature-action">INSPECT VEHICLE <ArrowRight size={13}/></span>
+
+        <div className="premium-feature-grid">
+          <button className="premium-feature premium-feature-vehicle" onClick={onVehicle}>
+            <div className="premium-feature-gridline" />
+            <div className="premium-feature-copy">
+              <span className="premium-kicker">IRONCLAD / SPECIAL MOBILITY</span>
+              <h3>{featuredVehicle.name}</h3>
+              <p>{featuredVehicle.tagline}</p>
+              <span className="premium-feature-link">Inspect vehicle <ArrowRight size={13} /></span>
             </div>
-            <div className="game-feature-object"><span>ST-17</span></div>
-            <div className="game-feature-id">NOLINE-ARASHI / 01</div>
+            <div className="premium-feature-object"><span>ST-17</span></div>
+            <div className="premium-feature-meta"><span>NOLINE-ARASHI</span><span>01 / 01</span></div>
           </button>
-          <button className="game-feature-card game-feature-market" onClick={onMarket}>
-            <div className="game-feature-copy">
-              <span className="kicker">MERCURY / COMMERCE</span>
-              <strong>Acquire what moves the world.</strong>
-              <p>Vehicles, services and specialist goods with one game-ready checkout layer.</p>
-              <span className="game-feature-action">OPEN MARKET <ArrowRight size={13}/></span>
+
+          <button className="premium-feature premium-feature-market" onClick={onMarket}>
+            <div className="premium-market-orbit"><ShoppingBag size={38} /></div>
+            <div className="premium-feature-copy">
+              <span className="premium-kicker">MERCURY / COMMERCE</span>
+              <h3>Acquire what moves the world.</h3>
+              <p>Five catalog objects, one consistent acquisition flow.</p>
+              <span className="premium-feature-link">Open market <ArrowRight size={13} /></span>
             </div>
-            <ShoppingBag className="game-feature-symbol" size={44}/>
+            <div className="premium-feature-meta"><span>CURATED CATALOG</span><span>05 OBJECTS</span></div>
           </button>
         </div>
       </section>
 
-      <section className="section game-section">
-        <div className="game-utility-band">
-          <div className="game-utility-primary">
-            <span className="kicker">COMMAND ACCESS</span>
-            <h2>One client. Every system.</h2>
-            <p>Press <kbd>⌘K</kbd> or enter <strong>cmdrun5</strong> to open the NOLINE command layer.</p>
-          </div>
-          <div className="game-utility-actions">
-            <button className="game-command-button compact" onClick={() => onSite("signal")}>
-              <Radio size={14}/><span><small>WORLD SIGNAL</small><strong>OPEN CHANNEL</strong></span><ArrowRight size={13}/>
-            </button>
-            <button className="game-command-button compact" onClick={onServices}>
-              <Cpu size={14}/><span><small>NETWORK</small><strong>{sites.length} REGISTERED MODULES</strong></span><ArrowRight size={13}/>
-            </button>
-          </div>
+      <section className="premium-command-band">
+        <div>
+          <span className="premium-kicker"><Command size={13} /> COMMAND LAYER</span>
+          <h2>One client.<br />Every system.</h2>
+          <p>Fast navigation without breaking the atmosphere.</p>
         </div>
+        <button onClick={onServices}>
+          <span><span>NETWORK ACCESS</span><strong>{sites.length} registered services</strong></span>
+          <ArrowRight size={15} />
+        </button>
       </section>
 
-      <footer className="footer game-footer">
-        <span>NOLINE / IN-WORLD NETWORK CLIENT</span><span>SESSION: LOCAL</span><span>GAME BRIDGE READY</span>
+      <footer className="premium-footer">
+        <span>NOLINE / IN-WORLD NETWORK CLIENT</span>
+        <span>GAME BRIDGE READY</span>
+        <span>© 2026</span>
       </footer>
     </div>
   );

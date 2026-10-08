@@ -1,9 +1,10 @@
 import "./globals.css";
 import "./game-client.css";
+import "./premium.css";
 
 export const metadata = {
   title: "NOLINE",
-  description: "NOLINE — the in-world browser.",
+  description: "NOLINE — the in-world network client.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
