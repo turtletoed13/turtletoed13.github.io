@@ -487,3 +487,31 @@ button:disabled { cursor:not-allowed; opacity:.38; }
   .command-layer { padding-top:8vh; }
   .basket-drawer { top:0; right:0; bottom:0; width:100%; border-radius:0; }
 }
+
+/* Viewport ownership and user-configurable presentation. */
+.browser.noline-premium { height:100svh; min-height:0; overflow:hidden; display:flex; flex-direction:column; }
+.browser.noline-premium .apple-chrome { flex:0 0 auto; }
+.browser.noline-premium .browser-body { position:relative; z-index:1; flex:1 1 auto; min-height:0; height:auto; overflow:auto; overscroll-behavior:contain; scrollbar-gutter:stable; }
+.browser.noline-premium.no-glass .apple-topbar,
+.browser.noline-premium.no-glass .apple-toolbar { background:rgba(9,9,11,.98); -webkit-backdrop-filter:none; backdrop-filter:none; }
+.browser.noline-premium.no-motion *,
+.browser.noline-premium.no-motion *::before,
+.browser.noline-premium.no-motion *::after { animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+.browser.noline-premium.compact .apple-topbar { min-height:52px; }
+.browser.noline-premium.compact .apple-toolbar { min-height:50px; }
+.browser.noline-premium.compact .apple-page { padding-top:28px; }
+.browser.noline-premium.compact .apple-hero { min-height:450px; }
+.toast.success { border-color:rgba(84,211,138,.24); }
+.browser.noline-premium .apple-home { padding-top:clamp(22px,3.5vw,48px); }
+.browser.noline-premium .apple-home .apple-eyebrow { color:rgba(245,245,247,.56); }
+.browser.noline-premium .apple-home .apple-hero-art:focus-visible { outline-offset:5px; }
+.browser.noline-premium .apple-hero-art-copy strong { text-wrap:balance; }
+.browser.noline-premium .apple-service-tile:focus-visible,
+.browser.noline-premium .apple-vehicle-card:focus-within { border-color:rgba(10,132,255,.5); }
+@media (max-width:760px) {
+  .browser.noline-premium { height:100svh; }
+  .browser.noline-premium .browser-body { scrollbar-gutter:auto; }
+  .browser.noline-premium .apple-topbar { flex-shrink:0; }
+  .browser.noline-premium .apple-toolbar { flex-shrink:0; }
+  .browser.noline-premium .apple-hero { min-height:0; }
+}
