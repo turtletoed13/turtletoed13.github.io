@@ -165,7 +165,7 @@ function renderHeader() {
     '<nav class="site-nav" aria-label="Main navigation">' +
       '<button class="nav-link ' + (state.page === "home" && filter === "all" ? "is-active" : "") + '" data-action="category" data-filter="all">Discover</button>' +
       '<button class="nav-link ' + (state.page === "home" && filter === "automotive" ? "is-active" : "") + '" data-action="category" data-filter="automotive">Automotive</button>' +
-      '<button class="nav-link" data-action="category" data-filter="specialist">Specialist supply</button>' +
+      '<button class="nav-link ' + (state.page === "home" && filter === "specialist" ? "is-active" : "") + '" data-action="category" data-filter="specialist">Specialist supply</button>' +
     '</nav><span class="header-spacer"></span>' +
     '<button class="header-search" data-action="focus-search" aria-label="Focus search">' + icon.search + '<span>Search</span><kbd>⌘ K</kbd></button>' +
     '<button class="nav-link ' + (state.page === "saved" ? "is-active" : "") + '" data-action="saved">Saved <span class="chip-count">' + String(state.saved.length).padStart(2, "0") + '</span></button>' +
@@ -270,11 +270,12 @@ function renderAssetCard(asset) {
   const previewSrc = asset.poster ? asset.basePath + asset.poster.replace(/^\.?\//, "") : (asset.images && asset.images[0] ? asset.basePath + asset.images[0].replace(/^\.?\//, "") : "");
   const price = salePrice(asset);
   const badge = asset.onSale ? "ON SALE" : (asset.badge || asset.stockStatus || "AVAILABLE");
-  let preview = previewSrc
-    ? '<img src="' + escapeHtml(previewSrc) + '" alt="" loading="lazy">'
-    : (modelSrc
-      ? '<model-viewer src="' + escapeHtml(modelSrc) + '" alt="' + escapeHtml(asset.name) + '" camera-controls auto-rotate rotation-per-second="7deg" disable-zoom></model-viewer>'
+  let preview = modelSrc
+    ? '<model-viewer src="' + escapeHtml(modelSrc) + '" poster="' + escapeHtml(previewSrc) + '" alt="' + escapeHtml(asset.name) + '" camera-controls auto-rotate rotation-per-second="7deg" disable-zoom></model-viewer>'
+    : (previewSrc
+      ? '<img src="' + escapeHtml(previewSrc) + '" alt="" loading="lazy">'
       : '<div class="asset-placeholder-art" aria-hidden="true"></div>');
+  if (modelSrc) ensureModelViewer();
   return '<article class="asset-card"><button class="asset-preview" data-action="open-asset" data-id="' + escapeHtml(asset.id) + '" aria-label="Inspect ' + escapeHtml(asset.name) + '">' +
     '<span class="asset-badge">' + escapeHtml(badge) + '</span>' + preview + '</button>' +
     '<div class="asset-copy"><h3>' + escapeHtml(asset.name) + '</h3><p>' + escapeHtml(asset.description || "") + '</p></div>' +
@@ -325,11 +326,11 @@ function renderAssetPage() {
   }
   const modelSrc = asset.model && asset.model.src ? asset.basePath + asset.model.src.replace(/^\.?\//, "") : "";
   const imageSrc = asset.poster ? asset.basePath + asset.poster.replace(/^\.?\//, "") : (asset.images && asset.images[0] ? asset.basePath + asset.images[0].replace(/^\.?\//, "") : "");
-  if (modelSrc && !imageSrc) ensureModelViewer();
-  const stage = imageSrc
-    ? '<img src="' + escapeHtml(imageSrc) + '" alt="' + escapeHtml(asset.name) + '">'
-    : (modelSrc
-      ? '<model-viewer src="' + escapeHtml(modelSrc) + '" alt="' + escapeHtml(asset.name) + '" camera-controls auto-rotate shadow-intensity="0.55" exposure="0.9" environment-image="neutral"></model-viewer>'
+  if (modelSrc) ensureModelViewer();
+  const stage = modelSrc
+    ? '<model-viewer src="' + escapeHtml(modelSrc) + '" poster="' + escapeHtml(imageSrc) + '" alt="' + escapeHtml(asset.name) + '" camera-controls auto-rotate shadow-intensity="0.55" exposure="0.9" environment-image="neutral"></model-viewer>'
+    : (imageSrc
+      ? '<img src="' + escapeHtml(imageSrc) + '" alt="' + escapeHtml(asset.name) + '">'
       : '<div class="asset-placeholder-art" aria-hidden="true"></div>');
   const price = salePrice(asset);
   const metadata = [
