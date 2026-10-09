@@ -13,6 +13,7 @@ const state = {
   saved: loadSaved(),
   assets: Object.create(null),
   loading: Object.create(null),
+  loadPromises: Object.create(null),
   catalogErrors: Object.create(null),
   paletteOpen: false,
   toastTimer: 0,
@@ -169,37 +170,46 @@ function modelStage(src, alt, mode = "hero", options = {}) {
 
 async function ensureBrandAssets(brandId) {
   const brand = getBrand(brandId);
-  if (!brand || state.loading[brandId]) return;
-  if (Object.prototype.hasOwnProperty.call(state.assets, brandId)) return;
+  if (!brand) return [];
+  if (Object.prototype.hasOwnProperty.call(state.assets, brandId)) return state.assets[brandId];
+  if (state.loadPromises[brandId]) return state.loadPromises[brandId];
+
   state.loading[brandId] = true;
   state.catalogErrors[brandId] = false;
   if (state.page === "brand" || state.page === "asset") render();
-  try {
-    const ids = Array.isArray(brand.assets)
-      ? brand.assets.filter((id) => typeof id === "string" && /^[a-z0-9][a-z0-9_-]*$/i.test(id) && id.toLowerCase() !== "_template")
-      : [];
-    const items = await Promise.all(ids.map(async (id) => {
-      try {
-        const module = await import("./brands/" + brand.folder + "/Assets/" + id + "/config.js");
-        const raw = module.default || module.asset;
-        if (!raw || typeof raw !== "object" || raw.id !== id) throw new Error("Listing configuration ID does not match its registered folder.");
-        const resolved = resolveAssetConfig(brand, raw);
-        return { ...resolved, brandId: brand.id, folder: brand.folder, basePath: "./brands/" + brand.folder + "/Assets/" + id + "/" };
-      } catch (error) {
-        state.catalogErrors[brandId] = true;
-        console.error("EYEFIND could not load listing configuration:", brand.folder + "/" + id, error);
-        return null;
-      }
-    }));
-    state.assets[brandId] = items.filter((item) => item && item.visible !== false);
-  } catch (error) {
-    state.catalogErrors[brandId] = true;
-    console.error("EYEFIND catalogue loading failed for " + brandId, error);
-    state.assets[brandId] = [];
-  } finally {
-    state.loading[brandId] = false;
-    if ((state.page === "brand" || state.page === "asset") && state.brandId === brandId) render();
-  }
+  const task = (async () => {
+    try {
+      const ids = Array.isArray(brand.assets)
+        ? brand.assets.filter((id) => typeof id === "string" && /^[a-z0-9][a-z0-9_-]*$/i.test(id) && id.toLowerCase() !== "_template")
+        : [];
+      const items = await Promise.all(ids.map(async (id) => {
+        try {
+          const module = await import("./brands/" + brand.folder + "/Assets/" + id + "/config.js");
+          const raw = module.default || module.asset;
+          if (!raw || typeof raw !== "object" || raw.id !== id) throw new Error("Listing configuration ID does not match its registered folder.");
+          const resolved = resolveAssetConfig(brand, raw);
+          return { ...resolved, brandId: brand.id, folder: brand.folder, basePath: "./brands/" + brand.folder + "/Assets/" + id + "/" };
+        } catch (error) {
+          state.catalogErrors[brandId] = true;
+          console.error("EYEFIND could not load listing configuration:", brand.folder + "/" + id, error);
+          return null;
+        }
+      }));
+      state.assets[brandId] = items.filter((item) => item && item.visible !== false);
+      return state.assets[brandId];
+    } catch (error) {
+      state.catalogErrors[brandId] = true;
+      console.error("EYEFIND catalogue loading failed for " + brandId, error);
+      state.assets[brandId] = [];
+      return [];
+    } finally {
+      state.loading[brandId] = false;
+      state.loadPromises[brandId] = null;
+      if ((state.page === "brand" || state.page === "asset") && state.brandId === brandId) render();
+    }
+  })();
+  state.loadPromises[brandId] = task;
+  return task;
 }
 function regularPrice(asset) {
   const value = asset.originalPrice != null && asset.originalPrice !== "" ? asset.originalPrice : asset.price;
