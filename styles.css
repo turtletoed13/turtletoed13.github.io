@@ -397,7 +397,8 @@ button:disabled { cursor: not-allowed; opacity: .45; }
 .asset-meta-list { margin: 24px 0 0; border-top: 1px solid var(--line); }
 .asset-meta-row { display: flex; justify-content: space-between; gap: 18px; padding: 11px 0; border-bottom: 1px solid var(--line); color: #77818e; font-size: 11px; }
 .asset-meta-row strong { color: #c4ccd7; font-weight: 520; text-align: right; }
-.saved-view { padding-top: 52px; min-height: 57vh; }
+.saved-view { padding-top: 52px; min-height: 57vh; animation: eyefind-fade-up .55s var(--ease) both; }
+.brand-page, .asset-detail { animation: eyefind-fade-up .55s var(--ease) both; }
 .saved-view .section { padding-top: 24px; }
 .empty-saved { margin-top: 25px; }
 .not-found { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; width: min(calc(100% - 48px), 660px); min-height: 100vh; margin: 0 auto; }
@@ -705,7 +706,8 @@ model-viewer { --progress-bar-color: #c5dcfc; --progress-bar-height: 2px; }
 .asset-preview model-viewer { display: block; width: 100%; height: 175px; --poster-color: transparent; background: transparent; }
 .asset-preview:focus-visible { outline-offset: -4px; }
 .brand-hero, .asset-info { isolation: isolate; -webkit-backdrop-filter: blur(28px) saturate(128%); backdrop-filter: blur(28px) saturate(128%); }
-.brand-hero-copy, .brand-hero-art, .asset-info > *, .asset-stage > * { position: relative; z-index: 2; }
+.brand-hero-copy, .brand-hero-art, .asset-info > *, .asset-stage > *:not(.asset-stage-caption) { position: relative; z-index: 2; }
+.asset-stage .asset-stage-caption { position: absolute; left: 22px; right: 22px; bottom: 18px; z-index: 4; }
 .brand-hero::after, .asset-info::after { z-index: 1; }
 .brand-art-ring { animation: orbit-breathe 16s ease-in-out infinite alternate; }
 .brand-art-shape { animation: brand-shape-float 12s ease-in-out infinite alternate; }
