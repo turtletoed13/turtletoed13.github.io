@@ -54,6 +54,7 @@ function getAssets(id) { return state.assets[id] || []; }
 function routeFor(page, brandId, assetId) {
   if (page === "saved") return "#/saved";
   if (page === "not-found") return "#/not-found";
+  if (page === "not-found") return "#/not-found";
   if (page === "brand" && brandId) return "#/brand/" + encodeURIComponent(brandId);
   if (page === "asset" && brandId && assetId) return "#/brand/" + encodeURIComponent(brandId) + "/asset/" + encodeURIComponent(assetId);
   return "#/discover";
@@ -238,6 +239,25 @@ function filteredBrands() {
     return matchesCategory && (!query || searchableBrand(brand).includes(query));
   });
 }
+function filteredAssets() {
+  const query = normalizeSearch(state.query);
+  if (!query) return [];
+  return brands.flatMap((brand) => getAssets(brand.id).filter((asset) => {
+    const matchesCategory = state.filter === "all" || brand.categoryId === state.filter;
+    const text = normalizeSearch([asset.name, asset.catalogId, asset.category, asset.description,
+      brand.name, brand.legalName, ...(Array.isArray(asset.tags) ? asset.tags : [])].join(" "));
+    return matchesCategory && text.includes(query);
+  }));
+}
+function renderDirectoryResults() {
+  const brandMatches = filteredBrands();
+  const assetMatches = filteredAssets();
+  const sections = [];
+  if (brandMatches.length) sections.push('<div class="destination-grid">' + brandMatches.map(renderBrandCard).join("") + '</div>');
+  if (assetMatches.length) sections.push('<section class="listing-search-results"><div class="listing-search-heading"><span class="eyebrow">Published listings</span><h3>Matching catalogue items</h3></div><div class="asset-grid">' + assetMatches.map(renderAssetCard).join("") + '</div></section>');
+  if (!sections.length) return '<div class="empty-state no-results"><span class="empty-state-icon">' + icons.search + '</span><h3>No destinations found.</h3><p>Try another name or clear the active filters. Only published destinations and listings appear here.</p><button class="button button-secondary" data-action="clear-search">Clear search and filters ' + icons.arrow + '</button></div>';
+  return sections.join("");
+}
 function toast(message) {
   let node = document.querySelector(".toast");
   if (!node) {
@@ -318,16 +338,16 @@ function categoryFilters() {
 }
 function renderDirectory() {
   const results = filteredBrands();
+  const productResults = filteredAssets();
   const title = state.query.trim() ? 'Results for “' + e(state.query.trim()) + '”' :
     state.filter === "automotive" ? "Made to move." : state.filter === "specialist" ? "Specialist destinations." : "Destinations worth knowing.";
-  const resultMarkup = results.length
-    ? '<div class="destination-grid">' + results.map(renderBrandCard).join("") + '</div>'
-    : '<div class="empty-state no-results"><span class="empty-state-icon">' + icons.search + '</span><h3>No destinations found.</h3><p>Try another name or clear the active filters. Only published destinations appear here.</p><button class="button button-secondary" data-action="clear-search">Clear search and filters ' + icons.arrow + '</button></div>';
+  const resultMarkup = renderDirectoryResults();
   return '<section class="directory-section" id="directory" aria-labelledby="directory-title"><div class="section-heading">' +
     '<div><span class="eyebrow">The directory</span><h2 id="directory-title">' + title + '</h2><p>Independent destinations, connected in one place.</p></div>' +
     '<span class="result-counter">' + String(results.length).padStart(2, "0") + ' <span>' + (results.length === 1 ? "DESTINATION" : "DESTINATIONS") + '</span></span></div>' +
-    '<div class="directory-tools">' + categoryFilters() + '<span class="directory-note">Curated for the city</span></div>' +
-    '<div id="directory-results" aria-live="polite">' + resultMarkup + '</div></section>';
+    '<div class="directory-tools">' + categoryFilters() + '<span class="directory-note">' +
+      (state.query.trim() ? String(results.length + productResults.length).padStart(2, "0") + " MATCHES" : "Curated for the city") +
+    '</span></div><div id="directory-results" aria-live="polite">' + resultMarkup + '</div></section>';
 }
 function featuredVehicle() {
   const brand = getBrand("morsa");
@@ -366,7 +386,7 @@ function renderAssetCard(asset) {
     ? modelStage(src, asset.name + " 3D model preview", "card", { poster, controls: false, zoom: false, loading: "lazy", label: "3D MODEL" })
     : poster ? '<div class="image-preview"><img src="' + e(poster) + '" alt="' + e(asset.name) + '" loading="lazy"></div>'
     : '<div class="model-stage model-stage--card model-stage--fallback"><div class="stage-light"></div><div class="stage-grid"></div><div class="model-fallback-mark" aria-hidden="true">' + icons.grid + '</div><span class="preview-label">LISTING / ' + e(String(asset.id).toUpperCase()) + '</span></div>';
-  return '<article class="asset-card"><button class="asset-preview-button" data-action="open-asset" data-id="' + e(asset.id) + '" aria-label="Inspect ' + e(asset.name) + '">' +
+  return '<article class="asset-card"><button class="asset-preview-button" data-action="open-asset" data-brand="' + e(asset.brandId) + '" data-id="' + e(asset.id) + '" aria-label="Inspect ' + e(asset.name) + '">' +
     '<span class="asset-badge ' + (isValidSale(asset) ? "asset-badge--sale" : "") + '">' + e(badge) + '</span>' + preview + '<span class="preview-arrow">' + icons.arrow + '</span></button>' +
     '<div class="asset-card-copy"><div class="asset-card-kicker">' + e(asset.category || "Catalogue listing") + '<span>' + e(asset.catalogId ? "NO. " + asset.catalogId : String(asset.id).toUpperCase()) + '</span></div>' +
     '<h3>' + e(asset.name) + '</h3><p>' + e(asset.description || "Further details will be published by this destination.") + '</p></div>' +
@@ -407,7 +427,7 @@ function renderAssetPage() {
   const brand = getBrand(state.brandId);
   const asset = brand && getAssets(brand.id).find((item) => item.id === state.assetId);
   if (!brand) return renderNotFound();
-  if (state.loading[brand.id] && !asset) return '<section class="loading-page"><span class="loader-orbit"></span><h1>Opening the listing</h1><p>Preparing product information.</p></section>';
+  if (!Object.prototype.hasOwnProperty.call(state.assets, brand.id) || state.loading[brand.id]) return '<section class="loading-page"><span class="loader-orbit"></span><h1>Opening the listing</h1><p>Preparing product information.</p></section>';
   if (!asset) return '<section class="not-found-card"><span class="eyebrow">LISTING NOT FOUND</span><h1>This listing is unavailable.</h1><p>The listing may have been unpublished or its identifier may be incorrect.</p><button class="button button-primary" data-action="open-brand" data-id="' + e(brand.id) + '">Return to ' + e(brand.name) + ' ' + icons.arrow + '</button></section>';
   const model = assetModelUrl(asset);
   const poster = assetPosterUrl(asset);
@@ -460,11 +480,13 @@ function updateDirectory() {
   const count = document.querySelector(".result-counter");
   if (!result || !heading || !count) return;
   const matches = filteredBrands();
+  const productMatches = filteredAssets();
   heading.textContent = state.query.trim() ? 'Results for "' + state.query.trim() + '"' :
     state.filter === "automotive" ? "Made to move." : state.filter === "specialist" ? "Specialist destinations." : "Destinations worth knowing.";
-  count.innerHTML = String(matches.length).padStart(2, "0") + ' <span>' + (matches.length === 1 ? "DESTINATION" : "DESTINATIONS") + '</span>';
-  result.innerHTML = matches.length ? '<div class="destination-grid">' + matches.map(renderBrandCard).join("") + '</div>' :
-    '<div class="empty-state no-results"><span class="empty-state-icon">' + icons.search + '</span><h3>No destinations found.</h3><p>Try another name or clear the active filters. Only published destinations appear here.</p><button class="button button-secondary" data-action="clear-search">Clear search and filters ' + icons.arrow + '</button></div>';
+  count.innerHTML = String(matches.length + productMatches.length).padStart(2, "0") + ' <span>' + (matches.length + productMatches.length === 1 ? "MATCH" : "MATCHES") + '</span>';
+  result.innerHTML = renderDirectoryResults();
+  const note = document.querySelector(".directory-note");
+  if (note) note.textContent = state.query.trim() ? String(matches.length + productMatches.length).padStart(2, "0") + " MATCHES" : "Curated for the city";
   document.querySelectorAll("[data-action='category']").forEach((button) => {
     const active = button.dataset.filter === state.filter;
     button.classList.toggle("is-active", active);
@@ -502,12 +524,16 @@ function closePalette(restoreFocus = true) {
   if (restoreFocus) document.querySelector(".header-search")?.focus();
 }
 function focusSearch() {
-  if (state.page !== "home" && state.page !== "saved") navigate("home");
-  else openPalette(true);
+  if (state.page !== "home" && state.page !== "saved") {
+    navigate("home");
+    openPalette(true);
+  } else openPalette(true);
 }
 function browseDirectory() {
-  if (state.page !== "home") navigate("home");
-  else {
+  if (state.page !== "home") {
+    navigate("home");
+    requestAnimationFrame(() => document.getElementById("directory")?.scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" }));
+  } else {
     document.getElementById("directory")?.scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" });
     document.querySelector(".directory-section .filter-chip")?.focus({ preventScroll: true });
   }
@@ -562,7 +588,12 @@ function handleAction(target, event) {
   else if (action === "toggle-saved") { event.preventDefault(); event.stopPropagation(); toggleSaved(target.dataset.id); }
   else if (action === "category") { event.preventDefault(); state.filter = target.dataset.filter || "all"; updateDirectory(); }
   else if (action === "clear-search") { event.preventDefault(); clearSearch(); closePalette(false); if (state.page !== "home") navigate("home"); }
-  else if (action === "open-asset") { event.preventDefault(); openAsset(target.dataset.id); }
+  else if (action === "open-asset") {
+    event.preventDefault();
+    const brandId = target.dataset.brand || state.brandId;
+    if (brandId && brandId !== state.brandId) navigate("asset", { brandId, assetId: target.dataset.id });
+    else openAsset(target.dataset.id);
+  }
   else if (action === "open-configured-asset") { event.preventDefault(); void openConfiguredAsset(target.dataset.brand, target.dataset.id); }
   else if (action === "retry-brand") {
     event.preventDefault();
@@ -640,3 +671,6 @@ root.addEventListener("pointermove", (event) => {
 });
 if (!location.hash) history.replaceState({ page: "home" }, "", "#/discover");
 activateCurrentRoute();
+void Promise.all(brands.map((brand) => ensureBrandAssets(brand.id))).then(() => {
+  if (state.page === "home") updateDirectory();
+});
