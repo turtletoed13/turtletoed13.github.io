@@ -3,7 +3,8 @@ import { resolveAssetConfig } from "./brands/resolve-config.js";
 
 const root = document.getElementById("app");
 const STORAGE_KEY = "eyefind:saved-sites:v1";
-const MODEL_VIEWER_URL = "https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js";
+const MODEL_VIEWER_URL = "https://ajax.googleapis.com/ajax/libs/model-viewer/4.3.1/model-viewer.min.js";
+const SEARCH_SHORTCUT = /Mac|iPhone|iPad/.test(navigator.platform || "") ? "⌘ K" : "Ctrl K";
 const state = {
   page: "home",
   brandId: null,
@@ -318,7 +319,7 @@ function header() {
       '<a href="#/saved" class="nav-link ' + (savedActive ? "is-active" : "") + '" data-action="saved">Saved <span class="saved-count">' + state.saved.length + '</span></a>' +
     '</nav><span class="header-spacer"></span>' +
     '<span class="network-label"><i></i> CITY NETWORK</span>' +
-    '<button class="header-search" data-action="focus-search" aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K">' + icons.search + '<span>Search</span><kbd>⌘ K</kbd></button>' +
+    '<button class="header-search" data-action="focus-search" aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K">' + icons.search + '<span>Search</span><kbd>' + e(SEARCH_SHORTCUT) + '</kbd></button>' +
     '<button class="mobile-search" data-action="focus-search" aria-label="Search EYEFIND">' + icons.search + '</button>' +
   '</div></header>';
 }
@@ -394,7 +395,7 @@ function renderHome() {
     '<div class="hero-overline"><span class="eyebrow-dot"></span> YOUR CITY, AT A GLANCE <span class="overline-divider"></span> EYEFIND NETWORK</div>' +
     '<div class="hero-layout"><div class="hero-copy"><p class="hero-kicker">A better way to get around.</p><h1>The city is<br><em>closer than ever.</em></h1>' +
     '<p class="hero-description">Discover the showrooms, specialists and services that shape your world. All the places worth knowing, one search away.</p>' +
-    '<form id="home-search-form" class="home-search"><span class="search-icon">' + icons.search + '</span><input id="home-search" name="q" type="search" autocomplete="off" placeholder="What are you looking for?" value="' + e(state.query) + '" aria-label="Search EYEFIND destinations"><kbd>⌘ K</kbd><button type="submit" aria-label="Search">' + icons.arrow + '</button></form>' +
+    '<form id="home-search-form" class="home-search"><span class="search-icon">' + icons.search + '</span><input id="home-search" name="q" type="search" autocomplete="off" placeholder="What are you looking for?" value="' + e(state.query) + '" aria-label="Search EYEFIND destinations"><kbd>' + e(SEARCH_SHORTCUT) + '</kbd><button type="submit" aria-label="Search">' + icons.arrow + '</button></form>' +
     '<div class="hero-search-note"><span>Try “automotive” or “MORSA”</span><span class="hero-note-line"></span><span>' + String(brands.length).padStart(2, "0") + ' destinations</span></div></div>' +
     '<div class="hero-aside"><div class="network-visual" aria-hidden="true"><span class="network-ring network-ring--one"></span><span class="network-ring network-ring--two"></span><span class="network-ring network-ring--three"></span>' +
     '<span class="network-core"><span class="network-core-mark"></span></span><span class="network-node node-one"></span><span class="network-node node-two"></span><span class="network-node node-three"></span><span class="network-caption caption-top">CITY / NETWORK 01</span><span class="network-caption caption-bottom">CONNECTED BY EYEFIND</span></div></div></div>' +
