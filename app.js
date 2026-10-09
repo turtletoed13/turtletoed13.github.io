@@ -320,7 +320,7 @@ function paletteMarkup() {
     '<section class="search-palette" role="dialog" aria-modal="true" aria-labelledby="palette-title">' +
     '<div class="palette-title-row"><span id="palette-title">Search EYEFIND</span><button class="icon-button" data-action="close-search" aria-label="Close search">' + icons.close + '</button></div>' +
     '<form id="palette-form" class="palette-input-wrap">' + icons.search + '<input id="palette-search" type="search" autocomplete="off" placeholder="Destinations, services, vehicles…" aria-label="Search all destinations"><kbd>ENTER</kbd></form>' +
-    '<div class="palette-results" id="palette-results"><p class="palette-hint">Search the city's published destinations.</p></div>' +
+    '<div class="palette-results" id="palette-results"><p class="palette-hint">Search the city&#39;s published destinations.</p></div>' +
     '<div class="palette-foot"><span>Navigate the city</span><span><kbd>ESC</kbd> to close</span></div></section></div>';
 }
 function renderBrandCard(brand, index = 0) {
