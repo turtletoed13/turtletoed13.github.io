@@ -55,7 +55,6 @@ function getAssets(id) { return state.assets[id] || []; }
 function routeFor(page, brandId, assetId) {
   if (page === "saved") return "#/saved";
   if (page === "not-found") return "#/not-found";
-  if (page === "not-found") return "#/not-found";
   if (page === "brand" && brandId) return "#/brand/" + encodeURIComponent(brandId);
   if (page === "asset" && brandId && assetId) return "#/brand/" + encodeURIComponent(brandId) + "/asset/" + encodeURIComponent(assetId);
   return "#/discover";
@@ -213,18 +212,27 @@ async function ensureBrandAssets(brandId) {
 }
 function regularPrice(asset) {
   const value = asset.originalPrice != null && asset.originalPrice !== "" ? asset.originalPrice : asset.price;
-  return value == null || value === "" || !Number.isFinite(Number(value)) ? null : Number(value);
+  return value == null || value === "" || !Number.isFinite(Number(value)) || Number(value) < 0 ? null : Number(value);
 }
 function salePrice(asset) {
   const normal = regularPrice(asset);
-  if (asset.onSale !== true) return asset.price == null || asset.price === "" ? normal : Number(asset.price);
-  if (asset.salePrice != null && asset.salePrice !== "") return Number(asset.salePrice);
-  if (Number(asset.salePercent) > 0 && normal != null) return Math.round(normal * (1 - Number(asset.salePercent) / 100));
-  return asset.price == null || asset.price === "" ? normal : Number(asset.price);
+  const configuredPrice = asset.price == null || asset.price === "" ? null : Number(asset.price);
+  if (asset.onSale !== true) return configuredPrice == null || !Number.isFinite(configuredPrice) || configuredPrice < 0 ? normal : configuredPrice;
+  const explicit = asset.salePrice == null || asset.salePrice === "" ? null : Number(asset.salePrice);
+  if (explicit != null && Number.isFinite(explicit) && explicit >= 0 && (normal == null || explicit < normal)) return explicit;
+  const percent = Number(asset.salePercent);
+  if (normal != null && Number.isFinite(percent) && percent > 0 && percent <= 100) return Math.round(normal * (1 - percent / 100));
+  if (configuredPrice != null && Number.isFinite(configuredPrice) && configuredPrice >= 0 && (normal == null || configuredPrice < normal)) return configuredPrice;
+  return normal;
 }
 function isValidSale(asset) {
   const normal = regularPrice(asset), current = salePrice(asset);
-  return asset.onSale === true && normal != null && current != null && Number.isFinite(Number(current)) && Number(current) < normal;
+  return asset.onSale === true && normal != null && current != null && Number.isFinite(Number(current)) && Number(current) >= 0 && Number(current) < normal;
+}
+function actualDiscountPercent(asset) {
+  const normal = regularPrice(asset), current = salePrice(asset);
+  if (!isValidSale(asset) || normal == null || normal <= 0 || current == null) return 0;
+  return Math.round((normal - current) / normal * 100);
 }
 function money(value, currency) {
   if (value == null || value === "" || !Number.isFinite(Number(value))) return "Price on request";
@@ -449,6 +457,7 @@ function renderAssetPage() {
     ["Availability", asset.stockStatus || "Not specified"],
   ].filter((entry) => entry[1]);
   const onSale = isValidSale(asset);
+  const discountPercent = actualDiscountPercent(asset);
   return '<section class="product-page"><div class="page-breadcrumb"><button class="back-link" data-action="open-brand" data-id="' + e(brand.id) + '">' + icons.back + ' Back to ' + e(brand.name) + '</button><span>PRODUCT INSPECTION <b>/</b> ' + e(String(asset.id).toUpperCase()) + '</span></div>' +
     '<div class="product-layout"><div class="product-visual-column"><div class="product-stage-wrap">' + modelStage(model, asset.name + " 3D model", "detail", { poster, autoRotate: false, label: (brand.name + " / " + (asset.catalogId || asset.id)).toUpperCase() }) + '</div>' +
     '<div class="product-visual-note"><span>INTERACTIVE MODEL</span><span>DRAG TO ROTATE · SCROLL TO ZOOM</span></div><div class="product-asset-path"><span>MODEL SOURCE</span><code>' + e(brand.folder + "/Assets/" + asset.id + "/" + (asset.model?.src || "No model registered")) + '</code></div></div>' +
@@ -456,7 +465,7 @@ function renderAssetPage() {
     '<div class="product-title-row"><h1>' + e(asset.name) + '</h1>' + (onSale ? '<span class="sale-pill">ON SALE</span>' : '') + '</div>' +
     '<p class="product-description">' + e(asset.description || "Further details will be published by this destination.") + '</p>' +
     '<div class="product-price-block">' + (onSale ? '<span class="product-old-price">' + e(money(regularPrice(asset), asset.currency)) + '</span>' : '') + '<strong>' + e(money(price, asset.currency)) + '</strong>' +
-    (onSale && Number(asset.salePercent) > 0 ? '<span class="sale-description">' + e(String(Number(asset.salePercent))) + '% configured discount</span>' : '') + '</div>' +
+    (onSale && discountPercent > 0 ? '<span class="sale-description">' + e(String(discountPercent)) + '% configured discount</span>' : '') + '</div>' +
     '<div class="product-status"><span class="stock-indicator"><i></i>' + e(asset.stockStatus || "Availability not specified") + '</span><span>' + e(asset.badge || "CATALOGUE LISTING") + '</span></div>' +
     '<div class="product-metadata"><span class="eyebrow">LISTING DETAILS</span>' + meta.map((row) => '<div class="metadata-row"><span>' + e(row[0]) + '</span><strong>' + e(row[1]) + '</strong></div>').join("") + '</div>' +
     '<button class="button button-primary button-wide" data-action="listing-notice">View listing availability ' + icons.external + '</button><p class="product-action-note">Purchasing is not connected. This page displays catalogue information only.</p>' +
