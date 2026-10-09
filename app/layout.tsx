@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "EYEFIND — The city, connected.",
-  description: "A considered guide to the city's destinations, specialist suppliers and automotive showrooms.",
+  description: "EYEFIND is the city’s in-world internet for fictional destinations, automotive showrooms and interactive listings.",
   icons: { icon: "/favicon.svg" },
 };
 
