@@ -10,7 +10,9 @@ const MORSA = {
   description: "A specialist destination for restricted stock, tactical mobility and mission-focused equipment. Clear listings, controlled availability and a catalogue built to expand with the world.",
   accent: "#c8bea7",
   logo: "./brands/MORSA/Brand/logo.svg",
-  assets: [],
+  featuredAsset: "arashi",
+  featuredModel: "Assets/arashi/model/arx_apc.glb",
+  assets: ["arashi"],
 
   catalog: {
     // Toggle between "brand" and "generated".

@@ -101,3 +101,10 @@ Create its own config.js, Brand/ and Assets/ tree following either existing dest
 - Brand-specific pages with generated catalogue entries and interactive 3D viewer support
 
 Purchases, inventory ownership and in-game delivery are not simulated by EYEFIND. Those require a future game/server integration.
+
+
+## Featured vehicle: Heavy, ST-17 Arashi
+
+The MORSA catalogue now includes the Heavy, ST-17 Arashi in the arashi listing folder. Its uploaded GLB was moved out of the template into that real listing's model folder. The homepage features an interactive 3D viewer, and the MORSA listing page includes the same model in its catalogue and detail view. The model can be rotated and inspected in the browser; no purchase or inventory authority is simulated.
+
+The MORSA config points to the featured listing with featuredAsset, featuredModel, and assets. Leave _TEMPLATE generic so it can be copied for the next listing.

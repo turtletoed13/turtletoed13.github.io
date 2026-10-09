@@ -236,13 +236,34 @@ function renderDirectoryContent() {
   return '<div id="directory-heading-row" class="section-head"><div><span class="eyebrow">The directory</span><h2 id="directory-heading">' + heading + '</h2><p>Independent destinations, considered in one place.</p></div><span class="section-count" id="result-count">' + countLabel + '</span></div>' +
     '<div class="directory-toolbar">' + renderFilters() + '</div><div id="brand-grid">' + grid + '</div>';
 }
+function renderFeaturedArashi() {
+  const brand = getBrand("morsa");
+  if (!brand) return "";
+  const assetId = brand.featuredAsset || "arashi";
+  const modelPath = "./brands/" + brand.folder + "/" + (brand.featuredModel || "Assets/arashi/model/arx_apc.glb");
+  return '<section class="featured-vehicle arrive" aria-label="Featured vehicle">' +
+    '<div class="featured-vehicle-copy"><span class="eyebrow"><span class="status-dot"></span> FEATURED FROM MORSA</span>' +
+    '<h2>Heavy, <em>ST-17</em><br>Arashi.</h2>' +
+    '<p>A closer look at MORSA’s armored high-mobility vehicle. Explore the model, discover the listing and inspect it from every angle.</p>' +
+    '<div class="featured-vehicle-meta"><span>MODEL VIEW / 001</span><span class="featured-meta-dot"></span><span>INTERACTIVE 3D</span></div>' +
+    '<button class="button button-primary" data-action="open-configured-asset" data-brand="' + escapeHtml(brand.id) + '" data-id="' + escapeHtml(assetId) + '">Explore the Arashi ' + icon.arrow + '</button></div>' +
+    '<div class="featured-vehicle-stage"><div class="featured-stage-grid" aria-hidden="true"></div>' +
+    '<div class="featured-stage-glow" aria-hidden="true"></div>' +
+    '<model-viewer class="featured-model" src="' + escapeHtml(modelPath) + '" alt="Heavy, ST-17 Arashi armored vehicle 3D model" camera-controls auto-rotate rotation-per-second="3deg" shadow-intensity="1.1" exposure="0.88" environment-image="neutral" camera-orbit="25deg 72deg 105%" interaction-prompt="none" loading="lazy"></model-viewer>' +
+    '<div class="model-chip"><span class="model-chip-dot"></span> LIVE MODEL <span class="model-chip-divider"></span> DRAG TO ROTATE</div>' +
+    '<span class="model-coordinate model-coordinate-top">MORSA / VEHICLE 001</span><span class="model-coordinate model-coordinate-bottom">ST-17 / ARASHI</span></div>' +
+    '<div class="featured-vehicle-foot"><span>ENGINEERING / FIELD MOBILITY</span><span>MODEL SOURCE · MORSA ASSETS</span></div></section>';
+}
+
 function renderHome() {
+  ensureModelViewer();
   return '<section class="home-hero">' +
     '<div class="hero-topline"><span class="status-dot"></span> THE CITY NETWORK <span class="caption-separator"></span> DIRECTORY 001</div>' +
     '<div class="hero-grid"><div class="hero-copy arrive"><h1>Find your<br><em>world.</em></h1><p>The city’s showrooms and specialist destinations, brought together in one beautifully direct place.</p>' +
     renderSearchForm() + '</div>' +
     '<div class="hero-aside" aria-hidden="true"><div class="hero-orbit"><span class="orbit-ring ring-a"></span><span class="orbit-ring ring-b"></span><span class="orbit-ring ring-c"></span><span class="orbit-core"></span><span class="orbit-node node-a"></span><span class="orbit-node node-b"></span><span class="orbit-caption">Everywhere, closer</span></div></div></div>' +
     '</section><hr class="hero-divider">' +
+    renderFeaturedArashi() +
     '<section class="section" aria-label="Directory destinations">' + renderDirectoryContent() + '</section>' +
     '<section class="info-strip" aria-label="About EYEFIND">' +
       '<div class="info-cell"><span class="info-index">01</span><div><strong>One clear entry point</strong><span>' + String(brands.length).padStart(2, "0") + ' curated destinations</span></div></div>' +
@@ -468,6 +489,13 @@ app.addEventListener("click", (event) => {
     clearSearch();
   } else if (action === "open-asset") {
     openAsset(target.dataset.id);
+  } else if (action === "open-configured-asset") {
+    const brandId = target.dataset.brand;
+    const assetId = target.dataset.id;
+    void ensureBrandAssets(brandId).then(() => {
+      if (assetsFor(brandId).some((asset) => asset.id === assetId)) navigate("asset", { brandId, assetId });
+      else openBrand(brandId);
+    });
   } else if (action === "retry-brand") {
     delete state.assetCache[target.dataset.id];
     delete state.catalogErrors[target.dataset.id];
@@ -476,6 +504,29 @@ app.addEventListener("click", (event) => {
     toast("Listing actions will be connected when the game commerce bridge is added.");
   }
 });
+
+app.addEventListener("pointermove", (event) => {
+  const target = event.target.closest(".destination-card, .asset-card, .featured-vehicle, .brand-hero, .search-form, .asset-info");
+  if (!target) return;
+  const rect = target.getBoundingClientRect();
+  if (!rect.width || !rect.height) return;
+  const x = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
+  const y = Math.max(0, Math.min(1, (event.clientY - rect.top) / rect.height));
+  target.style.setProperty("--pointer-x", (x * 100).toFixed(2) + "%");
+  target.style.setProperty("--pointer-y", (y * 100).toFixed(2) + "%");
+  if (window.matchMedia("(hover: hover) and (pointer: fine)").matches &&
+      (target.classList.contains("destination-card") || target.classList.contains("asset-card"))) {
+    target.style.setProperty("--tilt-x", ((x - .5) * 2.2).toFixed(2) + "deg");
+    target.style.setProperty("--tilt-y", ((.5 - y) * 2.0).toFixed(2) + "deg");
+  }
+});
+app.addEventListener("pointerout", (event) => {
+  const target = event.target.closest(".destination-card, .asset-card, .featured-vehicle, .brand-hero, .search-form, .asset-info");
+  if (!target || (event.relatedTarget && target.contains(event.relatedTarget))) return;
+  target.style.setProperty("--tilt-x", "0deg");
+  target.style.setProperty("--tilt-y", "0deg");
+});
+
 app.addEventListener("submit", (event) => {
   if (event.target.id !== "search-form") return;
   event.preventDefault();
