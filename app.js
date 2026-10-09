@@ -53,6 +53,7 @@ function isSaved(id) { return state.saved.includes(id); }
 function getAssets(id) { return state.assets[id] || []; }
 function routeFor(page, brandId, assetId) {
   if (page === "saved") return "#/saved";
+  if (page === "not-found") return "#/not-found";
   if (page === "brand" && brandId) return "#/brand/" + encodeURIComponent(brandId);
   if (page === "asset" && brandId && assetId) return "#/brand/" + encodeURIComponent(brandId) + "/asset/" + encodeURIComponent(assetId);
   return "#/discover";
@@ -123,7 +124,9 @@ function showModelError(viewer, title, message) {
   if (status) status.innerHTML = '<span class="status-glyph">' + icons.external + '</span><strong>' + e(title) + '</strong><span>' + e(message) + '</span>';
 }
 function wireModelViewers(scope = document) {
-  scope.querySelectorAll("model-viewer[data-model-src]").forEach((viewer) => {
+  const viewers = scope.querySelectorAll("model-viewer[data-model-src]");
+  if (!viewers.length) return;
+  viewers.forEach((viewer) => {
     if (viewer.dataset.wired === "true") return;
     viewer.dataset.wired = "true";
     const stage = viewer.closest(".model-stage");
@@ -169,6 +172,7 @@ async function ensureBrandAssets(brandId) {
   if (Object.prototype.hasOwnProperty.call(state.assets, brandId)) return;
   state.loading[brandId] = true;
   state.catalogErrors[brandId] = false;
+  if (state.page === "brand" || state.page === "asset") render();
   try {
     const ids = Array.isArray(brand.assets)
       ? brand.assets.filter((id) => typeof id === "string" && /^[a-z0-9][a-z0-9_-]*$/i.test(id) && id.toLowerCase() !== "_template")
@@ -257,7 +261,7 @@ function toggleSaved(id) {
   render();
 }
 function logo(brand, className = "brand-logo") {
-  return '<span class="' + e(className) + '"><img src="' + e(brand.logo) + '" alt="" loading="lazy" onerror="this.closest(\\'.brand-logo, .brand-heading-logo\\')?.classList.add(\\'logo-missing\\');this.remove()"></span>';
+  return '<span class="' + e(className) + '"><img src="' + e(brand.logo) + '" alt="" loading="lazy"></span>';
 }
 function header() {
   const homeActive = state.page === "home";
