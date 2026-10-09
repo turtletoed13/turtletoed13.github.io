@@ -1,9 +1,9 @@
 // Duplicate this folder for each new MORSA listing.
 // Example destination: brands/MORSA/Assets/<item-id>/config.js
 const asset = {
-  id: "replace-with-item-id",
-  name: "Replace with listing name",
-  catalogId: "MORSA-REPLACE-ME",
+  id: "509201355684",
+  name: "Heavy, St-17 Arashi",
+  catalogId: "517",
   category: "Specialist supply",
 
   // inherit follows MORSA/config.js. Use "brand" to force the fields below,
