@@ -106,12 +106,25 @@ function formatMoney(value, currency) {
     return "$" + Math.round(Number(value)).toLocaleString("en-US");
   }
 }
+function regularPrice(asset) {
+  const value = asset.originalPrice !== null && asset.originalPrice !== undefined && asset.originalPrice !== ""
+    ? asset.originalPrice
+    : asset.price;
+  return value === null || value === undefined || value === "" || !Number.isFinite(Number(value)) ? null : Number(value);
+}
 function salePrice(asset) {
+  const regular = regularPrice(asset);
+  if (asset.onSale !== true) return asset.price === null || asset.price === undefined || asset.price === "" ? regular : Number(asset.price);
   if (asset.salePrice !== null && asset.salePrice !== undefined && asset.salePrice !== "") return Number(asset.salePrice);
-  if (asset.onSale && Number(asset.salePercent) > 0 && asset.price !== null && asset.price !== undefined) {
-    return Math.round(Number(asset.price) * (1 - Number(asset.salePercent) / 100));
+  if (Number(asset.salePercent) > 0 && regular !== null) {
+    return Math.round(regular * (1 - Number(asset.salePercent) / 100));
   }
-  return asset.price;
+  return asset.price === null || asset.price === undefined || asset.price === "" ? regular : Number(asset.price);
+}
+function salePriceIsReal(asset) {
+  const regular = regularPrice(asset);
+  const current = salePrice(asset);
+  return asset.onSale === true && regular !== null && current !== null && Number.isFinite(Number(current)) && Number(current) < regular;
 }
 function assetsFor(id) { return state.assetCache[id] || []; }
 
@@ -300,7 +313,7 @@ function renderAssetCard(asset) {
   return '<article class="asset-card"><button class="asset-preview" data-action="open-asset" data-id="' + escapeHtml(asset.id) + '" aria-label="Inspect ' + escapeHtml(asset.name) + '">' +
     '<span class="asset-badge">' + escapeHtml(badge) + '</span>' + preview + '</button>' +
     '<div class="asset-copy"><h3>' + escapeHtml(asset.name) + '</h3><p>' + escapeHtml(asset.description || "") + '</p></div>' +
-    '<div class="asset-bottom"><span class="asset-price">' + (asset.onSale && asset.price != null ? '<s>' + formatMoney(asset.price, asset.currency) + '</s>' : '') + escapeHtml(formatMoney(price, asset.currency)) + '</span>' +
+    '<div class="asset-bottom"><span class="asset-price">' + (salePriceIsReal(asset) ? '<s>' + formatMoney(regularPrice(asset), asset.currency) + '</s> ' : '') + escapeHtml(formatMoney(price, asset.currency)) + '</span>' +
     '<span class="asset-stock">' + escapeHtml(asset.stockStatus || "Available") + '</span></div></article>';
 }
 function renderBrandPage() {
@@ -363,7 +376,7 @@ function renderAssetPage() {
   return '<section class="asset-detail"><div class="asset-detail-top"><button class="back-link" data-action="open-brand" data-id="' + escapeHtml(brand.id) + '">' + icon.back + ' Back to ' + escapeHtml(brand.name) + '</button><span class="section-count">LISTING / ' + escapeHtml(String(asset.id).toUpperCase()) + '</span></div>' +
     '<div class="asset-detail-grid"><div class="asset-stage">' + stage + '<div class="asset-stage-caption"><span>' + escapeHtml(brand.name) + ' / PRODUCT VIEW</span><span>' + (modelSrc ? "INTERACTIVE MODEL" : "PRODUCT PREVIEW") + '</span></div></div>' +
     '<aside class="asset-info"><span class="eyebrow">' + escapeHtml(brand.name) + ' CATALOGUE</span><h1>' + escapeHtml(asset.name) + '</h1><p class="asset-description">' + escapeHtml(asset.description || "Details supplied by the destination.") + '</p>' +
-    '<div class="asset-price-large">' + (asset.onSale && asset.price != null ? '<s>' + formatMoney(asset.price, asset.currency) + '</s> ' : '') + escapeHtml(formatMoney(price, asset.currency)) + '</div>' +
+    '<div class="asset-price-large">' + (salePriceIsReal(asset) ? '<s>' + formatMoney(regularPrice(asset), asset.currency) + '</s> ' : '') + escapeHtml(formatMoney(price, asset.currency)) + '</div>' +
     '<span class="asset-stock">' + escapeHtml(asset.stockStatus || "Available") + (asset.onSale ? " / ON SALE" : "") + '</span>' +
     '<div class="asset-meta-list">' + metadata.map((row) => '<div class="asset-meta-row"><span>' + escapeHtml(row[0]) + '</span><strong>' + escapeHtml(row[1]) + '</strong></div>').join("") + '</div>' +
     '<button class="button button-primary" data-action="listing-notice">Listing details ' + icon.open + '</button></aside></div></section>';
