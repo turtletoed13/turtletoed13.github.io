@@ -61,7 +61,13 @@ function routeFor(page, brandId, assetId) {
   return "#/discover";
 }
 function readRoute() {
-  const parts = decodeURIComponent((location.hash || "#/discover").replace(/^#\/?/, "")).split("/");
+  let parts;
+  try {
+    parts = decodeURIComponent((location.hash || "#/discover").replace(/^#\/?/, "")).split("/");
+  } catch (error) {
+    console.warn("EYEFIND received a malformed route.", error);
+    return { page: "not-found" };
+  }
   if (parts[0] === "saved") return { page: "saved" };
   if (parts[0] === "brand" && getBrand(parts[1])) {
     if (parts[2] === "asset" && parts[3]) return { page: "asset", brandId: parts[1], assetId: parts[3] };
@@ -512,6 +518,7 @@ function updateDirectory() {
     state.filter === "automotive" ? "Made to move." : state.filter === "specialist" ? "Specialist destinations." : "Destinations worth knowing.";
   count.innerHTML = String(matches.length + productMatches.length).padStart(2, "0") + ' <span>' + (matches.length + productMatches.length === 1 ? "MATCH" : "MATCHES") + '</span>';
   result.innerHTML = renderDirectoryResults();
+  wireModelViewers(result);
   const note = document.querySelector(".directory-note");
   if (note) note.textContent = state.query.trim() ? String(matches.length + productMatches.length).padStart(2, "0") + " MATCHES" : "Curated for the city";
   document.querySelectorAll("[data-action='category']").forEach((button) => {
@@ -676,11 +683,6 @@ document.addEventListener("submit", (event) => {
     runSearch(document.getElementById("palette-search")?.value || "");
   }
 });
-document.addEventListener("click", (event) => {
-  const target = event.target.closest("[data-action]");
-  if (!target || root.contains(target)) return;
-  handleAction(target, event);
-});
 document.addEventListener("keydown", (event) => {
   const key = event.key.toLowerCase();
   if ((event.metaKey || event.ctrlKey) && key === "k") {
@@ -727,4 +729,5 @@ if (!location.hash) history.replaceState({ page: "home" }, "", "#/discover");
 activateCurrentRoute();
 void Promise.all(brands.map((brand) => ensureBrandAssets(brand.id))).then(() => {
   if (state.page === "home") updateDirectory();
+  if (state.paletteOpen) updatePaletteResults();
 });
