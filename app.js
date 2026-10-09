@@ -352,9 +352,10 @@ function renderDirectory() {
   const title = state.query.trim() ? 'Results for “' + e(state.query.trim()) + '”' :
     state.filter === "automotive" ? "Made to move." : state.filter === "specialist" ? "Specialist destinations." : "Destinations worth knowing.";
   const resultMarkup = renderDirectoryResults();
+  const totalResults = results.length + productResults.length;
   return '<section class="directory-section" id="directory" aria-labelledby="directory-title"><div class="section-heading">' +
     '<div><span class="eyebrow">The directory</span><h2 id="directory-title">' + title + '</h2><p>Independent destinations, connected in one place.</p></div>' +
-    '<span class="result-counter">' + String(results.length).padStart(2, "0") + ' <span>' + (results.length === 1 ? "DESTINATION" : "DESTINATIONS") + '</span></span></div>' +
+    '<span class="result-counter">' + String(totalResults).padStart(2, "0") + ' <span>' + (totalResults === 1 ? "MATCH" : "MATCHES") + '</span></span></div>'
     '<div class="directory-tools">' + categoryFilters() + '<span class="directory-note">' +
       (state.query.trim() ? String(results.length + productResults.length).padStart(2, "0") + " MATCHES" : "Curated for the city") +
     '</span></div><div id="directory-results" aria-live="polite">' + resultMarkup + '</div></section>';
@@ -508,10 +509,19 @@ function updatePaletteResults() {
   if (!target) return;
   const query = normalizeSearch(state.query);
   const found = brands.filter((brand) => !query || searchableBrand(brand).includes(query));
-  target.innerHTML = found.length ? found.map((brand) =>
+  const products = filteredAssets();
+  const brandRows = found.map((brand) =>
     '<button class="palette-result" data-action="open-brand" data-id="' + e(brand.id) + '">' + logo(brand, "brand-logo brand-logo--small") +
     '<span><strong>' + e(brand.name) + '</strong><small>' + e(brand.legalName) + '</small></span><span class="palette-result-arrow">' + icons.arrow + '</span></button>'
-  ).join("") : '<div class="palette-empty"><strong>No matching destinations.</strong><span>Try a name, category or description.</span><button data-action="clear-search">Clear search</button></div>';
+  );
+  const productRows = products.map((asset) => {
+    const brand = getBrand(asset.brandId);
+    return '<button class="palette-result palette-result--product" data-action="open-asset" data-brand="' + e(asset.brandId) + '" data-id="' + e(asset.id) + '">' +
+      '<span class="palette-product-mark">' + icons.grid + '</span><span><strong>' + e(asset.name) + '</strong><small>' + e((brand ? brand.name + " · " : "") + (asset.category || "Catalogue listing")) + '</small></span><span class="palette-result-arrow">' + icons.arrow + '</span></button>';
+  });
+  const rows = brandRows.concat(productRows);
+  target.innerHTML = rows.length ? rows.join("") :
+    '<div class="palette-empty"><strong>No matching destinations.</strong><span>Try a name, category or description.</span><button data-action="clear-search">Clear search</button></div>';
 }
 function openPalette(focus = true) {
   const overlay = document.getElementById("search-overlay");
@@ -531,7 +541,13 @@ function closePalette(restoreFocus = true) {
   const overlay = document.getElementById("search-overlay");
   if (overlay) overlay.hidden = true;
   document.body.classList.remove("palette-open");
-  if (restoreFocus) document.querySelector(".header-search")?.focus();
+  const homeInput = document.getElementById("home-search");
+  if (homeInput) homeInput.value = state.query;
+  if (state.page === "home") updateDirectory();
+  if (restoreFocus) {
+    const mobile = window.matchMedia("(max-width: 760px)").matches;
+    (mobile ? document.querySelector(".mobile-search") : document.querySelector(".header-search"))?.focus();
+  }
 }
 function focusSearch() {
   if (state.page !== "home" && state.page !== "saved") {
