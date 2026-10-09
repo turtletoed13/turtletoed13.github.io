@@ -257,15 +257,21 @@ function filteredBrands() {
     return matchesCategory && (!query || searchableBrand(brand).includes(query));
   });
 }
-function filteredAssets() {
-  const query = normalizeSearch(state.query);
+function matchingAssets(queryValue = state.query) {
+  const query = normalizeSearch(queryValue);
   if (!query) return [];
   return brands.flatMap((brand) => getAssets(brand.id).filter((asset) => {
-    const matchesCategory = state.filter === "all" || brand.categoryId === state.filter;
     const text = normalizeSearch([asset.name, asset.catalogId, asset.category, asset.description,
       brand.name, brand.legalName, ...(Array.isArray(asset.tags) ? asset.tags : [])].join(" "));
-    return matchesCategory && text.includes(query);
+    return text.includes(query);
   }));
+}
+function filteredAssets() {
+  if (!normalizeSearch(state.query)) return [];
+  return matchingAssets().filter((asset) => {
+    const brand = getBrand(asset.brandId);
+    return state.filter === "all" || (brand && brand.categoryId === state.filter);
+  });
 }
 function renderDirectoryResults() {
   const brandMatches = filteredBrands();
@@ -518,7 +524,7 @@ function updatePaletteResults() {
   if (!target) return;
   const query = normalizeSearch(state.query);
   const found = brands.filter((brand) => !query || searchableBrand(brand).includes(query));
-  const products = filteredAssets();
+  const products = matchingAssets(state.query);
   const brandRows = found.map((brand) =>
     '<button class="palette-result" data-action="open-brand" data-id="' + e(brand.id) + '">' + logo(brand, "brand-logo brand-logo--small") +
     '<span><strong>' + e(brand.name) + '</strong><small>' + e(brand.legalName) + '</small></span><span class="palette-result-arrow">' + icons.arrow + '</span></button>'
@@ -685,6 +691,18 @@ document.addEventListener("keydown", (event) => {
   } else if (event.key === "Escape" && document.activeElement?.id === "home-search") {
     const input = document.getElementById("home-search");
     if (input?.value) { clearSearch(); input.blur(); }
+  } else if (event.key === "Tab" && state.paletteOpen) {
+    const overlay = document.getElementById("search-overlay");
+    const focusable = overlay ? [...overlay.querySelectorAll('button:not([disabled]), input:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])')].filter((node) => node.offsetParent !== null) : [];
+    if (!focusable.length) return;
+    const first = focusable[0], last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
   }
 });
 window.addEventListener("popstate", activateCurrentRoute);
