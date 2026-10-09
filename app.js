@@ -383,18 +383,38 @@ function renderDirectory() {
 }
 function featuredVehicle() {
   const brand = getBrand("morsa");
-  const asset = brand ? getAssets(brand.id).find((item) => item.id === brand.featuredAsset) : null;
-  const src = asset ? assetModelUrl(asset) : "./brands/MORSA/Assets/arashi/model/arx_apc.glb";
-  const poster = asset ? assetPosterUrl(asset) : "";
+  if (!brand || !Object.prototype.hasOwnProperty.call(state.assets, brand.id) || state.loading[brand.id]) {
+    return '<section class="featured-vehicle featured-vehicle--loading" aria-label="Featured listing" aria-busy="true">' +
+      '<div class="featured-copy"><span class="eyebrow"><span class="eyebrow-dot"></span> FEATURED LISTING</span><div class="featured-index">01 <span>—</span> CATALOGUE</div>' +
+      '<h2>Preparing the<br>featured listing.</h2><p>Loading published product details from the destination catalogue.</p></div>' +
+      '<div class="featured-visual"><div class="model-stage model-stage--hero"><div class="stage-light" aria-hidden="true"></div><div class="stage-grid" aria-hidden="true"></div>' +
+      '<div class="model-status"><span class="loader-orbit" aria-hidden="true"></span><strong>Checking listing availability</strong><span>Preparing the published model preview</span></div></div></div>' +
+      '<div class="featured-foot"><span>EYEFIND / FEATURED CATALOGUE</span><span>LISTING DATA</span></div></section>';
+  }
+  const asset = getAssets(brand.id).find((item) => item.id === brand.featuredAsset);
+  if (!asset) return "";
+  const src = assetModelUrl(asset);
+  const poster = assetPosterUrl(asset);
+  const arashiName = asset.name === "Heavy, ST-17 Arashi";
+  const heading = arashiName
+    ? '<h2 id="featured-title">Heavy, <span>ST-17</span><br>Arashi.</h2>'
+    : '<h2 id="featured-title">' + e(asset.name) + '</h2>';
+  const catalogueLabel = asset.catalogId ? "LISTING " + asset.catalogId : "LISTING / " + asset.id.toUpperCase();
   return '<section class="featured-vehicle" aria-labelledby="featured-title"><div class="featured-copy">' +
-    '<span class="eyebrow"><span class="eyebrow-dot"></span> Featured from MORSA</span><div class="featured-index">01 <span>—</span> VEHICLE STUDY</div>' +
-    '<h2 id="featured-title">Heavy, <span>ST-17</span><br>Arashi.</h2>' +
-    '<p>The original 3D model, ready to inspect. Explore the vehicle from every angle in an immersive product stage.</p>' +
-    '<div class="featured-facts"><span><i></i> INTERACTIVE MODEL</span><span>LISTING 517</span></div>' +
-    '<button class="button button-primary" data-action="open-configured-asset" data-brand="morsa" data-id="arashi">Explore the Arashi ' + icons.arrow + '</button></div>' +
-    '<div class="featured-visual">' + modelStage(src, "Heavy, ST-17 Arashi 3D model", "hero", { poster, autoRotate: true, label: "MORSA / 517" }) +
-    '<div class="featured-visual-bottom"><span>HEAVY / ST-17</span><span>DRAG TO ROTATE <b>↗</b></span></div></div>' +
-    '<div class="featured-foot"><span>PRODUCT INSPECTION / 001</span><span>CANONICAL ASSET · ARX_APC.GLb</span></div></section>';
+    '<span class="eyebrow"><span class="eyebrow-dot"></span> Featured from ' + e(brand.name) + '</span><div class="featured-index">01 <span>—</span> VEHICLE STUDY</div>' +
+    heading +
+    '<p>' + e(asset.description || "Further product details will be published by this destination.") + '</p>' +
+    '<div class="featured-facts"><span><i></i> ' + (src ? "INTERACTIVE MODEL" : "PRODUCT LISTING") + '</span><span>' + e(catalogueLabel) + '</span></div>' +
+    '<button class="button button-primary" data-action="open-configured-asset" data-brand="' + e(brand.id) + '" data-id="' + e(asset.id) + '">Inspect listing ' + icons.arrow + '</button></div>' +
+    '<div class="featured-visual">' + modelStage(src, asset.name + " 3D model", "hero", { poster, autoRotate: true, label: brand.name + " / " + (asset.catalogId || asset.id) }) +
+    '<div class="featured-visual-bottom"><span>' + e(asset.name.toUpperCase()) + '</span><span>DRAG TO ROTATE <b>↗</b></span></div></div>' +
+    '<div class="featured-foot"><span>PRODUCT INSPECTION / ' + e(String(asset.catalogId || asset.id).toUpperCase()) + '</span><span>' + e(brand.name.toUpperCase()) + ' / PUBLISHED LISTING</span></div></section>';
+}
+function updateFeaturedVehicle() {
+  const slot = document.getElementById("featured-vehicle-slot");
+  if (!slot) return;
+  slot.innerHTML = featuredVehicle();
+  wireModelViewers(slot);
 }
 function renderHome() {
   return '<section class="home-hero"><div class="hero-background" aria-hidden="true"><span class="hero-glow"></span><span class="hero-contour contour-one"></span><span class="hero-contour contour-two"></span></div>' +
@@ -406,7 +426,7 @@ function renderHome() {
     '<div class="hero-aside"><div class="network-visual" aria-hidden="true"><span class="network-ring network-ring--one"></span><span class="network-ring network-ring--two"></span><span class="network-ring network-ring--three"></span>' +
     '<span class="network-core"><span class="network-core-mark"></span></span><span class="network-node node-one"></span><span class="network-node node-two"></span><span class="network-node node-three"></span><span class="network-caption caption-top">CITY / NETWORK 01</span><span class="network-caption caption-bottom">CONNECTED BY EYEFIND</span></div></div></div>' +
     '<div class="hero-bottomline"><span>DISCOVER MORE. GO FURTHER.</span><span class="hero-scroll-cue">SCROLL TO EXPLORE <span>↓</span></span></div></section>' +
-    featuredVehicle() + renderDirectory() +
+    '<div id="featured-vehicle-slot">' + featuredVehicle() + '</div>' + renderDirectory() +
     '<section class="closing-note"><span class="closing-mark"><span class="eyefind-mark"><i></i></span></span><div><span class="eyebrow">A city in motion</span><h2>Find the next place<br>you want to be.</h2></div><button class="text-action" data-action="focus-search">Search EYEFIND ' + icons.arrow + '</button></section>';
 }
 function renderAssetCard(asset) {
@@ -728,6 +748,9 @@ root.addEventListener("pointermove", (event) => {
 if (!location.hash) history.replaceState({ page: "home" }, "", "#/discover");
 activateCurrentRoute();
 void Promise.all(brands.map((brand) => ensureBrandAssets(brand.id))).then(() => {
-  if (state.page === "home") updateDirectory();
+  if (state.page === "home") {
+    updateFeaturedVehicle();
+    updateDirectory();
+  }
   if (state.paletteOpen) updatePaletteResults();
 });
